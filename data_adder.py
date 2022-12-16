@@ -247,84 +247,88 @@ import tkinter as tk
 #         af.write(i)
 #         af.write("\n")
 
-with open("database/never_cleared.txt", "r", encoding="utf8") as af:
-    dol = []
-    for i in af:
-        dol.append(i)
+# with open("database/never_cleared.txt", "r", encoding="utf8") as af:
+#     dol = []
+#     for i in af:
+#         dol.append(i)
+#
+# def remove_and_rewrite(i):
+#     dol.remove(i)
+#     with open("database/never_cleared.txt", "w", encoding="utf8") as aa:
+#         for item in dol:
+#             aa.write(item)
+#
+# def get_length(a, b, c):
+#     return len(a), len(b), len(c)
+#
+#
+# with open("database/never.json", "r", encoding="utf8") as tr:
+#     new_data = json.load(tr)
+#
+# def store():
+#     with open("database/never.json", "w", encoding="utf8") as tn:
+#         json.dump(new_data, tn, ensure_ascii=False, indent=6)
+#
+# i = 0
+#
+# while len(dol) >= 0:
+#     print("#" * 50)
+#     print("'1' for LIFESTYLE, '2' for ABSURD, '3' for RELATIONS, '4' for PERSONAL, '5' for ADULT, '6' to remove")
+#     a = input(f"\n{dol[i]}\n")
+#     r = dol[i]
+#     if a == "1":
+#         new_data["lifestyle"][len(new_data["lifestyle"]) + 1] = dol[i]
+#         remove_and_rewrite(r)
+#         store()
+#         print(f"Left: {len(dol)}")
+#         print(f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
+#               f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
+#         i += 1
+#
+#     elif a == "2":
+#         new_data["absurd"][len(new_data["absurd"]) + 1] = dol[i]
+#         remove_and_rewrite(r)
+#         store()
+#         print(f"Left: {len(dol)}")
+#         print(
+#             f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
+#             f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
+#         i += 1
+#     elif a == "3":
+#         new_data["relations"][len(new_data["relations"]) + 1] = dol[i]
+#         remove_and_rewrite(r)
+#         store()
+#         print(f"Left: {len(dol)}")
+#         print(
+#             f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
+#             f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
+#         i += 1
+#     elif a == "4":
+#         new_data["personal"][len(new_data["personal"]) + 1] = dol[i]
+#         remove_and_rewrite(r)
+#         store()
+#         print(f"Left: {len(dol)}")
+#         print(
+#             f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
+#             f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
+#         i += 1
+#     elif a == "5":
+#         new_data["adult"][len(new_data["adult"]) + 1] = dol[i]
+#         remove_and_rewrite(r)
+#         store()
+#         print(f"Left: {len(dol)}")
+#         print(
+#             f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
+#             f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
+#         i += 1
+#     elif a == "6":
+#         remove_and_rewrite(r)
+#         store()
+#         i += 1
 
-def remove_and_rewrite(i):
-    dol.remove(i)
-    with open("database/never_cleared.txt", "w", encoding="utf8") as aa:
-        for item in dol:
-            aa.write(item)
-
-def get_length(a, b, c):
-    return len(a), len(b), len(c)
-
-
-with open("database/never.json", "r", encoding="utf8") as tr:
-    new_data = json.load(tr)
-
-def store():
-    with open("database/never.json", "w", encoding="utf8") as tn:
-        json.dump(new_data, tn, ensure_ascii=False, indent=6)
-
-i = 0
-
-while len(dol) >= 0:
-    print("#" * 50)
-    print("'1' for LIFESTYLE, '2' for ABSURD, '3' for RELATIONS, '4' for PERSONAL, '5' for ADULT, '6' to remove")
-    a = input(f"\n{dol[i]}\n")
-    r = dol[i]
-    if a == "1":
-        new_data["lifestyle"][len(new_data["lifestyle"]) + 1] = dol[i]
-        remove_and_rewrite(r)
-        store()
-        print(f"Left: {len(dol)}")
-        print(f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
-              f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
-        i += 1
-
-    elif a == "2":
-        new_data["absurd"][len(new_data["absurd"]) + 1] = dol[i]
-        remove_and_rewrite(r)
-        store()
-        print(f"Left: {len(dol)}")
-        print(
-            f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
-            f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
-        i += 1
-    elif a == "3":
-        new_data["relations"][len(new_data["relations"]) + 1] = dol[i]
-        remove_and_rewrite(r)
-        store()
-        print(f"Left: {len(dol)}")
-        print(
-            f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
-            f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
-        i += 1
-    elif a == "4":
-        new_data["personal"][len(new_data["personal"]) + 1] = dol[i]
-        remove_and_rewrite(r)
-        store()
-        print(f"Left: {len(dol)}")
-        print(
-            f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
-            f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
-        i += 1
-    elif a == "5":
-        new_data["adult"][len(new_data["adult"]) + 1] = dol[i]
-        remove_and_rewrite(r)
-        store()
-        print(f"Left: {len(dol)}")
-        print(
-            f'Current: L: {len(new_data["lifestyle"])}, A: {len(new_data["absurd"])}, R: {len(new_data["relations"])},'
-            f' P: {len(new_data["personal"])}, Ad: {len(new_data["adult"])}')
-        i += 1
-    elif a == "6":
-        remove_and_rewrite(r)
-        store()
-        i += 1
+def data(filepath):
+    with open(filepath, 'r', encoding='utf8') as f:
+        return [i for i in json.load(f)]
 
 
 

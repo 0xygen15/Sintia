@@ -1,4 +1,3 @@
-import os
 import sqlite3
 import json
 
@@ -8,23 +7,23 @@ c = connection.cursor()
 def get_data(file):
     with open(file, 'r', encoding='utf8') as f:
         jsondata = json.load(f)
-    return {"fileName": os.path.basename(f.name), "jsondata": jsondata}
+    return jsondata
 
-def fillDB(file):
-    fileName = get_data(file).get("fileName").split(sep=".")[0]
-    data = get_data(file).get('jsondata')
-    levels = [key for key, value in get_data(file).get('jsondata').items()]
+def create_and_fill_never(file):
+    data = get_data(file)
+    levels = [key for key, value in get_data(file).items()]
 
-    createTable = """CREATE TABLE ? (
-    number INTEGER PRIMARY KEY,
-    question CHAR,
-    level CHAR);"""
-    c.execute(createTable, fileName)
+    createTable = """CREATE TABLE NEVER (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT,
+    level TEXT
+    );"""
+    c.execute(createTable)
 
     def insert_data(level):
         for key, question in data.get(level).items():
-            insertData = """INSERT INTO ? VALUES (?, ?);"""
-            c.execute(insertData, (fileName, question, level))
+            insertData = """INSERT INTO NEVER (question, level) VALUES (?, ?);"""
+            c.execute(insertData, (question, level))
 
     for level in levels:
         insert_data(level)
@@ -32,8 +31,51 @@ def fillDB(file):
     connection.commit()
     connection.close()
 
-fileList = [i for i in os.listdir(r"C:\Users\QA\PycharmProjects\TORD4\database")]
+def create_and_fill_dare(file):
+    data = get_data(file)
+    levels = [key for key, value in get_data(file).items()]
 
-for file in fileList:
-    path = file
-    fillDB(file)
+    createTable = """CREATE TABLE DARE (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT,
+    level TEXT
+    );"""
+    c.execute(createTable)
+
+    def insert_data(level):
+        for key, question in data.get(level).items():
+            insertData = """INSERT INTO DARE (question, level) VALUES (?, ?);"""
+            c.execute(insertData, (question, level))
+
+    for level in levels:
+        insert_data(level)
+
+    connection.commit()
+    connection.close()
+
+def create_and_fill_truth(file):
+    data = get_data(file)
+    levels = [key for key, value in get_data(file).items()]
+
+    createTable = """CREATE TABLE TRUTH (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT,
+    level TEXT
+    );"""
+    c.execute(createTable)
+
+    def insert_data(level):
+        for key, question in data.get(level).items():
+            insertData = """INSERT INTO TRUTH (question, level) VALUES (?, ?);"""
+            c.execute(insertData, (question, level))
+
+    for level in levels:
+        insert_data(level)
+
+    connection.commit()
+    connection.close()
+
+
+create_and_fill_never("never.json")
+create_and_fill_truth("truth.json")
+create_and_fill_dare("dare.json")
