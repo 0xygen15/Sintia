@@ -49,3 +49,28 @@ class Engine:
             random.shuffle(_)
             random.shuffle(_)
             random.shuffle(_)
+
+
+    def three_of_five(self):
+        def one_level(filename, levelname):
+            with open(f"database/{filename}", mode="r", encoding="utf8") as f:
+                file = json.load(f)
+                levelfile_dict = file[levelname]
+                levelfile_list = [value for value in levelfile_dict.values()]
+                random.shuffle(levelfile_list)
+                return levelfile_list[0:5]
+
+        levels = ["lifestyle", "absurd", "relations", "personal", "adult"]
+        files = ["truth.json", "dare.json", "never.json"]
+
+        truth = {}
+        dare = {}
+        never = {}
+
+        for level in levels:
+            truth[level] = one_level(files[0], level)
+            dare[level] = one_level(files[1], level)
+            never[level] = one_level(files[2], level)
+
+        return
+
