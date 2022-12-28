@@ -43,7 +43,6 @@ current_player_name = ""
 
 @dp.message_handler(commands='truth_or_dare')
 async def players_names(message: Message):
-    print(int(message.message_id))
     await PlayerStates.ready_to_get_players_names.set()
     await bot.send_message(chat_id=message.from_user.id, text="Введите имена игроков используя запятую в качестве "
                                                               "разделителя:")
@@ -255,10 +254,9 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
     elif answer == "over":
         await state.finish()
         await query.answer()
-        await state.finish()
         player.players_list.clear()
         await bot.send_message(chat_id=query.from_user.id,
-                               text="Игра окончена, чтобы начать новую игру нажимай /truth_and_dare")
+                               text="Игра окончена, чтобы начать новую игру нажимай /truth_or_dare")
 
 
 

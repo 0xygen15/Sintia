@@ -179,6 +179,35 @@ class Keyboards:
                                                              ]
                                                          ])
 
+        self.cb35 = CallbackData('name', 'action')
+        self.kb35 = InlineKeyboardMarkup(row_width=2,
+                                         inline_keyboard=[
+                                             [
+                                                 InlineKeyboardButton(f'Раздел "Правда"', callback_data=self.cb35.new(action="Truth"))
+                                             ],
+                                             [
+                                                 InlineKeyboardButton(f'Раздел "Действие"',
+                                                                      callback_data=self.cb35.new(action="Dare"))
+                                             ],
+                                             [
+                                                 InlineKeyboardButton(f'Раздел "Я никогда не..."',
+                                                                      callback_data=self.cb35.new(action="Never"))
+                                             ],
+                                             [
+                                                 InlineKeyboardButton(f'Закончить/Новая игра',
+                                                                      callback_data=self.cb35.new(action="End"))
+                                             ]
+                                         ])
+
+        self.cb35b = CallbackData('name', 'action')
+        self.kb35b = InlineKeyboardMarkup(row_width=2,
+                                         inline_keyboard=[
+                                             [
+                                                 InlineKeyboardButton('Начать',
+                                                                      callback_data=self.cb35.new(action="Begin"))
+                                             ]
+                                         ])
+
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup):
         object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
 
@@ -292,3 +321,7 @@ class Keyboards:
                                                          ]
                                                      ])
         return updated_keyboard_mode
+
+
+
+

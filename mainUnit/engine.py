@@ -32,12 +32,12 @@ class Engine:
                 qlist.append(value)
 
         lists = [[file("truth.json"), self.t_all], [file("dare.json"), self.d_all], [file("never.json"), self.n_all]]
-        levels = [lifestyle, absurd, relations, personal, adult]
+        levels = [[lifestyle, "lifestyle"], [absurd, "absurd"], [relations, "relations"], [personal, "personal"], [adult, "adult"]]
 
         def check_and_add(level):
-            if level == True:
+            if level[0] == True:
                 for item in lists:
-                    adder(item[0], level, item[1])
+                    adder(item[0], level[1], item[1])
             else:
                 pass
 
@@ -50,6 +50,12 @@ class Engine:
             random.shuffle(_)
             random.shuffle(_)
 
+    def list_to_string(self, the_list):
+        the_string = ""
+        for item in the_list:
+            the_string += item
+            the_string += "\n"
+        return the_string
 
     def three_of_five(self):
         def one_level(filename, levelname):
@@ -60,17 +66,22 @@ class Engine:
                 random.shuffle(levelfile_list)
                 return levelfile_list[0:5]
 
-        levels = ["lifestyle", "absurd", "relations", "personal", "adult"]
+        levels = [["lifestyle", "1"], ["absurd", "2"], ["relations", "3"], ["personal", "4"], ["adult", "5"]]
         files = ["truth.json", "dare.json", "never.json"]
 
-        truth = {}
-        dare = {}
-        never = {}
+        truth = ""
+        dare = ""
+        never = ""
 
         for level in levels:
-            truth[level] = one_level(files[0], level)
-            dare[level] = one_level(files[1], level)
-            never[level] = one_level(files[2], level)
+            truth += f"<b>{level[1]}:</b>\n"
+            truth += f"{Engine.list_to_string(self, the_list=one_level(files[0], level[0]))}\n"
+            dare += f"<b>{level[1]}:</b>\n"
+            dare += f"{Engine.list_to_string(self, the_list=one_level(files[1], level[0]))}\n"
+            never += f"<b>{level[1]}:</b>\n"
+            never += f"{Engine.list_to_string(self, the_list=one_level(files[2], level[0]))}\n"
 
-        return
+        return [truth, dare, never]
+
+
 

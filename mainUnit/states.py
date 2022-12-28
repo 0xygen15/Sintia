@@ -15,3 +15,6 @@ class PlayerStates(StatesGroup):
 class NieStates(StatesGroup):
     levels = State()
     game = State()
+
+class ThreeOfFiveStates(StatesGroup):
+    pass
