@@ -38,11 +38,14 @@ tord = ""
 tord_t = True
 
 current_player_name = ""
-
+first_message_id: int
+last_message_id: int
 ###
 
 @dp.message_handler(commands='truth_or_dare')
 async def players_names(message: Message):
+    global first_message_id
+    first_message_id = message.message_id
     await PlayerStates.ready_to_get_players_names.set()
     await bot.send_message(chat_id=message.from_user.id, text="Введите имена игроков используя запятую в качестве "
                                                               "разделителя:")
@@ -52,7 +55,6 @@ async def players_names(message: Message):
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
 async def check_players_names(message: Message, state: FSMContext):
-    print(message.message_id)
     await PlayerStates.check_players_names.set()
     player.add_player(player.list_of_players_names(data=message.text))
     names = ""
@@ -147,13 +149,19 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], s
 async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
-    global truth, dare, current_player_name
+    global truth, dare, current_player_name, first_message_id, last_message_id
+    last_message_id = query.message.message_id
     if answer == 'free':
         await PlayerStates.game_free.set()
         engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
         current_player_name = player.players_list[player.current_player_number]
         await bot.send_message(chat_id=query.from_user.id, text=f'{current_player_name}, Правда или действие?',
                                reply_markup=keyboards.keyboard_td)
+        try:
+            for mid in range(first_message_id, last_message_id+1):
+                await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
+        except:
+            pass
 
     elif answer == 'step':
         if levels_are_chosen == False and players_are_added == False:
@@ -168,6 +176,11 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
                 await bot.send_message(chat_id=query.from_user.id,
                                        text=f"{current_player_name}, {truth}",
                                        reply_markup=keyboards.keyboard_completed)
+                try:
+                    for mid in range(first_message_id, last_message_id+1):
+                        await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
+                except:
+                    pass
                 logging.info(
                     f"Truth circle = {player.truth_circle}; "
                     f"Current player name: {current_player_name}; "
@@ -177,6 +190,11 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
                 await bot.send_message(chat_id=query.from_user.id,
                                        text=f"{current_player_name}, {dare}",
                                        reply_markup=keyboards.keyboard_completed)
+                try:
+                    for mid in range(first_message_id, last_message_id+1):
+                        await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
+                except:
+                    pass
                 logging.info(
                     f"Truth circle = {player.truth_circle};"
                     f"Current player name: {current_player_name};"
@@ -189,6 +207,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
 async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
+    message_id = query.message.message_id
     global truth, dare, current_player_name
     if answer == 'completed':
         player.next_player_number()
@@ -198,15 +217,16 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
             await state.finish()
             await query.answer()
             await bot.send_message(chat_id=query.from_user.id,
-                                   text="Игра окончена, кончились вопросы\действия чтобы начать новую игру нажимай /game")
+                                   text="Игра окончена, кончились вопросы\действия чтобы начать новую игру нажимай /truth_or_dare")
 
         if player.truth_circle == True:
             engine.t_all.remove(truth)
             current_player_name = player.players_list[player.current_player_number]
             truth = engine.shuffled_list(engine.t_all)[0]
-            await bot.send_message(chat_id=query.from_user.id,
+            await bot.edit_message_text(chat_id=query.from_user.id,
                                    text=f"{current_player_name}, {truth}",
-                                   reply_markup=keyboards.keyboard_completed)
+                                   reply_markup=keyboards.keyboard_completed,
+                                   message_id = message_id)
             logging.info(
                 f"\nTruth circle = {player.truth_circle}; "
                 f"Current player name: {current_player_name}; "
@@ -221,9 +241,10 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
                 pass
             current_player_name = player.players_list[player.current_player_number]
             dare = engine.shuffled_list(engine.d_all)[0]
-            await bot.send_message(chat_id=query.from_user.id,
+            await bot.edit_message_text(chat_id=query.from_user.id,
                                    text=f"{current_player_name}, {dare}",
-                                   reply_markup=keyboards.keyboard_completed)
+                                   reply_markup=keyboards.keyboard_completed,
+                                   message_id = message_id)
 
             logging.info(
                 f"\nTruth circle = {player.truth_circle}; "
@@ -257,6 +278,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
         player.players_list.clear()
         await bot.send_message(chat_id=query.from_user.id,
                                text="Игра окончена, чтобы начать новую игру нажимай /truth_or_dare")
+        await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
 
 
 
@@ -281,6 +303,7 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
         player.players_list.clear()
         await state.finish()
         await bot.send_message(chat_id=query.from_user.id, text="Игра окончена.")
+        await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
 
 
 
@@ -297,8 +320,8 @@ async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: ty
             engine.d_all.remove(tord)
         player.next_player_number()
         current_player_name = player.players_list[player.current_player_number]
-        await bot.send_message(chat_id=query.from_user.id, text=f'{current_player_name}, Правда или действие?',
-                               reply_markup=keyboards.keyboard_td)
+        await bot.edit_message_text(chat_id=query.from_user.id, text=f'{current_player_name}, Правда или действие?',
+                               reply_markup=keyboards.keyboard_td, message_id=query.message.message_id)
 
     elif answer == 'failed_f':
         if player.fail_check(current_player_name) == True:

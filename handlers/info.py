@@ -1,6 +1,8 @@
 from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
 
 from loader import dp, bot
+
 
 text_info = """
 Инструкция:
@@ -46,6 +48,22 @@ start_text = """
 <b>/never_i_ever</b> - Играть в "Я никогда не"
 <b>/three_of_five</b> - Играть в "Три из пяти"
 
+<b>/refresh</b> - Остановить игру/Перезагрузить бота/Выйти в любой момент
+
+Запустить игру можно также из кнопки "Меню". 
+"""
+
+refresh_text = """
+Бот перезагружен.
+
+<b>/info</b> - Инструкции и описание. Рекомендовано к прочтению перед игрой.
+
+<b>/truth_or_dare</b> - Играть в "Правда или Действие"
+<b>/never_i_ever</b> - Играть в "Я никогда не"
+<b>/three_of_five</b> - Играть в "Три из пяти"
+
+<b>/refresh</b> - Остановить игру/Перезагрузить бота/Выйти в любой момент
+
 Запустить игру можно также из кнопки "Меню". 
 """
 
@@ -54,6 +72,14 @@ start_text = """
 async def info(message: Message):
     await bot.send_message(text=text_info, chat_id=message.from_user.id, parse_mode='HTML')
 
+
 @dp.message_handler(commands='start')
-async def start(message: Message):
+async def start(message: Message, state: FSMContext):
+    await state.finish()
     await bot.send_message(text=start_text, chat_id=message.from_user.id, parse_mode='HTML')
+
+
+@dp.message_handler(commands='refresh', state='*')
+async def start(message: Message, state: FSMContext):
+    await state.finish()
+    await bot.send_message(text=refresh_text, chat_id=message.from_user.id, parse_mode='HTML')

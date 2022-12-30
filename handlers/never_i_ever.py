@@ -23,29 +23,31 @@ keyboards = Keyboards()
 
 ###
 
-players_are_added = False
+# players_are_added = False
 levels_are_chosen = False
-mode_is_chosen = False
+# mode_is_chosen = False
 
-truth = ""
-truth_index = 0
-dare = ""
-dare_index = 0
-nie_index = 0
+# truth = ""
+# truth_index = 0
+# dare = ""
+# dare_index = 0
+# nie_index = 0
 
 
 nie = ""
 tord = ""
 tord_t = True
 
-current_player_name = ""
+# current_player_name = ""
 
 ###
+
 
 @dp.message_handler(commands="never_i_ever")
 async def never_i_ever(message: Message):
     await NieStates.levels.set()
     await bot.send_message(chat_id=message.from_user.id, text="Выбирай уровни:", reply_markup=keyboards.keyboard_level_all)
+
 
 @dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'relations', 'personal', 'adult', 'ready']), state=NieStates.levels)
 async def nie_levels(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
@@ -91,12 +93,13 @@ async def nie_levels(query: CallbackQuery, state: FSMContext, callback_data: typ
     else:
         levels_are_chosen = False
 
+
 @dp.callback_query_handler(keyboards.cb_nie.filter(action=['truth_nie', 'dare_nie', 'next_nie', 'end_nie']),
                            state=NieStates.game)
 async def nie_game(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
-    global tord, tord_t, current_player_name, nie
+    global tord, tord_t, nie
     if answer == 'truth_nie':
         tord_t = True
         tord = engine.shuffled_list(engine.t_all)[0]
@@ -117,12 +120,13 @@ async def nie_game(query: CallbackQuery, state: FSMContext, callback_data: typin
         await bot.send_message(chat_id=query.from_user.id,
                                text="Игра окончена:)")
 
+
 @dp.callback_query_handler(keyboards.cb_completed_f.filter(action=['completed_f', 'failed_f']),
                            state=NieStates.game)
 async def nie_comp(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
-    global tord, tord_t, current_player_name, nie
+    global tord, tord_t, nie
     if answer == 'completed_f':
         if tord_t == True:
             engine.t_all.remove(tord)

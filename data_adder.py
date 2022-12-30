@@ -1,4 +1,5 @@
 import json
+import os
 import tkinter as tk
 
 #
@@ -326,10 +327,32 @@ import tkinter as tk
 #         store()
 #         i += 1
 
-def data(filepath):
-    with open(filepath, 'r', encoding='utf8') as f:
-        return [i for i in json.load(f)]
+# def data(filepath):
+#     with open(filepath, 'r', encoding='utf8') as f:
+#         return [i for i in json.load(f)]
 
+class DataManagement:
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    database_folder_path = "\database2"
+    truth_file = r"\truth.json"
+    dare_file = r"\dare.json"
+    never_file = r"\never.json"
+    truth_target_file = r"\truth.csv"
+    dare_target_file = r"\dare.csv"
+    never_target_file = r"\never.csv"
+    def __init__(self):
+        pass
+
+    def json_file_to_dict(self, filename):
+        with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
+                  mode="r", encoding='utf8') as f:
+            data = json.load(f)
+            return data
+
+    def csv_to_dict(self, filename):
+        with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
+                  mode="r", encoding='utf8') as f:
+            pass
 
 
 
