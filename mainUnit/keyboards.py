@@ -254,25 +254,25 @@ class Keyboards:
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Абсурд {self.mark2}',
+                                                            f'Абсурдные {self.mark2}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='absurd'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Компания {self.mark3}',
+                                                            f'Для компании {self.mark3}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='relations'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Узнать получше {self.mark4}',
+                                                            f'Отношения {self.mark4}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='personal'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'451℉ {self.mark5}',
+                                                            f'Неловкие {self.mark5}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='adult'))
                                                     ],

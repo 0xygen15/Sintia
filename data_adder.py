@@ -233,6 +233,7 @@ import tkinter as tk
 
 """tdnew"""
 
+
 # with open("database/dare.json", "r", encoding="utf8") as f:
 #     do_json = json.load(f)
 #     dol = []
@@ -331,53 +332,56 @@ import tkinter as tk
 #     with open(filepath, 'r', encoding='utf8') as f:
 #         return [i for i in json.load(f)]
 
-class DataManagement:
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    database_folder_path = "\database2"
-    truth_file = r"\truth.json"
-    dare_file = r"\dare.json"
-    never_file = r"\never.json"
-    truth_target_file = r"\truth.csv"
-    dare_target_file = r"\dare.csv"
-    never_target_file = r"\never.csv"
-    def __init__(self):
-        pass
+# class DataManagement:
+#     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+#     database_folder_path = "\database2"
+#     truth_file = r"\truth.json"
+#     dare_file = r"\dare.json"
+#     never_file = r"\never.json"
+#     truth_target_file = r"\truth.csv"
+#     dare_target_file = r"\dare.csv"
+#     never_target_file = r"\never.csv"
+#     def __init__(self):
+#         pass
+#
+#     def json_file_to_dict(self, filename):
+#         with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
+#                   mode="r", encoding='utf8') as f:
+#             data = json.load(f)
+#             return data
+#
+#     def csv_to_dict(self, filename):
+#         with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
+#                   mode="r", encoding='utf8') as f:
+#             pass
 
-    def json_file_to_dict(self, filename):
-        with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
-                  mode="r", encoding='utf8') as f:
-            data = json.load(f)
-            return data
+def aligner(source_file):
+    with open(source_file, 'r', encoding='utf8') as source_file:
+        source_json = json.load(source_file)
+        target_json = {}
+        index = 1
+        for level, data in source_json.items():
+            target_json[level] = {}
+            current_dict = target_json[level]
+            for key, value in data.items():
+                index_str = str(index)
+                current_dict[index_str] = value
+                index += 1
+            index = 1
+        return target_json
 
-    def csv_to_dict(self, filename):
-        with open(file=f"{DataManagement.ROOT_DIR}{DataManagement.database_folder_path}{filename}",
-                  mode="r", encoding='utf8') as f:
-            pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# print(json.dumps(aligner("./database2/truth.json"), indent=4, ensure_ascii=False))
+def writer(f):
+    with open(f, "r+", encoding='utf8') as ff:
+        json_file = json.dumps(aligner(f), indent=4, ensure_ascii=False)
+        ff.write("")
+        ff.write(json_file)
 
 
+file_paths = ["./database2/truth.json",
+              "./database2/dare.json",
+              "./database2/never.json"]
 
-
+for file in file_paths:
+    writer(file)
+#365, 332, 322

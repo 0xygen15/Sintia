@@ -15,8 +15,8 @@ def create_and_fill_never(file):
 
     createTable = """CREATE TABLE NEVER (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    question TEXT,
-    level TEXT
+    question VARCHAR(255) NOT NULL,
+    level VARCHAR(16) NOT NULL
     );"""
     c.execute(createTable)
 
@@ -29,7 +29,6 @@ def create_and_fill_never(file):
         insert_data(level)
 
     connection.commit()
-    connection.close()
 
 def create_and_fill_dare(file):
     data = get_data(file)
@@ -37,8 +36,8 @@ def create_and_fill_dare(file):
 
     createTable = """CREATE TABLE DARE (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    question TEXT,
-    level TEXT
+    question VARCHAR(255) NOT NULL,
+    level VARCHAR(16) NOT NULL
     );"""
     c.execute(createTable)
 
@@ -51,7 +50,6 @@ def create_and_fill_dare(file):
         insert_data(level)
 
     connection.commit()
-    connection.close()
 
 def create_and_fill_truth(file):
     data = get_data(file)
@@ -59,8 +57,8 @@ def create_and_fill_truth(file):
 
     createTable = """CREATE TABLE TRUTH (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    question TEXT,
-    level TEXT
+    question VARCHAR(255) NOT NULL,
+    level VARCHAR(16) NOT NULL
     );"""
     c.execute(createTable)
 
@@ -73,9 +71,9 @@ def create_and_fill_truth(file):
         insert_data(level)
 
     connection.commit()
-    connection.close()
-
 
 create_and_fill_never("never.json")
 create_and_fill_truth("truth.json")
 create_and_fill_dare("dare.json")
+
+connection.close()
