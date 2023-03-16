@@ -83,5 +83,12 @@ class Engine:
 
         return [truth, dare, never]
 
+    def theme(self, theme_name: str):
+        with open(f"database/themes_truth.json", mode="r", encoding="utf8") as f:
+            file = json.load(f)
+            theme_questions_dict = file[theme_name]
+        theme_questions_list = [v for k, v in theme_questions_dict.items()]
+        return theme_questions_list
+
 
 
