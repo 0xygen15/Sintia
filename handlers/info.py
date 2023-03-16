@@ -67,6 +67,22 @@ refresh_text = """
 Запустить игру можно также из кнопки "Меню". 
 """
 
+theme_school = """test desc"""
+theme_work = """test desc"""
+theme_travel = """test desc"""
+theme_worldview = """test desc"""
+theme_social_media = """test desc"""
+theme_art = """test desc"""
+theme_relations = """test desc"""
+theme_memes = """test desc"""
+theme_religion = """test desc"""
+theme_memories = """test desc"""
+theme_the_if = """test desc"""
+theme_videogames = """test desc"""
+theme_education = """test desc"""
+theme_fashion = """test desc"""
+theme_hard_choice = """test desc"""
+
 
 @dp.message_handler(commands='info')
 async def info(message: Message):

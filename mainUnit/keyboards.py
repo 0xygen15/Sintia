@@ -208,6 +208,106 @@ class Keyboards:
                                              ]
                                          ])
 
+        self.cb_themes = CallbackData('name', 'action')
+        self.kb_themes = InlineKeyboardMarkup(row_width=3,
+                                              inline_keyboard=[
+                                                  [
+                                                      InlineKeyboardButton('school',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="school")),
+                                                      InlineKeyboardButton('work',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="work")),
+                                                      InlineKeyboardButton('travel',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="travel"))
+                                                  ],
+                                                  [
+                                                      InlineKeyboardButton('worldview',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="worldview")),
+                                                      InlineKeyboardButton('social media',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="social media")),
+                                                      InlineKeyboardButton('art',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="art"))
+                                                  ],
+                                                  [
+                                                      InlineKeyboardButton('relations',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="relations")),
+                                                      InlineKeyboardButton('memes',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="memes")),
+                                                      InlineKeyboardButton('religion',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="religion"))
+
+                                                  ],
+                                                  [
+                                                      InlineKeyboardButton('memories',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="memories")),
+                                                      InlineKeyboardButton('if',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="if")),
+                                                      InlineKeyboardButton('videogames',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="videogames"))
+                                                  ],
+                                                  [
+                                                      InlineKeyboardButton('education',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="education")),
+                                                      InlineKeyboardButton('fashion',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="fashion")),
+                                                      InlineKeyboardButton('hard choice',
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="fashion"))
+                                                  ]
+                                              ])
+
+        self.cb_themes_game = CallbackData('name', 'action')
+        self.kb_themes_game = InlineKeyboardMarkup(row_width=2,
+                                                   inline_keyboard=[
+                                                       [
+                                                           InlineKeyboardButton('Назад',
+                                                                                callback_data=self.cb_completed.new(
+                                                                                    action='previous'
+                                                                                )),
+                                                           InlineKeyboardButton('Далее',
+                                                                                callback_data=self.cb_completed.new(
+                                                                                    action='next'
+                                                                                ))
+
+                                                       ],
+                                                       [
+                                                           InlineKeyboardButton('Закончить игру',
+                                                                                callback_data=self.cb_completed.new(
+                                                                                    action='end'
+                                                                                ))
+                                                       ]
+                                                                ]
+                                                   )
+        self.cb_themes_confirm = CallbackData('name', 'action')
+        self.kb_themes_confirm = InlineKeyboardMarkup(row_width=2,
+                                                   inline_keyboard=[
+                                                       [
+                                                           InlineKeyboardButton('В главное меню',
+                                                                                callback_data=self.cb_completed.new(
+                                                                                    action='menu'
+                                                                                )),
+                                                           InlineKeyboardButton('Начать игру',
+                                                                                callback_data=self.cb_completed.new(
+                                                                                    action='begin'
+                                                                                ))
+
+                                                       ]
+                                                   ]
+                                                   )
+
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup):
         object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
 
@@ -321,7 +421,4 @@ class Keyboards:
                                                          ]
                                                      ])
         return updated_keyboard_mode
-
-
-
 

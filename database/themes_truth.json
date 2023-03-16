@@ -446,5 +446,37 @@
               "28": "What is your opinion on wearing vintage or thrifted clothing?",
               "29": "What is your favorite type of bag to carry?",
               "30": "What is your favorite fashion era?"
-            }
+            },
+  "hard choice": {
+              "1": "If you could only save one: your significant other or your best friend?",
+              "2": "If you had to choose between saving your dream job or your dream relationship, which would you choose?",
+              "3": "If you could only choose one form of entertainment for the rest of your life, would you choose movies, music, or books?",
+              "4": "If you had to choose between being the world's greatest musician or the world's greatest athlete, which would you choose?",
+              "5": "If you could only keep one social media account, which one would you choose to keep?",
+              "6": "If you could only eat one type of food for the rest of your life, would you choose sweet or savory?",
+              "7": "If you could only keep one piece of technology, would you keep your phone or your laptop?",
+              "8": "If you had to choose between spending the rest of your life in a big city or a small town, which would you choose?",
+              "9": "If you could only wear one color for the rest of your life, which color would you choose?",
+              "10": "If you had to choose between never being able to leave your home country or never being able to return to your home country, which would you choose?",
+              "11": "If you could only choose one superpower, would you choose flight or invisibility?",
+              "12": "If you had to choose between living without music or living without movies/TV shows, which would you choose?",
+              "13": "If you could only travel to one country for the rest of your life, which country would you choose?",
+              "14": "If you could only keep one of your five senses, which sense would you choose?",
+              "15": "If you had to choose between living in the past or living in the future, which would you choose?",
+              "16": "If you could only have one type of pet for the rest of your life, would you choose a dog or a cat?",
+              "17": "If you could only keep one hobby for the rest of your life, which hobby would you choose?",
+              "18": "If you had to choose between being extremely intelligent but unhappy or extremely happy but unintelligent, which would you choose?",
+              "19": "If you could only keep one form of transportation for the rest of your life, would you choose a car or a bike?",
+              "20": "If you had to choose between never being able to read or never being able to write, which would you choose?",
+              "21": "If you could only keep one possession for the rest of your life, what would it be?",
+              "22": "If you had to choose between being able to speak every language in the world or being able to talk to animals, which would you choose?",
+              "23": "If you could only live in one type of climate for the rest of your life, would you choose a hot climate or a cold climate?",
+              "24": "If you had to choose between living in a world with no art or no science, which would you choose?",
+              "25": "If you could only keep one social tradition, which tradition would you choose?",
+              "26": "If you had to choose between being the best at your current job or being the best at a completely different job, which would you choose?",
+              "27": "If you could only keep one form of exercise for the rest of your life, which would you choose?",
+              "28": "If you could only eat one type of cuisine for the rest of your life, would you choose Italian or Asian cuisine?",
+              "29": "If you could only have one hobby for the rest of your life, would you choose reading or sports?",
+              "30": "If you could only live in one climate for the rest of your life, would you choose hot or cold?"
+  }
 }
