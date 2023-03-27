@@ -18,3 +18,7 @@ class NieStates(StatesGroup):
 
 class ThreeOfFiveStates(StatesGroup):
     pass
+
+class AdsStates(StatesGroup):
+    reading = State()
+    checking = State()

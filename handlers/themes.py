@@ -27,7 +27,7 @@ index: int
 @dp.message_handler(commands='themes')
 async def themes_start(message: Message):
     await bot.send_message(chat_id=message.from_user.id,
-                           text="Описание игры (в разработке). Выбрать тему для начала:",
+                           text="Выберите тему игры. После выбора будет доступно описание темы.",
                            reply_markup=keyboards.kb_themes)
 
 
@@ -51,7 +51,7 @@ async def themes_choice(query: CallbackQuery, callback_data: typing.Dict[str, st
     global theme_chosen
     message_id = query.message.message_id
     theme_chosen = answer
-    await bot.edit_message_text(text=f"game description for {answer}", chat_id=query.from_user.id, message_id=message_id,
+    await bot.edit_message_text(text=f"{themes_description[answer]}", chat_id=query.from_user.id, message_id=message_id,
                                         reply_markup=keyboards.kb_themes_confirm, parse_mode='HTML')
 
 
@@ -62,7 +62,7 @@ async def themes_confirm(query: CallbackQuery, callback_data: typing.Dict[str, s
     message_id = query.message.message_id
     if answer == "menu":
         theme_chosen = ""
-        await bot.edit_message_text(text=f"Описание игры (в разработке). Выбрать тему для начала:",
+        await bot.edit_message_text(text=f"Выберите тему игры. После выбора будет доступно описание темы.",
                                     chat_id=query.from_user.id,
                                     message_id=message_id,
                                     reply_markup=keyboards.kb_themes,
@@ -85,7 +85,7 @@ async def themes_game(query: CallbackQuery, callback_data: typing.Dict[str, str]
     if answer == "next":
         if index > len(data)-1:
             theme_chosen = ""
-            await bot.edit_message_text(text=f"Game over: out of question. Start a new game",
+            await bot.edit_message_text(text=f"Игра окончена. Ещё одну игру?",
                                         chat_id=query.from_user.id,
                                         message_id=message_id,
                                         reply_markup=keyboards.kb_themes,
@@ -113,7 +113,7 @@ async def themes_game(query: CallbackQuery, callback_data: typing.Dict[str, str]
                                         parse_mode='HTML')
     elif answer == "end":
         theme_chosen = ""
-        await bot.edit_message_text(text=f"Game over upon request",
+        await bot.edit_message_text(text=f"Игра окончена. Ещё одну игру?",
                                     chat_id=query.from_user.id,
                                     message_id=message_id,
                                     reply_markup=keyboards.kb_themes,
