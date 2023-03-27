@@ -175,17 +175,17 @@ async def info(message: Message):
 
 
 @dp.message_handler(commands='start')
-async def start(message: Message, state: FSMContext, chat: Chat, user: User):
+async def start(message: Message, state: FSMContext):
     await state.finish()
     user_chat_data = {
-        'chat_id': chat.id,
-        'chat_type': chat.type,
-        'username': user.username,
-        'fName': user.first_name,
-        'lName': user.last_name,
-        'user_id': user.id,
-        'language_code': user.language_code,
-        'is_bot': user.is_bot
+        'chat_id': message.chat.id,
+        'chat_type': message.chat.type,
+        'username': message.from_user.username,
+        'fName': message.from_user.first_name,
+        'lName': message.from_user.last_name,
+        'user_id': message.from_user.id,
+        'language_code': message.from_user.language_code,
+        'is_bot': message.from_user.is_bot
     }
     Users.create_table()
     Users.create(user_chat_data)

@@ -98,51 +98,79 @@ class Engine:
         return theme_questions_list
 
 class Users:
-    connection = sqlite3.connect("./database/users.db")
-    c = connection.cursor()
+    # connection = sqlite3.connect("./database/users.db")
+    # c = connection.cursor()
 
     @classmethod
     def create_table(cls):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
         query = """
         CREATE TABLE IF NOT EXISTS users (
             chat_id CHAR NOT NULL UNIQUE,
             chat_type CHAR NOT NULL,
             username CHAR NOT NULL,
-            fName CHAR NOT NULL,
-            lName CHAR NOT NULL,
+            fName CHAR,
+            lName CHAR,
             user_id CHAR NOT NULL UNIQUE,
             language_code CHAR NOT NULL,
             is_bot INT NOT NULL
         );
         """
-        cls.c.execute(query)
-        cls.connection.commit()
+        # cls.c.execute(query)
+        # cls.connection.commit()
+        c.execute(query)
+        connection.commit()
 
     @classmethod
     def create(cls, data: dict):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
+
+        c.execute("SELECT * FROM users WHERE user_id = ?", data["user_id"])
+        result = c.fetchone()
+
+        if result is None:
+            pass
+        else:
+            pass
         query = """
         INSERT INTO USERS (chat_id, chat_type, username, fName, lName, user_id, language_code, is_bot)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         """
-        cls.c.execute(query, (data["chat_id"],
-                               data["chat_type"],
-                               data["username"],
-                               data["fName"],
-                               data["lName"],
-                               data["user_id"],
-                               data["language_code"],
-                               data["is_bot"])),
-        cls.connection.commit()
-        cls.connection.close()
+        # cls.c.execute(query, (data["chat_id"],
+        #                        data["chat_type"],
+        #                        data["username"],
+        #                        data["fName"],
+        #                        data["lName"],
+        #                        data["user_id"],
+        #                        data["language_code"],
+        #                        data["is_bot"])),
+        # cls.connection.commit()
+        # cls.connection.close()
+        c.execute(query, (data["chat_id"],
+                              data["chat_type"],
+                              data["username"],
+                              data["fName"],
+                              data["lName"],
+                              data["user_id"],
+                              data["language_code"],
+                              data["is_bot"])),
+        connection.commit()
+        connection.close()
 
     @classmethod
     def chat_ids(cls):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
         query = """
         SELECT chat_id, chat_type, username, fName, lName, user_id, language_code, is_bot
         FROM USERS;
         """
-        cls.c.execute(query)
-        rows = cls.c.fetchall()
+        # cls.c.execute(query)
+        # rows = cls.c.fetchall()
+        c.execute(query)
+        rows = c.fetchall()
         users_list = []
         for row in rows:
             chat_id = int(row[0])
@@ -161,7 +189,9 @@ class Users:
 
             users_list.append(user_data)
 
-        cls.connection.commit()
-        cls.connection.close()
+        # cls.connection.commit()
+        # cls.connection.close()
+        connection.commit()
+        connection.close()
 
         return users_list

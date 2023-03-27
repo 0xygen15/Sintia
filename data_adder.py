@@ -2,6 +2,8 @@ import json
 import os
 import tkinter as tk
 
+import aiogram
+
 #
 # with open("old/dare.json", "r", encoding="utf8") as tf:
 #     data_old = json.load(tf)
@@ -355,33 +357,33 @@ import tkinter as tk
 #                   mode="r", encoding='utf8') as f:
 #             pass
 
-def aligner(source_file):
-    with open(source_file, 'r', encoding='utf8') as source_file:
-        source_json = json.load(source_file)
-        target_json = {}
-        index = 1
-        for level, data in source_json.items():
-            target_json[level] = {}
-            current_dict = target_json[level]
-            for key, value in data.items():
-                index_str = str(index)
-                current_dict[index_str] = value
-                index += 1
-            index = 1
-        return target_json
-
-# print(json.dumps(aligner("./database2/truth.json"), indent=4, ensure_ascii=False))
-def writer(f):
-    with open(f, "r+", encoding='utf8') as ff:
-        json_file = json.dumps(aligner(f), indent=4, ensure_ascii=False)
-        ff.write("")
-        ff.write(json_file)
-
-
-file_paths = ["./database2/truth.json",
-              "./database2/dare.json",
-              "./database2/never.json"]
-
-for file in file_paths:
-    writer(file)
-#365, 332, 322
+# def aligner(source_file):
+#     with open(source_file, 'r', encoding='utf8') as source_file:
+#         source_json = json.load(source_file)
+#         target_json = {}
+#         index = 1
+#         for level, data in source_json.items():
+#             target_json[level] = {}
+#             current_dict = target_json[level]
+#             for key, value in data.items():
+#                 index_str = str(index)
+#                 current_dict[index_str] = value
+#                 index += 1
+#             index = 1
+#         return target_json
+#
+# # print(json.dumps(aligner("./database2/truth.json"), indent=4, ensure_ascii=False))
+# def writer(f):
+#     with open(f, "r+", encoding='utf8') as ff:
+#         json_file = json.dumps(aligner(f), indent=4, ensure_ascii=False)
+#         ff.write("")
+#         ff.write(json_file)
+#
+#
+# file_paths = ["./database2/truth.json",
+#               "./database2/dare.json",
+#               "./database2/never.json"]
+#
+# for file in file_paths:
+#     writer(file)
+# #365, 332, 322
