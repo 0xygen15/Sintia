@@ -1,6 +1,7 @@
 import translators as ts
 import json
 import asyncio
+import time
 
 async def translate2l(sourse_lang, target_lang, sourse_filepath, target_filepath, translator):
     with open(sourse_filepath, "r", encoding='utf8') as sf:
@@ -12,9 +13,13 @@ async def translate2l(sourse_lang, target_lang, sourse_filepath, target_filepath
             for k1, v1 in v.items():
                 tf_dict[k][k1] = ts.translate_text(query_text=v1, translator=translator, from_language=sourse_lang,
                                                    to_language=target_lang)
+                time.sleep(2)
+                with open(target_filepath, "w", encoding='utf8') as tf:
+                    json.dump(tf_dict, tf, ensure_ascii=False, indent=4)
+
                 print(f"[Translating {sourse_filepath} to {target_lang} number {k1}]")
         with open(target_filepath, "w", encoding='utf8') as tf:
-            json.dump(tf_dict, tf)
+            json.dump(tf_dict, tf, ensure_ascii=False, indent=4)
             print(f"[Translated {sourse_filepath} to {target_lang}...]")
 
 
