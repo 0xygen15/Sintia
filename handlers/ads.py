@@ -6,7 +6,7 @@ from aiogram.types import Message, User
 
 from mainUnit.states import AdsStates
 from mainUnit.engine import Users
-from mainUnit.token import admin_id, channel_id
+from mainUnit.config import admin_id, channel_id
 
 from loader import dp, bot
 
