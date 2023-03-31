@@ -127,28 +127,16 @@ class Users:
         connection = sqlite3.connect("./database/users.db")
         c = connection.cursor()
 
-        c.execute("SELECT * FROM users WHERE user_id = ?", data["user_id"])
+        c.execute("SELECT * FROM users WHERE user_id = ?", (data["user_id"],))
         result = c.fetchone()
 
         if result is None:
-            pass
-        else:
-            pass
-        query = """
-        INSERT INTO USERS (chat_id, chat_type, username, fName, lName, user_id, language_code, is_bot)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-        """
-        # cls.c.execute(query, (data["chat_id"],
-        #                        data["chat_type"],
-        #                        data["username"],
-        #                        data["fName"],
-        #                        data["lName"],
-        #                        data["user_id"],
-        #                        data["language_code"],
-        #                        data["is_bot"])),
-        # cls.connection.commit()
-        # cls.connection.close()
-        c.execute(query, (data["chat_id"],
+            query = """
+                    INSERT INTO USERS (chat_id, chat_type, username, fName, lName, user_id, language_code, is_bot)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+                    """
+
+            c.execute(query, (data["chat_id"],
                               data["chat_type"],
                               data["username"],
                               data["fName"],
@@ -156,41 +144,23 @@ class Users:
                               data["user_id"],
                               data["language_code"],
                               data["is_bot"])),
-        connection.commit()
-        connection.close()
+            connection.commit()
+            connection.close()
+        else:
+            pass
+
 
     @classmethod
     def chat_ids(cls):
         connection = sqlite3.connect("./database/users.db")
         c = connection.cursor()
-        query = """
-        SELECT chat_id, chat_type, username, fName, lName, user_id, language_code, is_bot
-        FROM USERS;
-        """
-        # cls.c.execute(query)
-        # rows = cls.c.fetchall()
+        query = """SELECT chat_id FROM USERS;"""
         c.execute(query)
         rows = c.fetchall()
         users_list = []
         for row in rows:
-            chat_id = int(row[0])
-            user_id = int(row[5])
+            users_list.append(row)
 
-            user_data = {
-                'chat_id': chat_id,
-                'chat_type': row[1],
-                'username': row[2],
-                'fName': row[3],
-                'lName': row[4],
-                'user_id': user_id,
-                'language_code': row[6],
-                'is_bot': row[7]
-            }
-
-            users_list.append(user_data)
-
-        # cls.connection.commit()
-        # cls.connection.close()
         connection.commit()
         connection.close()
 

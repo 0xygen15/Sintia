@@ -1,2 +1,3 @@
 API_TOKEN = "5944479895:AAF_3q3nXOh-bvV1Wmt08hOFnLjJjgjgEYk"
 admin_id = 107985053
+channel_id = -1001358361130
