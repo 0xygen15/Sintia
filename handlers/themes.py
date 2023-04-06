@@ -4,7 +4,7 @@ import typing
 from aiogram.types import CallbackQuery, Message
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards
+from mainUnit.keyboards import Keyboards, ThemesKeyboard
 from mainUnit.players import Players
 from handlers.info import *
 
@@ -16,7 +16,8 @@ logging.basicConfig(level=logging.INFO)
 
 engine = Engine()
 player = Players()
-keyboards = Keyboards()
+# keyboards = Keyboards()
+keyboards = ThemesKeyboard()
 
 theme_chosen: str
 data = []

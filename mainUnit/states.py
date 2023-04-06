@@ -22,3 +22,6 @@ class ThreeOfFiveStates(StatesGroup):
 class AdsStates(StatesGroup):
     reading = State()
     checking = State()
+
+class LangStates(StatesGroup):
+    pending = State()

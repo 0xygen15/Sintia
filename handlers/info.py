@@ -1,9 +1,15 @@
-from aiogram.types import Message, User, Chat
+import typing
+
+from aiogram.types import Message, User, Chat, CallbackQuery
 from aiogram.dispatcher import FSMContext
 
 from loader import dp, bot
 
 from mainUnit.engine import Users
+from mainUnit.keyboards import ConfigKeyboard
+from mainUnit.states import LangStates
+from local.lang import Texts
+from local.lang import Texts
 
 
 text_info = """
@@ -68,22 +74,6 @@ refresh_text = """
 
 Запустить игру можно также из кнопки "Меню". 
 """
-
-# theme_school = """test desc"""
-# theme_work = """test desc"""
-# theme_travel = """test desc"""
-# theme_worldview = """test desc"""
-# theme_social_media = """test desc"""
-# theme_art = """test desc"""
-# theme_relations = """test desc"""
-# theme_memes = """test desc"""
-# theme_religion = """test desc"""
-# theme_memories = """test desc"""
-# theme_the_if = """test desc"""
-# theme_videogames = """test desc"""
-# theme_education = """test desc"""
-# theme_fashion = """test desc"""
-# theme_hard_choice = """test desc"""
 
 themes_description = {
                         "school": """Тема «школа» посвящена воспоминаниям и опыту, связанным с образованием.
@@ -189,6 +179,8 @@ async def start(message: Message, state: FSMContext):
     }
     Users.create_table()
     Users.create(user_chat_data)
+    lang_code = Users.get_user_lang_code(message.from_user.id)
+    #set default language
     await bot.send_message(text=start_text, chat_id=message.from_user.id, parse_mode='HTML')
 
 
@@ -196,3 +188,62 @@ async def start(message: Message, state: FSMContext):
 async def start(message: Message, state: FSMContext):
     await state.finish()
     await bot.send_message(text=refresh_text, chat_id=message.from_user.id, parse_mode='HTML')
+
+@dp.message_handler(commands="language")
+async def language(message: Message):
+    await bot.send_message(chat_id=message.from_user.id, text="Choose language/Выбери язык", reply_markup=ConfigKeyboard.kb_lang)
+    await LangStates.pending.set()
+
+@dp.callback_query_handler(ConfigKeyboard.cb_lang.filter(action=['en', 'de', 'fr', 'es', 'sr', 'ru', 'uk']),
+                           state=LangStates.pending)
+async def choose_language(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
+    answer = callback_data['action']
+    if answer == 'en':
+        Users.change_user_lang_code('en', query.message.from_user.id)
+        Texts.load_localisation('en')
+        await bot.edit_message_text(text="English language chosen as a default. Have a nice game!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'de':
+        Users.change_user_lang_code('de', query.message.from_user.id)
+        Texts.load_localisation('de')
+        await bot.edit_message_text(text="Standardmäßig ist die deutsche Sprache gewählt. Haben Sie ein schönes Spiel!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'fr':
+        Users.change_user_lang_code('fr', query.message.from_user.id)
+        Texts.load_localisation('fr')
+        await bot.edit_message_text(text="Langue française choisie par défaut. Bon jeu !", chat_id=query.message.chat.id,
+                                    message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'es':
+        Users.change_user_lang_code('es', query.message.from_user.id)
+        Texts.load_localisation('es')
+        await bot.edit_message_text(text="Idioma español elegido por defecto. ¡Que tengas un buen juego!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'sr':
+        Users.change_user_lang_code('sr', query.message.from_user.id)
+        Texts.load_localisation('sr')
+        await bot.edit_message_text(text="Српски језик изабран као подразумевани. Угодна игра!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'ru':
+        Users.change_user_lang_code('ru', query.message.from_user.id)
+        Texts.load_localisation('ru')
+        await bot.edit_message_text(text="Русский язык выбран по умолчанию. Приятной игры!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()
+    elif answer == 'uk':
+        Users.change_user_lang_code('uk', query.message.from_user.id)
+        Texts.load_localisation('uk')
+        await bot.edit_message_text(text="За замовчуванням вибрано українську мову. Гарної гри!",
+                                    chat_id=query.message.chat.id, message_id=query.message.message_id,
+                                    reply_markup=None)
+        await state.finish()

@@ -165,3 +165,28 @@ class Users:
         connection.close()
 
         return users_list
+
+    @classmethod
+    def get_user_lang_code(cls, user_id):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
+
+        query = """SELECT language_code FROM USERS WHERE user_id = ?"""
+        c.execute(query, (user_id,))
+        lang_code = c.fetchone()[0]
+
+        connection.commit()
+        connection.close()
+
+        return lang_code
+
+    @classmethod
+    def change_user_lang_code(cls, lang_code, user_id):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
+
+        query = "UPDATE users SET language_code = ? WHERE user_id = ?"
+        c.execute(query, (lang_code, user_id,))
+
+        connection.commit()
+        connection.close()

@@ -4,7 +4,7 @@ import typing
 from aiogram.types import CallbackQuery, Message
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards
+from mainUnit.keyboards import Keyboards, ThreeOfFiveKeyboard
 from mainUnit.players import Players
 
 
@@ -16,7 +16,8 @@ logging.basicConfig(level=logging.INFO)
 
 engine = Engine()
 player = Players()
-keyboards = Keyboards()
+# keyboards = Keyboards()
+keyboards = ThreeOfFiveKeyboard()
 
 data = []
 

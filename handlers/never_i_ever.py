@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.dispatcher import FSMContext
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards
+from mainUnit.keyboards import Keyboards, NieKeyboard
 from mainUnit.players import Players
 from mainUnit.states import NieStates
 
@@ -19,7 +19,8 @@ logging.basicConfig(level=logging.INFO)
 
 engine = Engine()
 player = Players()
-keyboards = Keyboards()
+# keyboards = Keyboards()
+keyboards = NieKeyboard()
 
 ###
 
