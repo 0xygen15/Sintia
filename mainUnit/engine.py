@@ -10,6 +10,8 @@ class Engine:
         self.d_all = []
         self.n_all = []
 
+        self.lang_code = ""
+
     def shuffled_list(self, object: list):
         import random
         random.shuffle(object)
