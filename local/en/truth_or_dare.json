@@ -1,0 +1,14 @@
+{
+    "lang_code": "RU",
+    "players names enter request": "Enter the names of the players using a comma as a separator:",
+    "check names": "Let's check the names:",
+    "right?": "Is everything right?",
+    "enter usernames": "Enter the names of the players:",
+    "proceed to settings": "Great, you can go to the settings.",
+    "choose levels": "In this menu you need to choose categories of questions and actions for the game.",
+    "mode": "Select the game mode. There are two of them. \n\n 'Free' - everyone chooses when the truth is, and when the action. \n\n Alternately - the bot will alternate the truth and action one time.",
+    "tord?": "True or action?",
+    "players, level and mode!": "First you need to add players, choose the level and mode of the game!.",
+    "game over": "The game is over, questions/actions are over. Click a new game",
+    "penalty": "It looks like you have five failures in a row, you have a fine."
+}

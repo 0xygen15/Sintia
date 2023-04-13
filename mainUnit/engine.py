@@ -180,7 +180,7 @@ class Users:
         connection.commit()
         connection.close()
 
-        return lang_code
+        return str(lang_code)
 
     @classmethod
     def change_user_lang_code(cls, lang_code, user_id):
