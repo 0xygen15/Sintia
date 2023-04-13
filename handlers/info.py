@@ -1,6 +1,6 @@
 import typing
 
-from aiogram.types import Message, User, Chat, CallbackQuery
+from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 
 from loader import dp, bot
@@ -8,7 +8,7 @@ from loader import dp, bot
 from mainUnit.engine import Users
 from mainUnit.keyboards import ConfigKeyboard
 from mainUnit.states import LangStates
-from local.lang import Texts
+
 from local.lang import Texts
 
 
@@ -158,7 +158,6 @@ themes_description = {
                                 и какие факторы влияют на ваш выбор, такие как эмпатия, рациональность или личные интересы."""
 }
 
-
 @dp.message_handler(commands='info')
 async def info(message: Message):
     await bot.send_message(text=text_info, chat_id=message.from_user.id, parse_mode='HTML')
@@ -177,10 +176,10 @@ async def start(message: Message, state: FSMContext):
         'language_code': message.from_user.language_code,
         'is_bot': message.from_user.is_bot
     }
-    Users.create_table()
-    Users.create(user_chat_data)
-    lang_code = Users.get_user_lang_code(message.from_user.id)
-    #set default language
+    Users.create_table() # create db if not created
+    Users.create(user_chat_data) #add user data to db if bot added yet
+    Texts.lang_code = Users.get_user_lang_code(message.from_user.id) #get lang code if the user based on his telegram default
+    Texts.load_localisation(Texts.lang_code) #load localisation files
     await bot.send_message(text=start_text, chat_id=message.from_user.id, parse_mode='HTML')
 
 

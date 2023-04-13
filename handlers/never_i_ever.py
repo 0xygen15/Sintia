@@ -9,6 +9,8 @@ from mainUnit.keyboards import Keyboards, NieKeyboard
 from mainUnit.players import Players
 from mainUnit.states import NieStates
 
+from local.lang import Texts
+
 from loader import dp, bot
 
 ###
@@ -43,6 +45,7 @@ tord_t = True
 
 ###
 
+texts = Texts.never_i_ever
 
 @dp.message_handler(commands="never_i_ever")
 async def never_i_ever(message: Message):
