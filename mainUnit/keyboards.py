@@ -1,7 +1,10 @@
 from aiogram.utils.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from local.lang import Texts
 
+texts = Texts.keyboards
+texts_themes = Texts.themes
 class Keyboards:
 
     def __init__(self):
@@ -9,20 +12,20 @@ class Keyboards:
         self.keyboard_nie = InlineKeyboardMarkup(row_width=2,
                                                  inline_keyboard=[
                                                      [
-                                                         InlineKeyboardButton('Правда',
+                                                         InlineKeyboardButton(texts["truth"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='truth_nie')),
-                                                         InlineKeyboardButton('Действие',
+                                                         InlineKeyboardButton(texts["dare"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='dare_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton('Я никогда не ...',
+                                                         InlineKeyboardButton(texts["never i ever"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='next_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton('Завершить',
+                                                         InlineKeyboardButton(texts["end"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='end_nie'))
                                                      ]
@@ -32,15 +35,15 @@ class Keyboards:
         self.keyboard_td = InlineKeyboardMarkup(row_width=2,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton('Правда',
+                                                        InlineKeyboardButton(texts["truth"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='truth')),
-                                                        InlineKeyboardButton('Действие',
+                                                        InlineKeyboardButton(texts["dare"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='dare'))
                                                     ],
                                                     [
-                                                        InlineKeyboardButton('Завершить',
+                                                        InlineKeyboardButton(texts["end"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='end'))
                                                     ]
@@ -62,37 +65,37 @@ class Keyboards:
         self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'О жизни {self.mark1}',
+                                                               InlineKeyboardButton(f'{texts["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Абсурд {self.mark2}',
+                                                                   f'{texts["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Компания {self.mark3}',
+                                                                   f'{texts["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Узнать получше {self.mark4}',
+                                                                   f'{texts["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='personal'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'451℉ {self.mark5}',
+                                                                   f'{texts["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='adult'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   'В ы б о р   с д е л а н',
+                                                                   texts["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -105,10 +108,10 @@ class Keyboards:
         self.keyboard_players = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton('Да, всё верно.',
+                                                             InlineKeyboardButton(texts["right"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='yes')),
-                                                             InlineKeyboardButton('Нет, хочу исправить.',
+                                                             InlineKeyboardButton(texts["need edit"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='no')),
                                                          ]
@@ -122,14 +125,14 @@ class Keyboards:
         self.keyboard_mode = InlineKeyboardMarkup(row_width=2,
                                                   inline_keyboard=[
                                                       [
-                                                          InlineKeyboardButton('Свободный',
+                                                          InlineKeyboardButton(texts["free mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='free'
                                                                                )),
 
                                                       ],
                                                       [
-                                                          InlineKeyboardButton('Поочередный',
+                                                          InlineKeyboardButton(texts["alternate mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='step'
                                                                                ))
@@ -140,20 +143,20 @@ class Keyboards:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton('Выполнено',
+                                                               InlineKeyboardButton(texts["done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton('Не выполнено',
+                                                               InlineKeyboardButton(texts["not done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(' О к о н ч и т ь  и г р у',
+                                                               InlineKeyboardButton(texts["end the game"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -165,14 +168,14 @@ class Keyboards:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton('Выполнено',
+                                                                 InlineKeyboardButton(texts["done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton('Не выполнено',
+                                                                 InlineKeyboardButton(texts["not done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='failed_f'
                                                                                       ))
@@ -183,18 +186,18 @@ class Keyboards:
         self.kb35 = InlineKeyboardMarkup(row_width=2,
                                          inline_keyboard=[
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Правда"', callback_data=self.cb35.new(action="Truth"))
+                                                 InlineKeyboardButton(texts["chapter truth"], callback_data=self.cb35.new(action="Truth"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Действие"',
+                                                 InlineKeyboardButton(texts["chapter dare"],
                                                                       callback_data=self.cb35.new(action="Dare"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Я никогда не..."',
+                                                 InlineKeyboardButton(texts["chapter nie"],
                                                                       callback_data=self.cb35.new(action="Never"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Закончить/Новая игра',
+                                                 InlineKeyboardButton(texts["endgame new game"],
                                                                       callback_data=self.cb35.new(action="End"))
                                              ]
                                          ])
@@ -203,7 +206,7 @@ class Keyboards:
         self.kb35b = InlineKeyboardMarkup(row_width=2,
                                          inline_keyboard=[
                                              [
-                                                 InlineKeyboardButton('Начать',
+                                                 InlineKeyboardButton(texts["begin"],
                                                                       callback_data=self.cb35.new(action="Begin"))
                                              ]
                                          ])
@@ -429,15 +432,15 @@ class TordKeyboard:
         self.keyboard_td = InlineKeyboardMarkup(row_width=2,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton('Правда',
+                                                        InlineKeyboardButton(texts["truth"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='truth')),
-                                                        InlineKeyboardButton('Действие',
+                                                        InlineKeyboardButton(texts["dare"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='dare'))
                                                     ],
                                                     [
-                                                        InlineKeyboardButton('Завершить',
+                                                        InlineKeyboardButton(texts["end"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='end'))
                                                     ]
@@ -459,37 +462,37 @@ class TordKeyboard:
         self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'О жизни {self.mark1}',
+                                                               InlineKeyboardButton(f'{texts["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Абсурд {self.mark2}',
+                                                                   f'{texts["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Компания {self.mark3}',
+                                                                   f'{texts["company"]} {self.mark3}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='company'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Узнать получше {self.mark4}',
+                                                                   f'{texts["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='personal'))
+                                                                       action='awkward'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'451℉ {self.mark5}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='adult'))
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   'В ы б о р   с д е л а н',
+                                                                   texts["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -502,10 +505,10 @@ class TordKeyboard:
         self.keyboard_players = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton('Да, всё верно.',
+                                                             InlineKeyboardButton(texts["right"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='yes')),
-                                                             InlineKeyboardButton('Нет, хочу исправить.',
+                                                             InlineKeyboardButton(texts["need edit"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='no')),
                                                          ]
@@ -519,14 +522,14 @@ class TordKeyboard:
         self.keyboard_mode = InlineKeyboardMarkup(row_width=2,
                                                   inline_keyboard=[
                                                       [
-                                                          InlineKeyboardButton('Свободный',
+                                                          InlineKeyboardButton(texts["free mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='free'
                                                                                )),
 
                                                       ],
                                                       [
-                                                          InlineKeyboardButton('Поочередный',
+                                                          InlineKeyboardButton(texts["alternate mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='step'
                                                                                ))
@@ -537,20 +540,20 @@ class TordKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton('Выполнено',
+                                                               InlineKeyboardButton(texts["done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton('Не выполнено',
+                                                               InlineKeyboardButton(texts["not done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(' О к о н ч и т ь  и г р у',
+                                                               InlineKeyboardButton(texts["end the game"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -561,14 +564,14 @@ class TordKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton('Выполнено',
+                                                                 InlineKeyboardButton(texts["done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton('Не выполнено',
+                                                                 InlineKeyboardButton(texts["not done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='failed_f'
                                                                                       ))
@@ -616,33 +619,33 @@ class TordKeyboard:
         updated_keyboard = InlineKeyboardMarkup(row_width=1,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton(f'О жизни {self.mark1}',
+                                                        InlineKeyboardButton(f'{texts["about life"]} {self.mark1}',
                                                                              callback_data=self.cb_all_level.new(
                                                                                  action='lifestyle'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Абсурдные {self.mark2}',
+                                                            f'{texts["absurd"]} {self.mark2}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='absurd'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Для компании {self.mark3}',
+                                                            f'{texts["company"]} {self.mark3}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='company'))
+                                                    ],
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            f'{texts["relations"]} {self.mark4}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='relations'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'Отношения {self.mark4}',
+                                                            f'{texts["awkward"]} {self.mark5}',
                                                             callback_data=self.cb_all_level.new(
-                                                                action='personal'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'Неловкие {self.mark5}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='adult'))
+                                                                action='awkward'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
@@ -675,14 +678,14 @@ class TordKeyboard:
         updated_keyboard_mode = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton(f'Свободный {self.mode_mark1}',
+                                                             InlineKeyboardButton(f'{texts["free mode"]} {self.mode_mark1}',
                                                                                   callback_data=self.cb_mode.new(
                                                                                       action='free'
                                                                                   )),
 
                                                          ],
                                                          [
-                                                             InlineKeyboardButton(f'Поочередный {self.mode_mark2}',
+                                                             InlineKeyboardButton(f'{texts["alternate mode"]} {self.mode_mark2}',
                                                                                   callback_data=self.cb_mode.new(
                                                                                       action='step'
                                                                                   ))
@@ -695,20 +698,20 @@ class NieKeyboard:
         self.keyboard_nie = InlineKeyboardMarkup(row_width=2,
                                                  inline_keyboard=[
                                                      [
-                                                         InlineKeyboardButton('Правда',
+                                                         InlineKeyboardButton(texts["truth"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='truth_nie')),
-                                                         InlineKeyboardButton('Действие',
+                                                         InlineKeyboardButton(texts["dare"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='dare_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton('Я никогда не ...',
+                                                         InlineKeyboardButton(texts["never i ever"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='next_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton('Завершить',
+                                                         InlineKeyboardButton(texts["end the game"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='end_nie'))
                                                      ]
@@ -729,37 +732,37 @@ class NieKeyboard:
         self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'О жизни {self.mark1}',
+                                                               InlineKeyboardButton(f'{texts["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Абсурд {self.mark2}',
+                                                                   f'{texts["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Компания {self.mark3}',
+                                                                   f'{texts["company"]} {self.mark3}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='company'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'Узнать получше {self.mark4}',
+                                                                   f'{texts["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='personal'))
+                                                                       action='awkward'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'451℉ {self.mark5}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='adult'))
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   'В ы б о р   с д е л а н',
+                                                                   texts["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -770,20 +773,20 @@ class NieKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton('Выполнено',
+                                                               InlineKeyboardButton(texts["done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton('Не выполнено',
+                                                               InlineKeyboardButton(texts["not done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(' О к о н ч и т ь  и г р у',
+                                                               InlineKeyboardButton(texts["end the game"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -794,14 +797,14 @@ class NieKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton('Выполнено',
+                                                                 InlineKeyboardButton(texts["done"],
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton('Не выполнено',
+                                                                 InlineKeyboardButton(texts["not done"],
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='failed_f'
                                                                                       ))
@@ -848,44 +851,43 @@ class NieKeyboard:
 
         updated_keyboard = InlineKeyboardMarkup(row_width=1,
                                                 inline_keyboard=[
-                                                    [
-                                                        InlineKeyboardButton(f'О жизни {self.mark1}',
-                                                                             callback_data=self.cb_all_level.new(
-                                                                                 action='lifestyle'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'Абсурдные {self.mark2}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='absurd'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'Для компании {self.mark3}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='relations'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'Отношения {self.mark4}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='personal'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'Неловкие {self.mark5}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='adult'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            'В ы б о р   с д е л а н',
-                                                            callback_data=self.cb_all_level.new(action=
-                                                                                                'ready')
-                                                        )
-                                                    ]
-
-                                                ]
+                                                           [
+                                                               InlineKeyboardButton(f'{texts["about life"]} {self.mark1}',
+                                                                                    callback_data=self.cb_all_level.new(
+                                                                                        action='lifestyle'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["absurd"]} {self.mark2}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='absurd'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["company"]} {self.mark3}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='company'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["relations"]} {self.mark4}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='relations'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{texts["awkward"]} {self.mark5}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='awkward'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   texts["choice is made"],
+                                                                   callback_data=self.cb_all_level.new(action=
+                                                                                                       'ready')
+                                                               )
+                                                           ]
+                                                       ]
                                                 )
         return updated_keyboard
 
@@ -895,19 +897,19 @@ class ThreeOfFiveKeyboard:
         self.kb35 = InlineKeyboardMarkup(row_width=2,
                                          inline_keyboard=[
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Правда"',
+                                                 InlineKeyboardButton(texts["chapter truth"],
                                                                       callback_data=self.cb35.new(action="Truth"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Действие"',
+                                                 InlineKeyboardButton(texts["chapter dare"],
                                                                       callback_data=self.cb35.new(action="Dare"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Раздел "Я никогда не..."',
+                                                 InlineKeyboardButton(texts["chapter nie"],
                                                                       callback_data=self.cb35.new(action="Never"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(f'Закончить/Новая игра',
+                                                 InlineKeyboardButton(texts["endgame new game"],
                                                                       callback_data=self.cb35.new(action="End"))
                                              ]
                                          ])
@@ -916,7 +918,7 @@ class ThreeOfFiveKeyboard:
         self.kb35b = InlineKeyboardMarkup(row_width=2,
                                           inline_keyboard=[
                                               [
-                                                  InlineKeyboardButton('Начать',
+                                                  InlineKeyboardButton(texts["begin"],
                                                                        callback_data=self.cb35.new(action="Begin"))
                                               ]
                                           ])
@@ -949,60 +951,60 @@ class ThemesKeyboard:
         self.kb_themes = InlineKeyboardMarkup(row_width=3,
                                               inline_keyboard=[
                                                   [
-                                                      InlineKeyboardButton('school',
+                                                      InlineKeyboardButton(texts_themes["school name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="school")),
-                                                      InlineKeyboardButton('work',
+                                                      InlineKeyboardButton(texts_themes["work name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="work")),
-                                                      InlineKeyboardButton('travel',
+                                                      InlineKeyboardButton(texts_themes["travel name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="travel"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton('worldview',
+                                                      InlineKeyboardButton(texts_themes["worldview name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="worldview")),
-                                                      InlineKeyboardButton('social media',
+                                                      InlineKeyboardButton(texts_themes["social media name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="social media")),
-                                                      InlineKeyboardButton('art',
+                                                      InlineKeyboardButton(texts_themes["art name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="art"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton('relations',
+                                                      InlineKeyboardButton(texts_themes["relations name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="relations")),
-                                                      InlineKeyboardButton('memes',
+                                                      InlineKeyboardButton(texts_themes["memes name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="memes")),
-                                                      InlineKeyboardButton('religion',
+                                                      InlineKeyboardButton(texts_themes["religion name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="religion"))
 
                                                   ],
                                                   [
-                                                      InlineKeyboardButton('memories',
+                                                      InlineKeyboardButton(texts_themes["memories name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="memories")),
-                                                      InlineKeyboardButton('if',
+                                                      InlineKeyboardButton(texts_themes["if name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="if")),
-                                                      InlineKeyboardButton('videogames',
+                                                      InlineKeyboardButton(texts_themes["videogames name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="videogames"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton('education',
+                                                      InlineKeyboardButton(texts_themes["education name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="education")),
-                                                      InlineKeyboardButton('fashion',
+                                                      InlineKeyboardButton(texts_themes["fashion name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="fashion")),
-                                                      InlineKeyboardButton('hard choice',
+                                                      InlineKeyboardButton(texts_themes["hard choice name"],
                                                                            callback_data=self.cb_themes.new(
-                                                                               action="fashion"))
+                                                                               action="hard choice"))
                                                   ]
                                               ])
 
@@ -1010,18 +1012,18 @@ class ThemesKeyboard:
         self.kb_themes_game = InlineKeyboardMarkup(row_width=2,
                                                    inline_keyboard=[
                                                        [
-                                                           InlineKeyboardButton('Назад',
+                                                           InlineKeyboardButton('⬅️',
                                                                                 callback_data=self.cb_themes_game.new(
                                                                                     action='previous'
                                                                                 )),
-                                                           InlineKeyboardButton('Далее',
+                                                           InlineKeyboardButton('➡️',
                                                                                 callback_data=self.cb_themes_game.new(
                                                                                     action='next'
                                                                                 ))
 
                                                        ],
                                                        [
-                                                           InlineKeyboardButton('Закончить игру',
+                                                           InlineKeyboardButton(texts["end the game"],
                                                                                 callback_data=self.cb_themes_game.new(
                                                                                     action='end'
                                                                                 ))
@@ -1032,11 +1034,11 @@ class ThemesKeyboard:
         self.kb_themes_confirm = InlineKeyboardMarkup(row_width=2,
                                                       inline_keyboard=[
                                                           [
-                                                              InlineKeyboardButton('В главное меню',
+                                                              InlineKeyboardButton(texts["menu"],
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='menu'
                                                                                    )),
-                                                              InlineKeyboardButton('Начать игру',
+                                                              InlineKeyboardButton(texts["begin"],
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='begin'
                                                                                    ))

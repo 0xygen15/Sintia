@@ -4,6 +4,8 @@ info = {
     "refresh": ""
 }
 keyboards = {
+    "menu": "",
+    "begin": "",
     "truth": "",
     "dare": "",
     "end": "",
@@ -23,7 +25,8 @@ keyboards = {
     "chapter truth": "",
     "chapter nie": "",
     "chapter dare": "",
-    "endgame new game": """"""
+    "choice is made": "",
+    "endgame new game": ""
 }
 never_i_ever = {
     "choose levels": "",
