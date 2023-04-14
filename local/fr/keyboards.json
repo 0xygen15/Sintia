@@ -7,6 +7,7 @@
     "company": "Pour la compagnie",
     "relations": "Relation",
     "awkward": "Maladroit",
+    "choice is made": "Le choix est fait",
     "right": "Oui c'est vrai.",
     "need edit": "Non, vous devez le réparer.",
     "free mode": "Mode libre choix.",
@@ -18,5 +19,7 @@
     "chapter truth": "Section 'Pravda'",
     "chapter nie": "Section 'Je ne ...'",
     "chapter dare": "Section «Action»",
-    "endgame new game": "Terminer le jeu / recommencer"
+    "endgame new game": "Terminer le jeu / recommencer",
+    "begin": "Commencer",
+    "menu": "au menu principal"
 }

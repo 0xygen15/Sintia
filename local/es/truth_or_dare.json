@@ -3,6 +3,7 @@
     "players names enter request": "Introduce los nombres de los jugadores usando una coma como separador:",
     "check names": "Vamos a ver los nombres:",
     "right?": "¿Todo está bien?",
+    "min2": "Al menos dos nombres :) Vamos de nuevo:",
     "enter usernames": "Ingrese los nombres de los jugadores:",
     "proceed to settings": "Genial, puedes ir a la configuración.",
     "choose levels": "En este menú, debe elegir categorías de preguntas y acciones para el juego.",

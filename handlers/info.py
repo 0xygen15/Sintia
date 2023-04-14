@@ -158,9 +158,11 @@ themes_description = {
                                 и какие факторы влияют на ваш выбор, такие как эмпатия, рациональность или личные интересы."""
 }
 
+# texts = Texts.info
+
 @dp.message_handler(commands='info')
 async def info(message: Message):
-    await bot.send_message(text=text_info, chat_id=message.from_user.id, parse_mode='HTML')
+    await bot.send_message(text=Texts.info["info"], chat_id=message.from_user.id, parse_mode='HTML')
 
 
 @dp.message_handler(commands='start')
@@ -178,15 +180,15 @@ async def start(message: Message, state: FSMContext):
     }
     Users.create_table() # create db if not created
     Users.create(user_chat_data) #add user data to db if bot added yet
-    Texts.lang_code = Users.get_user_lang_code(message.from_user.id) #get lang code if the user based on his telegram default
+    Texts.lang_code = Users.get_user_lang_code(message.from_user.id)
     Texts.load_localisation(Texts.lang_code) #load localisation files
-    await bot.send_message(text=start_text, chat_id=message.from_user.id, parse_mode='HTML')
+    await bot.send_message(text=Texts.info["start"], chat_id=message.from_user.id, parse_mode='HTML')
 
 
 @dp.message_handler(commands='refresh', state='*')
 async def start(message: Message, state: FSMContext):
     await state.finish()
-    await bot.send_message(text=refresh_text, chat_id=message.from_user.id, parse_mode='HTML')
+    await bot.send_message(text=Texts.info["refresh"], chat_id=message.from_user.id, parse_mode='HTML')
 
 @dp.message_handler(commands="language")
 async def language(message: Message):
@@ -199,49 +201,56 @@ async def choose_language(query: CallbackQuery, callback_data: typing.Dict[str, 
     answer = callback_data['action']
     if answer == 'en':
         Users.change_user_lang_code('en', query.message.from_user.id)
-        Texts.load_localisation('en')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="English language chosen as a default. Have a nice game!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'de':
         Users.change_user_lang_code('de', query.message.from_user.id)
-        Texts.load_localisation('de')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="Standardmäßig ist die deutsche Sprache gewählt. Haben Sie ein schönes Spiel!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'fr':
         Users.change_user_lang_code('fr', query.message.from_user.id)
-        Texts.load_localisation('fr')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="Langue française choisie par défaut. Bon jeu !", chat_id=query.message.chat.id,
                                     message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'es':
         Users.change_user_lang_code('es', query.message.from_user.id)
-        Texts.load_localisation('es')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="Idioma español elegido por defecto. ¡Que tengas un buen juego!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'sr':
         Users.change_user_lang_code('sr', query.message.from_user.id)
-        Texts.load_localisation('sr')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="Српски језик изабран као подразумевани. Угодна игра!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'ru':
         Users.change_user_lang_code('ru', query.message.from_user.id)
-        Texts.load_localisation('ru')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="Русский язык выбран по умолчанию. Приятной игры!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
         await state.finish()
     elif answer == 'uk':
         Users.change_user_lang_code('uk', query.message.from_user.id)
-        Texts.load_localisation('uk')
+        Texts.lang_code = Users.get_user_lang_code(query.message.from_user.id)
+        Texts.load_localisation(Texts.lang_code)
         await bot.edit_message_text(text="За замовчуванням вибрано українську мову. Гарної гри!",
                                     chat_id=query.message.chat.id, message_id=query.message.message_id,
                                     reply_markup=None)
