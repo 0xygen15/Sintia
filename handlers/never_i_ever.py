@@ -24,40 +24,16 @@ player = Players()
 # keyboards = Keyboards()
 keyboards = NieKeyboard()
 
-def keyboard_local():
-    global keyboards
-    if Texts.lang_code == "en":
-        keyboards_en = NieKeyboard()
-        keyboards = keyboards_en
-        return keyboards
-    elif Texts.lang_code == "de":
-        keyboards_de = NieKeyboard()
-        keyboards = keyboards_de
-        return keyboards
-    elif Texts.lang_code == "fr":
-        keyboards_fr = NieKeyboard()
-        keyboards = keyboards_fr
-        return keyboards
-    elif Texts.lang_code == "es":
-        keyboards_es = NieKeyboard()
-        keyboards = keyboards_es
-        return keyboards
-    elif Texts.lang_code == "ru":
-        keyboards_ru = NieKeyboard()
-        keyboards = keyboards_ru
-        return keyboards
-    elif Texts.lang_code == "uk":
-        keyboards_uk = NieKeyboard()
-        keyboards = keyboards_uk
-        return keyboards
-    elif Texts.lang_code == "sr":
-        keyboards_sr = NieKeyboard()
-        keyboards = keyboards_sr
-        return keyboards
-    else:
-        keyboards_en = NieKeyboard()
-        keyboards = keyboards_en
-        return keyboards
+def update_keyboards_object():
+    global keyboards, engine, player
+    if Texts.lang_code:
+        keyboards_updated = NieKeyboard()
+        keyboards = keyboards_updated
+        engine_updated = Engine()
+        engine = engine_updated
+        player_updated = Players()
+        player = player_updated
+        return keyboards, engine, player
 
 
 ###
@@ -83,13 +59,13 @@ tord_t = True
 
 # texts = Texts.never_i_ever
 
-@dp.message_handler(commands="never_i_ever")
+@dp.message_handler(commands="never_i_ever", state='*')
 async def never_i_ever(message: Message, state: FSMContext):
-    global keyboards
+    global keyboards, engine, player
     await state.finish()
     await NieStates.levels.set()
     Texts.ensure_localisation(Users.get_user_lang_code(message.from_user.id))
-    keyboards = keyboard_local()
+    keyboards, engine, player = update_keyboards_object()
     await bot.send_message(chat_id=message.from_user.id, text=Texts.never_i_ever["choose levels"], reply_markup=keyboards.keyboard_level_all)
 
 

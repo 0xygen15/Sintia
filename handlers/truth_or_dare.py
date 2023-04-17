@@ -44,52 +44,28 @@ current_player_name = ""
 first_message_id: int
 last_message_id: int
 
-def keyboard_local():
-    global keyboards
-    if Texts.lang_code == "en":
+def update_keyboards_object():
+    global keyboards, engine, player
+    if Texts.lang_code:
         keyboards_en = TordKeyboard()
         keyboards = keyboards_en
-        return keyboards
-    elif Texts.lang_code == "de":
-        keyboards_de = TordKeyboard()
-        keyboards = keyboards_de
-        return keyboards
-    elif Texts.lang_code == "fr":
-        keyboards_fr = TordKeyboard()
-        keyboards = keyboards_fr
-        return keyboards
-    elif Texts.lang_code == "es":
-        keyboards_es = TordKeyboard()
-        keyboards = keyboards_es
-        return keyboards
-    elif Texts.lang_code == "ru":
-        keyboards_ru = TordKeyboard()
-        keyboards = keyboards_ru
-        return keyboards
-    elif Texts.lang_code == "uk":
-        keyboards_uk = TordKeyboard()
-        keyboards = keyboards_uk
-        return keyboards
-    elif Texts.lang_code == "sr":
-        keyboards_sr = TordKeyboard()
-        keyboards = keyboards_sr
-        return keyboards
-    else:
-        keyboards_en = TordKeyboard()
-        keyboards = keyboards_en
-        return keyboards
+        engine_updated = Engine()
+        engine = engine_updated
+        player_updated = Players()
+        player = player_updated
+        return keyboards, engine, player
 
 # texts = Texts.truth_or_dare
 ###
 
-@dp.message_handler(commands='truth_or_dare')
+@dp.message_handler(commands='truth_or_dare', state='*')
 async def players_names(message: Message, state: FSMContext):
-    global keyboards
+    global keyboards, engine, player
     await state.finish()
     global first_message_id
     first_message_id = message.message_id
     await PlayerStates.ready_to_get_players_names.set()
-    keyboards = keyboard_local()
+    keyboards, engine, player = update_keyboards_object()
     await bot.send_message(chat_id=message.from_user.id, text=Texts.truth_or_dare["players names enter request"])
     logging.info("User is asked to enter names of players")
 

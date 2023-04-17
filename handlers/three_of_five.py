@@ -25,50 +25,26 @@ data = []
 
 # texts = Texts.three_of_five
 
-def keyboard_local():
-    global keyboards
-    if Texts.lang_code == "en":
+def update_keyboards_object():
+    global keyboards, engine, player
+    if Texts.lang_code:
         keyboards_en = ThreeOfFiveKeyboard()
         keyboards = keyboards_en
-        return keyboards
-    elif Texts.lang_code == "de":
-        keyboards_de = ThreeOfFiveKeyboard()
-        keyboards = keyboards_de
-        return keyboards
-    elif Texts.lang_code == "fr":
-        keyboards_fr = ThreeOfFiveKeyboard()
-        keyboards = keyboards_fr
-        return keyboards
-    elif Texts.lang_code == "es":
-        keyboards_es = ThreeOfFiveKeyboard()
-        keyboards = keyboards_es
-        return keyboards
-    elif Texts.lang_code == "ru":
-        keyboards_ru = ThreeOfFiveKeyboard()
-        keyboards = keyboards_ru
-        return keyboards
-    elif Texts.lang_code == "uk":
-        keyboards_uk = ThreeOfFiveKeyboard()
-        keyboards = keyboards_uk
-        return keyboards
-    elif Texts.lang_code == "sr":
-        keyboards_sr = ThreeOfFiveKeyboard()
-        keyboards = keyboards_sr
-        return keyboards
-    else:
-        keyboards_en = ThreeOfFiveKeyboard()
-        keyboards = keyboards_en
-        return keyboards
+        engine_updated = Engine()
+        engine = engine_updated
+        player_updated = Players()
+        player = player_updated
+        return keyboards, engine, player
 
 ####
 
-@dp.message_handler(commands='three_of_five')
+@dp.message_handler(commands='three_of_five', state='*')
 async def three_of_five_start(message: Message, state: FSMContext):
-    global keyboards
+    global keyboards, engine, player
     await state.finish()
     global data
     data = engine.three_of_five()
-    keyboards = keyboard_local()
+    keyboards, engine, player = update_keyboards_object()
     await bot.send_message(chat_id=message.from_user.id,
                            text=Texts.three_of_five["description"],
                            reply_markup=keyboards.kb35)

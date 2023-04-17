@@ -26,50 +26,26 @@ theme_chosen: str
 data = []
 index: int
 
-def keyboard_local():
-    global keyboards
-    if Texts.lang_code == "en":
+def update_keyboards_object():
+    global keyboards, engine, player
+    if Texts.lang_code:
         keyboards_en = ThemesKeyboard()
         keyboards = keyboards_en
-        return keyboards
-    elif Texts.lang_code == "de":
-        keyboards_de = ThemesKeyboard()
-        keyboards = keyboards_de
-        return keyboards
-    elif Texts.lang_code == "fr":
-        keyboards_fr = ThemesKeyboard()
-        keyboards = keyboards_fr
-        return keyboards
-    elif Texts.lang_code == "es":
-        keyboards_es = ThemesKeyboard()
-        keyboards = keyboards_es
-        return keyboards
-    elif Texts.lang_code == "ru":
-        keyboards_ru = ThemesKeyboard()
-        keyboards = keyboards_ru
-        return keyboards
-    elif Texts.lang_code == "uk":
-        keyboards_uk = ThemesKeyboard()
-        keyboards = keyboards_uk
-        return keyboards
-    elif Texts.lang_code == "sr":
-        keyboards_sr = ThemesKeyboard()
-        keyboards = keyboards_sr
-        return keyboards
-    else:
-        keyboards_en = ThemesKeyboard()
-        keyboards = keyboards_en
-        return keyboards
+        engine_updated = Engine()
+        engine = engine_updated
+        player_updated = Players()
+        player = player_updated
+        return keyboards, engine, player
 
 # texts = Texts.themes
 ####
 
-@dp.message_handler(commands='themes')
+@dp.message_handler(commands='themes', state='*')
 async def themes_start(message: Message, state: FSMContext):
-    global keyboards
+    global keyboards, engine, player
     await state.finish()
     await ThemesStates.theme_choice.set()
-    keyboards = keyboard_local()
+    keyboards, engine, player = update_keyboards_object()
     await bot.send_message(chat_id=message.from_user.id,
                            text=Texts.themes["make choice"],
                            reply_markup=keyboards.kb_themes)
