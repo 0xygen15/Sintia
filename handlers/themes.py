@@ -26,16 +26,16 @@ theme_chosen: str
 data = []
 index: int
 
-def update_keyboards_object():
-    global keyboards, engine, player
-    if Texts.lang_code:
-        keyboards_en = ThemesKeyboard()
-        keyboards = keyboards_en
-        engine_updated = Engine()
-        engine = engine_updated
-        player_updated = Players()
-        player = player_updated
-        return keyboards, engine, player
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_en = ThemesKeyboard()
+#         keyboards = keyboards_en
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
 
 # texts = Texts.themes
 ####
@@ -45,7 +45,8 @@ async def themes_start(message: Message, state: FSMContext):
     global keyboards, engine, player
     await state.finish()
     await ThemesStates.theme_choice.set()
-    keyboards, engine, player = update_keyboards_object()
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = ThemesKeyboard(), Engine(), Players()
     await bot.send_message(chat_id=message.from_user.id,
                            text=Texts.themes["make choice"],
                            reply_markup=keyboards.kb_themes)

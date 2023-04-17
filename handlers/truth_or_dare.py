@@ -44,16 +44,16 @@ current_player_name = ""
 first_message_id: int
 last_message_id: int
 
-def update_keyboards_object():
-    global keyboards, engine, player
-    if Texts.lang_code:
-        keyboards_en = TordKeyboard()
-        keyboards = keyboards_en
-        engine_updated = Engine()
-        engine = engine_updated
-        player_updated = Players()
-        player = player_updated
-        return keyboards, engine, player
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_en = TordKeyboard()
+#         keyboards = keyboards_en
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
 
 # texts = Texts.truth_or_dare
 ###
@@ -65,7 +65,8 @@ async def players_names(message: Message, state: FSMContext):
     global first_message_id
     first_message_id = message.message_id
     await PlayerStates.ready_to_get_players_names.set()
-    keyboards, engine, player = update_keyboards_object()
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = TordKeyboard(), Engine(), Players()
     await bot.send_message(chat_id=message.from_user.id, text=Texts.truth_or_dare["players names enter request"])
     logging.info("User is asked to enter names of players")
 

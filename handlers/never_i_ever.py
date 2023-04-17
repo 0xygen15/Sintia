@@ -24,16 +24,16 @@ player = Players()
 # keyboards = Keyboards()
 keyboards = NieKeyboard()
 
-def update_keyboards_object():
-    global keyboards, engine, player
-    if Texts.lang_code:
-        keyboards_updated = NieKeyboard()
-        keyboards = keyboards_updated
-        engine_updated = Engine()
-        engine = engine_updated
-        player_updated = Players()
-        player = player_updated
-        return keyboards, engine, player
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_updated = NieKeyboard()
+#         keyboards = keyboards_updated
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
 
 
 ###
@@ -65,7 +65,8 @@ async def never_i_ever(message: Message, state: FSMContext):
     await state.finish()
     await NieStates.levels.set()
     Texts.ensure_localisation(Users.get_user_lang_code(message.from_user.id))
-    keyboards, engine, player = update_keyboards_object()
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = NieKeyboard(), Engine(), Players()
     await bot.send_message(chat_id=message.from_user.id, text=Texts.never_i_ever["choose levels"], reply_markup=keyboards.keyboard_level_all)
 
 

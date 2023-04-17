@@ -228,7 +228,7 @@ class TordKeyboard:
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            '☑️',
+                                                            Texts.keyboards["choice is made"],
                                                             callback_data=self.cb_all_level.new(action=
                                                                                                 'ready')
                                                         )
