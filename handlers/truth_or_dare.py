@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.dispatcher import FSMContext
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards, TordKeyboard
+from mainUnit.keyboards import TordKeyboard
 from mainUnit.players import Players
 from mainUnit.states import PlayerStates
 
@@ -44,14 +44,52 @@ current_player_name = ""
 first_message_id: int
 last_message_id: int
 
+def keyboard_local():
+    global keyboards
+    if Texts.lang_code == "en":
+        keyboards_en = TordKeyboard()
+        keyboards = keyboards_en
+        return keyboards
+    elif Texts.lang_code == "de":
+        keyboards_de = TordKeyboard()
+        keyboards = keyboards_de
+        return keyboards
+    elif Texts.lang_code == "fr":
+        keyboards_fr = TordKeyboard()
+        keyboards = keyboards_fr
+        return keyboards
+    elif Texts.lang_code == "es":
+        keyboards_es = TordKeyboard()
+        keyboards = keyboards_es
+        return keyboards
+    elif Texts.lang_code == "ru":
+        keyboards_ru = TordKeyboard()
+        keyboards = keyboards_ru
+        return keyboards
+    elif Texts.lang_code == "uk":
+        keyboards_uk = TordKeyboard()
+        keyboards = keyboards_uk
+        return keyboards
+    elif Texts.lang_code == "sr":
+        keyboards_sr = TordKeyboard()
+        keyboards = keyboards_sr
+        return keyboards
+    else:
+        keyboards_en = TordKeyboard()
+        keyboards = keyboards_en
+        return keyboards
+
 # texts = Texts.truth_or_dare
 ###
 
 @dp.message_handler(commands='truth_or_dare')
-async def players_names(message: Message):
+async def players_names(message: Message, state: FSMContext):
+    global keyboards
+    await state.finish()
     global first_message_id
     first_message_id = message.message_id
     await PlayerStates.ready_to_get_players_names.set()
+    keyboards = keyboard_local()
     await bot.send_message(chat_id=message.from_user.id, text=Texts.truth_or_dare["players names enter request"])
     logging.info("User is asked to enter names of players")
 
@@ -93,7 +131,7 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
     await query.answer()
     await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["proceed to settings"])
     await PlayerStates.settings.set()
-    await bot.send_message(text=texts["choose levels"],
+    await bot.send_message(text=Texts.truth_or_dare["choose levels"],
                            chat_id=query.from_user.id,
                            reply_markup=keyboards.keyboard_level_all)
     logging.info(f"User has is offered to choose levels")

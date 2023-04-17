@@ -1,10 +1,11 @@
 import logging
 import typing
 
+from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards, ThreeOfFiveKeyboard
+from mainUnit.keyboards import ThreeOfFiveKeyboard
 from mainUnit.players import Players
 
 from local.lang import Texts
@@ -24,12 +25,50 @@ data = []
 
 # texts = Texts.three_of_five
 
+def keyboard_local():
+    global keyboards
+    if Texts.lang_code == "en":
+        keyboards_en = ThreeOfFiveKeyboard()
+        keyboards = keyboards_en
+        return keyboards
+    elif Texts.lang_code == "de":
+        keyboards_de = ThreeOfFiveKeyboard()
+        keyboards = keyboards_de
+        return keyboards
+    elif Texts.lang_code == "fr":
+        keyboards_fr = ThreeOfFiveKeyboard()
+        keyboards = keyboards_fr
+        return keyboards
+    elif Texts.lang_code == "es":
+        keyboards_es = ThreeOfFiveKeyboard()
+        keyboards = keyboards_es
+        return keyboards
+    elif Texts.lang_code == "ru":
+        keyboards_ru = ThreeOfFiveKeyboard()
+        keyboards = keyboards_ru
+        return keyboards
+    elif Texts.lang_code == "uk":
+        keyboards_uk = ThreeOfFiveKeyboard()
+        keyboards = keyboards_uk
+        return keyboards
+    elif Texts.lang_code == "sr":
+        keyboards_sr = ThreeOfFiveKeyboard()
+        keyboards = keyboards_sr
+        return keyboards
+    else:
+        keyboards_en = ThreeOfFiveKeyboard()
+        keyboards = keyboards_en
+        return keyboards
+
 ####
 
 @dp.message_handler(commands='three_of_five')
-async def three_of_five_start(message: Message):
+async def three_of_five_start(message: Message, state: FSMContext):
+    global keyboards
+    await state.finish()
     global data
     data = engine.three_of_five()
+    keyboards = keyboard_local()
     await bot.send_message(chat_id=message.from_user.id,
                            text=Texts.three_of_five["description"],
                            reply_markup=keyboards.kb35)

@@ -55,3 +55,4 @@ class Texts:
     def ensure_localisation(cls, user_lang_code):
         if not cls.lang_code:
             cls.load_localisation(user_lang_code)
+
