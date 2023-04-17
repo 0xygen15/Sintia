@@ -190,7 +190,8 @@ class Users:
         c = connection.cursor()
 
         query = "UPDATE users SET language_code = ? WHERE user_id = ?"
-        c.execute(query, (lang_code, user_id,))
+        data = (lang_code, user_id)
+        c.execute(query, data)
 
         connection.commit()
         connection.close()

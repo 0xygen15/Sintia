@@ -53,6 +53,5 @@ class Texts:
             cls.truth_or_dare = json.load(truth_or_dare_file)
     @classmethod
     def ensure_localisation(cls, user_lang_code):
-        for handler_item in cls.handlers_list:
-            if not bool(handler_item[1]):
-                cls.load_localisation(user_lang_code)
+        if not cls.lang_code:
+            cls.load_localisation(user_lang_code)

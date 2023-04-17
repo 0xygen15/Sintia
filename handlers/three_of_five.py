@@ -22,7 +22,7 @@ keyboards = ThreeOfFiveKeyboard()
 
 data = []
 
-texts = Texts.three_of_five
+# texts = Texts.three_of_five
 
 ####
 

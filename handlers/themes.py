@@ -25,7 +25,7 @@ theme_chosen: str
 data = []
 index: int
 
-texts = Texts.themes
+# texts = Texts.themes
 ####
 
 @dp.message_handler(commands='themes')

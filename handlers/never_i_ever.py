@@ -45,7 +45,7 @@ tord_t = True
 
 ###
 
-texts = Texts.never_i_ever
+# texts = Texts.never_i_ever
 
 @dp.message_handler(commands="never_i_ever")
 async def never_i_ever(message: Message):

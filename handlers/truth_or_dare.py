@@ -44,7 +44,7 @@ current_player_name = ""
 first_message_id: int
 last_message_id: int
 
-texts = Texts.truth_or_dare
+# texts = Texts.truth_or_dare
 ###
 
 @dp.message_handler(commands='truth_or_dare')
