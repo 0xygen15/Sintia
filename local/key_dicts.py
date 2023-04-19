@@ -1,7 +1,12 @@
 info = {
     "info": "",
     "start": "",
-    "refresh": ""
+    "refresh": "",
+    "main_menu": "",
+    "feedback": "",
+    "advertise": "",
+    "donate": "",
+    "endgame wish": ""
 }
 keyboards = {
     "menu": "",

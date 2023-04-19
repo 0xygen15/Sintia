@@ -75,13 +75,13 @@ async def themes_choice(query: CallbackQuery, callback_data: typing.Dict[str, st
     answer = callback_data['action']
     message_id = query.message.message_id
     theme_chosen = answer
-    key = answer+" name"
+    key = answer+" desc"
 
     await bot.edit_message_text(text=f"{Texts.themes[key]}", chat_id=query.from_user.id, message_id=message_id,
                                         reply_markup=keyboards.kb_themes_confirm, parse_mode='HTML')
 
 
-@dp.callback_query_handler(keyboards.cb_themes_confirm.filter(action=["menu", "begin"]), state=ThemesStates.confirmation.set())
+@dp.callback_query_handler(keyboards.cb_themes_confirm.filter(action=["menu", "begin"]), state=ThemesStates.confirmation)
 async def themes_confirm(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     global theme_chosen, data, index
 
@@ -99,6 +99,7 @@ async def themes_confirm(query: CallbackQuery, callback_data: typing.Dict[str, s
     elif answer == "begin":
         await ThemesStates.game.set()
         data = engine.theme(theme_chosen)
+        print(theme_chosen)
         index = 0
         current_question = data[index]
         await bot.edit_message_text(text=f"{current_question}",

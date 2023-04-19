@@ -31,3 +31,10 @@ class AdsStates(StatesGroup):
 
 class LangStates(StatesGroup):
     pending = State()
+
+class Feedback(StatesGroup):
+    pending = State()
+
+
+class Advertise(StatesGroup):
+    pending = State()
