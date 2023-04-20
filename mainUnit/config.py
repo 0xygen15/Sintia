@@ -3,4 +3,5 @@ admin_id = 107985053
 channel_id = -1001358361130
 feedback_channel_id = -1001592126909
 post_channel_id = -1001916666501
+backup_channel_id = -1001837048766
 donation_links = ""

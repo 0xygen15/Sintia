@@ -195,3 +195,45 @@ class Users:
 
         connection.commit()
         connection.close()
+
+    @classmethod
+    def get_statistics(cls):
+        connection = sqlite3.connect("./database/users.db")
+        c = connection.cursor()
+
+        c.execute("SELECT user_id FROM users")
+        all_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = ru")
+        ru_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = uk")
+        uk_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = en")
+        en_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = de")
+        de_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = es")
+        es_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = fr")
+        fr_users_number = len(c.fetchall())
+
+        c.execute("SELECT * FROM users WHERE language_code = sr")
+        sr_users_number = len(c.fetchall())
+
+        data = {
+            "all": all_users_number,
+            "ru": ru_users_number,
+            "uk": uk_users_number,
+            "en": en_users_number,
+            "de": de_users_number,
+            "es": es_users_number,
+            "fr": fr_users_number,
+            "sr": sr_users_number
+        }
+
+        return data

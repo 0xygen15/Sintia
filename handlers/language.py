@@ -26,7 +26,7 @@ async def choose_language(query: CallbackQuery, callback_data: typing.Dict[str, 
                 'es': "Idioma español elegido por defecto. ¡Que tengas un buen juego!",
                 'sr': "Српски језик изабран као подразумевани. Угодна игра!",
                 'ru': "Русский язык выбран по умолчанию. Приятной игры!",
-                'uk': "За замовчуванням вибрано українську мову. Гарної гри!"
+                'uk': "За замовчуванням обрано українську мову. Гарної гри!"
     }
 
     Users.change_user_lang_code(lang_code_choice, query.from_user.id)
