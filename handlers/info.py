@@ -36,12 +36,11 @@ async def start(message: Message, state: FSMContext):
     Texts.load_localisation(Texts.lang_code) #load localisation files
     await bot.send_message(text=Texts.info["start"], chat_id=message.from_user.id, parse_mode='HTML')
 
-
 @dp.message_handler(commands='main_menu', state='*')
 async def main_menu(message: Message, state: FSMContext):
     await state.finish()
     Texts.ensure_localisation(Texts.lang_code)
-    await bot.send_message(text=Texts.info["main menu"], chat_id=message.from_user.id, parse_mode='HTML')
+    await bot.send_message(text=Texts.info["main_menu"], chat_id=message.from_user.id, parse_mode='HTML')
 
 
 # @dp.message_handler(commands='refresh', state='*')

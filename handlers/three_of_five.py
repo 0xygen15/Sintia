@@ -73,6 +73,7 @@ async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[st
         data = engine.three_of_five()
         text = f"{Texts.three_of_five['new game']} /three_of_five"
         await bot.edit_message_text(text=text, chat_id=query.from_user.id, message_id=message_id,
-                                    reply_markup=keyboards.kb35, parse_mode='HTML')
+                                    parse_mode='HTML')
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 

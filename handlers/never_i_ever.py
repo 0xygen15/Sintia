@@ -140,6 +140,7 @@ async def nie_game(query: CallbackQuery, state: FSMContext, callback_data: typin
         await state.finish()
         await bot.send_message(chat_id=query.from_user.id,
                                text=Texts.never_i_ever["game over"])
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 @dp.callback_query_handler(keyboards.cb_completed_f.filter(action=['completed_f', 'failed_f']),

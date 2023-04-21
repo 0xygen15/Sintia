@@ -296,6 +296,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
         await bot.send_message(chat_id=query.from_user.id,
                                text=f"{Texts.truth_or_dare['game over']} /truth_or_dare")
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 
@@ -321,6 +322,7 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
         await state.finish()
         await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["game over"])
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 

@@ -152,3 +152,4 @@ async def themes_game(query: CallbackQuery, callback_data: typing.Dict[str, str]
                                     message_id=message_id,
                                     reply_markup=keyboards.kb_themes,
                                     parse_mode='HTML')
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
