@@ -19,9 +19,22 @@ class NieStates(StatesGroup):
 class ThreeOfFiveStates(StatesGroup):
     pass
 
+class ThemesStates(StatesGroup):
+    start = State()
+    theme_choice = State()
+    confirmation = State()
+    game = State()
+
 class AdsStates(StatesGroup):
     reading = State()
     checking = State()
 
 class LangStates(StatesGroup):
+    pending = State()
+
+class Feedback(StatesGroup):
+    pending = State()
+
+
+class Advertise(StatesGroup):
     pending = State()

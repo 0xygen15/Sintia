@@ -1,0 +1,15 @@
+{
+    "lang_code": "Ru",
+    "players names enter request": "Entrez les noms des joueurs en utilisant une virgule comme séparateur :",
+    "check names": "Vérifions les noms:",
+    "right?": "Est-ce que tout va bien?",
+    "min2": "Au moins deux noms :) Allez encore :",
+    "enter usernames": "Entrez les noms des joueurs:",
+    "proceed to settings": "Super, vous pouvez aller aux paramètres.",
+    "choose levels": "Dans ce menu, vous devez sélectionner les catégories de questions et d'actions pour le jeu.",
+    "mode": "Sélectionnez le mode de jeu. Il y a deux d'entre eux. \n\n «GRATUIT» - Tout le monde choisit quand la vérité est, et quand l'action. \n\n Alternativement - le bot alternera la vérité et l'action une fois.",
+    "tord?": "Vrai ou action?",
+    "players, level and mode!": "Vous devez d'abord ajouter des joueurs, sélectionner un niveau et un mode de jeu!",
+    "game over": "Le jeu est terminé, les questions / actions sont terminées. Cliquez sur un nouveau jeu",
+    "penalty": "Il semble que vous ayez cinq échecs d'affilée, vous avez une amende."
+}

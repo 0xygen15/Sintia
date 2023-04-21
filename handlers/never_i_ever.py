@@ -4,10 +4,12 @@ import typing
 from aiogram.types import CallbackQuery, Message
 from aiogram.dispatcher import FSMContext
 
-from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards, NieKeyboard
+from mainUnit.engine import Engine, Users
+from mainUnit.keyboards import NieKeyboard
 from mainUnit.players import Players
 from mainUnit.states import NieStates
+
+from local.lang import Texts
 
 from loader import dp, bot
 
@@ -21,6 +23,18 @@ engine = Engine()
 player = Players()
 # keyboards = Keyboards()
 keyboards = NieKeyboard()
+
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_updated = NieKeyboard()
+#         keyboards = keyboards_updated
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
+
 
 ###
 
@@ -43,14 +57,20 @@ tord_t = True
 
 ###
 
+# texts = Texts.never_i_ever
 
-@dp.message_handler(commands="never_i_ever")
-async def never_i_ever(message: Message):
+@dp.message_handler(commands="never_i_ever", state='*')
+async def never_i_ever(message: Message, state: FSMContext):
+    global keyboards, engine, player
+    await state.finish()
     await NieStates.levels.set()
-    await bot.send_message(chat_id=message.from_user.id, text="Выбирай уровни:", reply_markup=keyboards.keyboard_level_all)
+    Texts.ensure_localisation(Users.get_user_lang_code(message.from_user.id))
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = NieKeyboard(), Engine(), Players()
+    await bot.send_message(chat_id=message.from_user.id, text=Texts.never_i_ever["choose levels"], reply_markup=keyboards.keyboard_level_all)
 
 
-@dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'relations', 'personal', 'adult', 'ready']), state=NieStates.levels)
+@dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']), state=NieStates.levels)
 async def nie_levels(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
@@ -64,29 +84,29 @@ async def nie_levels(query: CallbackQuery, state: FSMContext, callback_data: typ
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'relations':
+    elif answer == 'company':
         new_keyboard = keyboards.update_keyboard(2, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'personal':
+    elif answer == 'relations':
         new_keyboard = keyboards.update_keyboard(3, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'adult':
+    elif answer == 'awkward':
         new_keyboard = keyboards.update_keyboard(4, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'ready':
         if not True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
-            await bot.answer_callback_query(query.id, 'Но ты же ничего не выбрал!', True)
+            await bot.answer_callback_query(query.id, Texts.never_i_ever["no choice made"], True)
         else:
             await NieStates.game.set()
             engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
             await bot.send_message(chat_id=query.from_user.id,
-                                   text='Поехали! Жми "Я никогда не..."',
+                                   text=Texts.never_i_ever["begin it"],
                                    reply_markup=keyboards.keyboard_nie)
     global levels_are_chosen
     if True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
@@ -119,7 +139,8 @@ async def nie_game(query: CallbackQuery, state: FSMContext, callback_data: typin
     elif answer == 'end_nie':
         await state.finish()
         await bot.send_message(chat_id=query.from_user.id,
-                               text="Игра окончена:)")
+                               text=Texts.never_i_ever["game over"])
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 @dp.callback_query_handler(keyboards.cb_completed_f.filter(action=['completed_f', 'failed_f']),

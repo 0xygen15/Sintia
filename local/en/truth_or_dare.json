@@ -1,0 +1,14 @@
+{
+    "players names enter request": "Enter the names of the players using a comma as a separator:",
+    "check names": "Let's check the names:",
+    "right?": "Is everything right?",
+    "min2": "At least two names :) Come on again:",
+    "enter usernames": "Enter the names of the players:",
+    "proceed to settings": "Great, you can go to the settings.",
+    "choose levels": "In this menu you need to choose categories of truths and dares for the game.",
+    "mode": "Select the game mode. There are two of them. \n\n 'Free' - everyone chooses when the truth is, and when the action. \n\n 'Alternatele' - the bot will alternate the truth and dare one time after another.",
+    "tord?": "Truth or dare?",
+    "players, level and mode!": "You need to add players, choose the level and mode of the game!",
+    "game over": "The game is over, truths/dares are over. Click for a new game",
+    "penalty": "It looks like you have five failures in a row, you have a fine truth/dare from mates."
+}

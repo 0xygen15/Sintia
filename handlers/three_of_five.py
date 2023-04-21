@@ -1,12 +1,14 @@
 import logging
 import typing
 
+from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards, ThreeOfFiveKeyboard
+from mainUnit.keyboards import ThreeOfFiveKeyboard
 from mainUnit.players import Players
 
+from local.lang import Texts
 
 from loader import dp, bot
 
@@ -21,14 +23,31 @@ keyboards = ThreeOfFiveKeyboard()
 
 data = []
 
+# texts = Texts.three_of_five
+
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_en = ThreeOfFiveKeyboard()
+#         keyboards = keyboards_en
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
+
 ####
 
-@dp.message_handler(commands='three_of_five')
-async def three_of_five_start(message: Message):
+@dp.message_handler(commands='three_of_five', state='*')
+async def three_of_five_start(message: Message, state: FSMContext):
+    global keyboards, engine, player
+    await state.finish()
     global data
     data = engine.three_of_five()
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = ThreeOfFiveKeyboard(), Engine(), Players()
     await bot.send_message(chat_id=message.from_user.id,
-                           text="Описание игры (в разработке). Нажать кнопку для начала:",
+                           text=Texts.three_of_five["description"],
                            reply_markup=keyboards.kb35)
     logging.info("Three of five game is on")
 
@@ -52,8 +71,9 @@ async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[st
                                     reply_markup=keyboards.kb35, parse_mode='HTML')
     elif answer == 'End':
         data = engine.three_of_five()
-        text = "Чтобы начать новую игру нажми: /three_of_five"
+        text = f"{Texts.three_of_five['new game']} /three_of_five"
         await bot.edit_message_text(text=text, chat_id=query.from_user.id, message_id=message_id,
-                                    reply_markup=keyboards.kb35, parse_mode='HTML')
+                                    parse_mode='HTML')
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 

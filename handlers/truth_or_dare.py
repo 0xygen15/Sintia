@@ -5,9 +5,11 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.dispatcher import FSMContext
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import Keyboards, TordKeyboard
+from mainUnit.keyboards import TordKeyboard
 from mainUnit.players import Players
 from mainUnit.states import PlayerStates
+
+from local.lang import Texts
 
 
 from loader import dp, bot
@@ -41,15 +43,31 @@ tord_t = True
 current_player_name = ""
 first_message_id: int
 last_message_id: int
+
+# def update_keyboards_object():
+#     global keyboards, engine, player
+#     if Texts.lang_code:
+#         keyboards_en = TordKeyboard()
+#         keyboards = keyboards_en
+#         engine_updated = Engine()
+#         engine = engine_updated
+#         player_updated = Players()
+#         player = player_updated
+#         return keyboards, engine, player
+
+# texts = Texts.truth_or_dare
 ###
 
-@dp.message_handler(commands='truth_or_dare')
-async def players_names(message: Message):
+@dp.message_handler(commands='truth_or_dare', state='*')
+async def players_names(message: Message, state: FSMContext):
+    global keyboards, engine, player
+    await state.finish()
     global first_message_id
     first_message_id = message.message_id
     await PlayerStates.ready_to_get_players_names.set()
-    await bot.send_message(chat_id=message.from_user.id, text="Введите имена игроков используя запятую в качестве "
-                                                              "разделителя:")
+    # keyboards, engine, player = update_keyboards_object()
+    keyboards, engine, player = TordKeyboard(), Engine(), Players()
+    await bot.send_message(chat_id=message.from_user.id, text=Texts.truth_or_dare["players names enter request"])
     logging.info("User is asked to enter names of players")
 
 
@@ -61,10 +79,10 @@ async def check_players_names(message: Message, state: FSMContext):
     names = ""
     for name in player.players_list:
         names += f"{name}\n"
-    answer = f"Проверим имена:\n\n{names}\nВсё верно?"
+    answer = f"""{Texts.truth_or_dare["check names"]}\n\n{names}\n{Texts.truth_or_dare["right?"]}"""
     if len(player.players_list) < 2:
         await state.finish()
-        await bot.send_message(chat_id=message.from_user.id, text="Как минимум два имени:) Давай снова: /truth_or_dare")
+        await bot.send_message(chat_id=message.from_user.id, text=f"{Texts.truth_or_dare['min2']} /truth_or_dare")
     else:
         await bot.send_message(chat_id=message.from_user.id, text=answer, reply_markup=keyboards.keyboard_players)
         logging.info(f"User has entered {player.players_list}")
@@ -77,7 +95,7 @@ async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str])
     player.players_list.clear()
     await query.answer()
     await PlayerStates.ready_to_get_players_names.set()
-    await bot.send_message(chat_id=query.from_user.id, text="Введите имена игроков:")
+    await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["enter usernames"])
     logging.info("User reenters names")
 
 
@@ -88,16 +106,16 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
     global players_are_added
     players_are_added = True
     await query.answer()
-    await bot.send_message(chat_id=query.from_user.id, text="Отлично, можно перейти к настройкам.")
+    await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["proceed to settings"])
     await PlayerStates.settings.set()
-    await bot.send_message(text="В этом меню нужно выбрать категории вопросов и действий для игры.",
+    await bot.send_message(text=Texts.truth_or_dare["choose levels"],
                            chat_id=query.from_user.id,
                            reply_markup=keyboards.keyboard_level_all)
     logging.info(f"User has is offered to choose levels")
 
 
 
-@dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'relations', 'personal', 'adult', 'ready']),
+@dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']),
                            state=PlayerStates.settings)
 async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
     print(query.message.message_id)
@@ -113,30 +131,28 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], s
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'relations':
+    elif answer == 'company':
         new_keyboard = keyboards.update_keyboard(2, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'personal':
+    elif answer == 'relations':
         new_keyboard = keyboards.update_keyboard(3, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
-    elif answer == 'adult':
+    elif answer == 'awkward':
         new_keyboard = keyboards.update_keyboard(4, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'ready':
         if not True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
-            await bot.answer_callback_query(query.id, 'Но ты же ничего не выбрал!', True)
+            await bot.answer_callback_query(query.id, '🗿', True)
         else:
             await PlayerStates.mode.set()
             await bot.send_message(chat_id=query.from_user.id,
-                                   text='Теперь нужно выбрать режим. Их есть аж целых два.\n\n'
-                                        'Свободный - каждый сам выбирает, когда Правда, а когда Действие.\n\n'
-                                        'Поочередный - бот будет сам чередовать 1 через 1 Правду и Действие.',
+                                   text=Texts.truth_or_dare["mode"],
                                    reply_markup=keyboards.keyboard_mode)
     global levels_are_chosen
     if True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
@@ -156,7 +172,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
         await PlayerStates.game_free.set()
         engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
         current_player_name = player.players_list[player.current_player_number]
-        await bot.send_message(chat_id=query.from_user.id, text=f'{current_player_name}, Правда или действие?',
+        await bot.send_message(chat_id=query.from_user.id, text=f'{current_player_name}, {Texts.truth_or_dare["tord?"]}',
                                reply_markup=keyboards.keyboard_td)
         try:
             for mid in range(first_message_id, last_message_id+1):
@@ -167,7 +183,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
     elif answer == 'step':
         if levels_are_chosen == False and players_are_added == False:
             await bot.send_message(chat_id=query.from_user.id,
-                                   text="Сначала нужно добавить игроков, выбрать уровень и режим.")
+                                   text=Texts.truth_or_dare["players, level and mode!"])
         else:
             await PlayerStates.game.set()
             engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
@@ -218,7 +234,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
             await state.finish()
             await query.answer()
             await bot.send_message(chat_id=query.from_user.id,
-                                   text="Игра окончена, кончились вопросы\действия чтобы начать новую игру нажимай /truth_or_dare")
+                                   text=f"{Texts.truth_or_dare['game over']} /truth_or_dare")
 
         if player.truth_circle == True:
             engine.t_all.remove(truth)
@@ -257,7 +273,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
     elif answer == 'failed':
         if player.fail_check(current_player_name) == True:
             await bot.answer_callback_query(query.id,
-                                            f'{current_player_name}, похоже у тебя 5 провалов подряд, тебе штраф)',
+                                            f'{current_player_name}, {Texts.truth_or_dare["penalty"]}',
                                             True)
         player.score[current_player_name]['p'] += 1
         if player.truth_circle == True:
@@ -278,8 +294,9 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
         await query.answer()
         player.players_list.clear()
         await bot.send_message(chat_id=query.from_user.id,
-                               text="Игра окончена, чтобы начать новую игру нажимай /truth_or_dare")
+                               text=f"{Texts.truth_or_dare['game over']} /truth_or_dare")
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 
@@ -303,8 +320,9 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
     elif answer == 'end':
         player.players_list.clear()
         await state.finish()
-        await bot.send_message(chat_id=query.from_user.id, text="Игра окончена.")
+        await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["game over"])
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 
@@ -321,13 +339,13 @@ async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: ty
             engine.d_all.remove(tord)
         player.next_player_number()
         current_player_name = player.players_list[player.current_player_number]
-        await bot.edit_message_text(chat_id=query.from_user.id, text=f'{current_player_name}, Правда или действие?',
+        await bot.edit_message_text(chat_id=query.from_user.id, text=f'{current_player_name}, {Texts.truth_or_dare["tord?"]}',
                                reply_markup=keyboards.keyboard_td, message_id=query.message.message_id)
 
     elif answer == 'failed_f':
         if player.fail_check(current_player_name) == True:
             await bot.answer_callback_query(query.id,
-                                            f'{current_player_name}, похоже у тебя 5 провалов подряд, тебе штраф)',
+                                            f'{current_player_name}, {Texts.truth_or_dare["penalty"]}',
                                             True)
         player.score[current_player_name]['p'] += 1
         if tord_t == True:
