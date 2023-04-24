@@ -638,7 +638,7 @@ class ConfigKeyboard:
                                        [
                                            InlineKeyboardButton("Русский", callback_data=cb_lang.new(action="ru")),
                                            InlineKeyboardButton("Српски", callback_data=cb_lang.new(action="sr")),
-                                           InlineKeyboardButton("Espana", callback_data=cb_lang.new(action="uk")),
+                                           InlineKeyboardButton("Українська", callback_data=cb_lang.new(action="uk")),
                                        ],
                                        [
                                            InlineKeyboardButton("France", callback_data=cb_lang.new(action="fr"))
