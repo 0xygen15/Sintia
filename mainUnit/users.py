@@ -1,5 +1,8 @@
 from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
 from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThreeOfFiveKeyboard, ThemesKeyboard
+from mainUnit.database import Database
+
+from loader import user_objects
 
 class Users:
     def __init__(self, user_id: str | int, lang_code: str,
@@ -30,3 +33,13 @@ class Users:
         self.fName = fName
         self.lName = lName
         self.is_bot = is_bot
+
+    @classmethod
+    def retrieve_user_obj(cls, user_id):
+        try:
+            user_obj = user_objects[user_id]
+        except KeyError:
+            user_objects[user_id] = Database.get_user_obj_from_db(user_id)
+            user_obj = user_objects[user_id]
+
+        return user_obj
