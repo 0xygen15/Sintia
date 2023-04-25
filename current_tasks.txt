@@ -1,1 +1,2 @@
-
+1. remake localisation like in "info.py" handler.
+2. remake game and kb objects.

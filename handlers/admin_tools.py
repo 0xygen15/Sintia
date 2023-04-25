@@ -62,7 +62,7 @@ async def forward_from_channel(message: Message):
 @dp.message_handler(filters.IDFilter(chat_id=admin_id), commands="backup_the_db")
 async def backup_the_dp(message: Message):
     time = datetime.now()
-    database_file = types.InputFile("../database/users.db", f"users_{time}")
+    database_file = types.InputFile("../trash folder/users.db", f"users_{time}")
     file_caption = f"Back Up Time: {time}"
     await bot.send_document(chat_id=backup_channel_id, document=database_file, caption=file_caption)
 

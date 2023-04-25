@@ -3,23 +3,24 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from local.lang import Texts
 
-# texts = Texts.keyboards
-# texts_themes = Texts.themes
+# texts = self.loc_file.keyboards
+# texts_themes = self.loc_file.themes
 class TordKeyboard:
-    def __init__(self):
+    def __init__(self, loc_file: Texts):
+        self.loc_file = loc_file
         self.cb_td = CallbackData('name', 'action')
         self.keyboard_td = InlineKeyboardMarkup(row_width=2,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton(Texts.keyboards["truth"],
+                                                        InlineKeyboardButton(self.loc_file.keyboards["truth"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='truth')),
-                                                        InlineKeyboardButton(Texts.keyboards["dare"],
+                                                        InlineKeyboardButton(self.loc_file.keyboards["dare"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='dare'))
                                                     ],
                                                     [
-                                                        InlineKeyboardButton(Texts.keyboards["end"],
+                                                        InlineKeyboardButton(self.loc_file.keyboards["end"],
                                                                              callback_data=self.cb_td.new(
                                                                                  action='end'))
                                                     ]
@@ -41,37 +42,37 @@ class TordKeyboard:
         self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'{Texts.keyboards["about life"]} {self.mark1}',
+                                                               InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["absurd"]} {self.mark2}',
+                                                                   f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["company"]} {self.mark3}',
+                                                                   f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='company'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["relations"]} {self.mark4}',
+                                                                   f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["awkward"]} {self.mark5}',
+                                                                   f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='awkward'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   Texts.keyboards["choice is made"],
+                                                                   self.loc_file.keyboards["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -84,10 +85,10 @@ class TordKeyboard:
         self.keyboard_players = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton(Texts.keyboards["right"],
+                                                             InlineKeyboardButton(self.loc_file.keyboards["right"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='yes')),
-                                                             InlineKeyboardButton(Texts.keyboards["need edit"],
+                                                             InlineKeyboardButton(self.loc_file.keyboards["need edit"],
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='no')),
                                                          ]
@@ -101,14 +102,14 @@ class TordKeyboard:
         self.keyboard_mode = InlineKeyboardMarkup(row_width=2,
                                                   inline_keyboard=[
                                                       [
-                                                          InlineKeyboardButton(Texts.keyboards["free mode"],
+                                                          InlineKeyboardButton(self.loc_file.keyboards["free mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='free'
                                                                                )),
 
                                                       ],
                                                       [
-                                                          InlineKeyboardButton(Texts.keyboards["alternate mode"],
+                                                          InlineKeyboardButton(self.loc_file.keyboards["alternate mode"],
                                                                                callback_data=self.cb_mode.new(
                                                                                    action='step'
                                                                                ))
@@ -119,20 +120,20 @@ class TordKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["done"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["not done"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["not done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["end the game"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["end the game"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -143,20 +144,21 @@ class TordKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton(Texts.keyboards["done"],
+                                                                 InlineKeyboardButton(self.loc_file.keyboards["done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton(Texts.keyboards["not done"],
+                                                                 InlineKeyboardButton(self.loc_file.keyboards["not done"],
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='failed_f'
                                                                                       ))
                                                              ]
                                                          ])
-
+    def __str__(self):
+        return f"""Tord Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
 
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup):
         object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
@@ -198,37 +200,37 @@ class TordKeyboard:
         updated_keyboard = InlineKeyboardMarkup(row_width=1,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton(f'{Texts.keyboards["about life"]} {self.mark1}',
+                                                        InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
                                                                              callback_data=self.cb_all_level.new(
                                                                                  action='lifestyle'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'{Texts.keyboards["absurd"]} {self.mark2}',
+                                                            f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='absurd'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'{Texts.keyboards["company"]} {self.mark3}',
+                                                            f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='company'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'{Texts.keyboards["relations"]} {self.mark4}',
+                                                            f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='relations'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            f'{Texts.keyboards["awkward"]} {self.mark5}',
+                                                            f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                             callback_data=self.cb_all_level.new(
                                                                 action='awkward'))
                                                     ],
                                                     [
                                                         InlineKeyboardButton(
-                                                            Texts.keyboards["choice is made"],
+                                                            self.loc_file.keyboards["choice is made"],
                                                             callback_data=self.cb_all_level.new(action=
                                                                                                 'ready')
                                                         )
@@ -257,14 +259,14 @@ class TordKeyboard:
         updated_keyboard_mode = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton(f'{Texts.keyboards["free mode"]} {self.mode_mark1}',
+                                                             InlineKeyboardButton(f'{self.loc_file.keyboards["free mode"]} {self.mode_mark1}',
                                                                                   callback_data=self.cb_mode.new(
                                                                                       action='free'
                                                                                   )),
 
                                                          ],
                                                          [
-                                                             InlineKeyboardButton(f'{Texts.keyboards["alternate mode"]} {self.mode_mark2}',
+                                                             InlineKeyboardButton(f'{self.loc_file.keyboards["alternate mode"]} {self.mode_mark2}',
                                                                                   callback_data=self.cb_mode.new(
                                                                                       action='step'
                                                                                   ))
@@ -272,25 +274,26 @@ class TordKeyboard:
                                                      ])
         return updated_keyboard_mode
 class NieKeyboard:
-    def __init__(self):
+    def __init__(self, loc_file: Texts):
+        self.loc_file = loc_file
         self.cb_nie = CallbackData('name', 'action')
         self.keyboard_nie = InlineKeyboardMarkup(row_width=2,
                                                  inline_keyboard=[
                                                      [
-                                                         InlineKeyboardButton(Texts.keyboards["truth"],
+                                                         InlineKeyboardButton(self.loc_file.keyboards["truth"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='truth_nie')),
-                                                         InlineKeyboardButton(Texts.keyboards["dare"],
+                                                         InlineKeyboardButton(self.loc_file.keyboards["dare"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='dare_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton(Texts.keyboards["never i ever"],
+                                                         InlineKeyboardButton(self.loc_file.keyboards["never i ever"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='next_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton(Texts.keyboards["end the game"],
+                                                         InlineKeyboardButton(self.loc_file.keyboards["end the game"],
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='end_nie'))
                                                      ]
@@ -311,37 +314,37 @@ class NieKeyboard:
         self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'{Texts.keyboards["about life"]} {self.mark1}',
+                                                               InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["absurd"]} {self.mark2}',
+                                                                   f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["company"]} {self.mark3}',
+                                                                   f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='company'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["relations"]} {self.mark4}',
+                                                                   f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["awkward"]} {self.mark5}',
+                                                                   f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='awkward'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   Texts.keyboards["choice is made"],
+                                                                   self.loc_file.keyboards["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -352,20 +355,20 @@ class NieKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["done"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["not done"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["not done"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(Texts.keyboards["end the game"],
+                                                               InlineKeyboardButton(self.loc_file.keyboards["end the game"],
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -376,19 +379,22 @@ class NieKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton(Texts.keyboards["done"],
+                                                                 InlineKeyboardButton(self.loc_file.keyboards["done"],
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton(Texts.keyboards["not done"],
+                                                                 InlineKeyboardButton(self.loc_file.keyboards["not done"],
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='failed_f'
                                                                                       ))
                                                              ]
                                                          ])
+
+    def __str__(self):
+        return f"""Nie Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
 
 
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup):
@@ -431,37 +437,37 @@ class NieKeyboard:
         updated_keyboard = InlineKeyboardMarkup(row_width=1,
                                                 inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(f'{Texts.keyboards["about life"]} {self.mark1}',
+                                                               InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
                                                                                         action='lifestyle'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["absurd"]} {self.mark2}',
+                                                                   f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='absurd'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["company"]} {self.mark3}',
+                                                                   f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='company'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["relations"]} {self.mark4}',
+                                                                   f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='relations'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   f'{Texts.keyboards["awkward"]} {self.mark5}',
+                                                                   f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
                                                                        action='awkward'))
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   Texts.keyboards["choice is made"],
+                                                                   self.loc_file.keyboards["choice is made"],
                                                                    callback_data=self.cb_all_level.new(action=
                                                                                                        'ready')
                                                                )
@@ -471,24 +477,25 @@ class NieKeyboard:
         return updated_keyboard
 
 class ThreeOfFiveKeyboard:
-    def __init__(self):
+    def __init__(self, loc_file: Texts):
+        self.loc_file = loc_file
         self.cb35 = CallbackData('name', 'action')
         self.kb35 = InlineKeyboardMarkup(row_width=2,
                                          inline_keyboard=[
                                              [
-                                                 InlineKeyboardButton(Texts.keyboards["chapter truth"],
+                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter truth"],
                                                                       callback_data=self.cb35.new(action="Truth"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(Texts.keyboards["chapter dare"],
+                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter dare"],
                                                                       callback_data=self.cb35.new(action="Dare"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(Texts.keyboards["chapter nie"],
+                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter nie"],
                                                                       callback_data=self.cb35.new(action="Never"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(Texts.keyboards["endgame new game"],
+                                                 InlineKeyboardButton(self.loc_file.keyboards["endgame new game"],
                                                                       callback_data=self.cb35.new(action="End"))
                                              ]
                                          ])
@@ -497,12 +504,16 @@ class ThreeOfFiveKeyboard:
         self.kb35b = InlineKeyboardMarkup(row_width=2,
                                           inline_keyboard=[
                                               [
-                                                  InlineKeyboardButton(Texts.keyboards["begin"],
+                                                  InlineKeyboardButton(self.loc_file.keyboards["begin"],
                                                                        callback_data=self.cb35.new(action="Begin"))
                                               ]
                                           ])
+
+    def __str__(self):
+        return f"""35 Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
 class ThemesKeyboard:
-    def __init__(self):
+    def __init__(self, loc_file: Texts):
+        self.loc_file = loc_file
         # self.cb_completed = CallbackData('name', 'action')
         # self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
         #                                                inline_keyboard=[
@@ -530,58 +541,58 @@ class ThemesKeyboard:
         self.kb_themes = InlineKeyboardMarkup(row_width=3,
                                               inline_keyboard=[
                                                   [
-                                                      InlineKeyboardButton(Texts.themes["school name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["school name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="school")),
-                                                      InlineKeyboardButton(Texts.themes["work name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["work name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="work")),
-                                                      InlineKeyboardButton(Texts.themes["travel name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["travel name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="travel"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton(Texts.themes["worldview name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["worldview name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="worldview")),
-                                                      InlineKeyboardButton(Texts.themes["social media name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["social media name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="social media")),
-                                                      InlineKeyboardButton(Texts.themes["art name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["art name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="art"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton(Texts.themes["relations name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["relations name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="relations")),
-                                                      InlineKeyboardButton(Texts.themes["memes name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["memes name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="memes")),
-                                                      InlineKeyboardButton(Texts.themes["religion name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["religion name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="religion"))
 
                                                   ],
                                                   [
-                                                      InlineKeyboardButton(Texts.themes["memories name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["memories name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="memories")),
-                                                      InlineKeyboardButton(Texts.themes["if name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["if name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="if")),
-                                                      InlineKeyboardButton(Texts.themes["videogames name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["videogames name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="videogames"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton(Texts.themes["education name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["education name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="education")),
-                                                      InlineKeyboardButton(Texts.themes["fashion name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["fashion name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="fashion")),
-                                                      InlineKeyboardButton(Texts.themes["hard choice name"],
+                                                      InlineKeyboardButton(self.loc_file.themes["hard choice name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="hard choice"))
                                                   ]
@@ -602,7 +613,7 @@ class ThemesKeyboard:
 
                                                        ],
                                                        [
-                                                           InlineKeyboardButton(Texts.keyboards["end the game"],
+                                                           InlineKeyboardButton(self.loc_file.keyboards["end the game"],
                                                                                 callback_data=self.cb_themes_game.new(
                                                                                     action='end'
                                                                                 ))
@@ -613,11 +624,11 @@ class ThemesKeyboard:
         self.kb_themes_confirm = InlineKeyboardMarkup(row_width=2,
                                                       inline_keyboard=[
                                                           [
-                                                              InlineKeyboardButton(Texts.keyboards["menu"],
+                                                              InlineKeyboardButton(self.loc_file.keyboards["menu"],
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='menu'
                                                                                    )),
-                                                              InlineKeyboardButton(Texts.keyboards["begin"],
+                                                              InlineKeyboardButton(self.loc_file.keyboards["begin"],
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='begin'
                                                                                    ))
@@ -625,6 +636,9 @@ class ThemesKeyboard:
                                                           ]
                                                       ]
                                                       )
+
+    def __str__(self):
+        return f"""Themes Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
 
 class ConfigKeyboard:
     cb_lang = CallbackData('name', 'action')

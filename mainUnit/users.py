@@ -1,7 +1,15 @@
-user_objects = {}
+from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
+from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThreeOfFiveKeyboard, ThemesKeyboard
 
 class Users:
-    def __init__(self, user_id, lang_code, tord_game, nie_game, the_35_game, themes_game, tord_kb, nie_kb, the_35_kb, themes_kb):
+    def __init__(self, user_id: str | int, lang_code: str,
+                 tord_game: Tord, nie_game: Nie,
+                 the_35_game: ThreeOfFive, themes_game: Themes,
+                 tord_kb: TordKeyboard, nie_kb: NieKeyboard,
+                 the_35_kb: ThreeOfFiveKeyboard, themes_kb: ThemesKeyboard,
+                 chat_id: str | int, chat_type: str,
+                 username: str, fName: str, lName: str,
+                 is_bot: bool):
 
         self.user_id = user_id
         self.lang_code = lang_code
@@ -15,3 +23,10 @@ class Users:
         self.nie_kb = nie_kb
         self.the_35_kb = the_35_kb
         self.themes_kb = themes_kb
+
+        self.chat_id = chat_id
+        self.chat_type = chat_type
+        self.username = username
+        self.fName = fName
+        self.lName = lName
+        self.is_bot = is_bot

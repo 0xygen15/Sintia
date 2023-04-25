@@ -118,6 +118,9 @@ class Tord:
         self.truth_circle = True
         self.penalties = {}
 
+    def __str__(self):
+        return f"Tord object with id: {self.user_id}"
+
     def shuffle_lists(self):
         data_lists = [self.truths_list, self.dares_list]
         for the_list in data_lists:
@@ -227,6 +230,9 @@ class Nie:
         self.truth_circle = True
         self.penalties = {}
 
+    def __str__(self):
+        return f"Nie object with id: {self.user_id}"
+
     def shuffle_lists(self):
         data_lists = [self.truths_list, self.dares_list, self.nevers_list]
         for the_list in data_lists:
@@ -282,6 +288,9 @@ class ThreeOfFive:
         self.dares_str = ""
         self.nevers_str = ""
 
+    def __str__(self):
+        return f"ThreeOfFive object with id: {self.user_id}"
+
     def three_of_five(self):
         def one_level(filename, levelname):
 
@@ -320,6 +329,9 @@ class Themes:
         self.lang_code = lang_code
 
         self.theme_questions_list = []
+
+    def __str__(self):
+        return f"Themes object with id: {self.user_id}"
 
     def theme(self, theme_name: str):
         with open(f"database/{self.lang_code}/themes_truth.json", mode="r", encoding="utf8") as f:
