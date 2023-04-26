@@ -13,344 +13,400 @@ from local.lang import Texts
 
 
 from loader import dp, bot
+from loader import loc_objects, user_objects
+
+from mainUnit.users import Users
+from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
+from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThemesKeyboard, ThreeOfFiveKeyboard
+from mainUnit.database import Database
 
 ####
 
 logging.basicConfig(level=logging.INFO)
 
-engine = Engine()
-player = Players()
+# engine = Engine()
+# player = Players()
 # keyboards = Keyboards()
-keyboards = TordKeyboard()
+# keyboards = TordKeyboard()
+
+# tord_game_obj: Tord
+tord_kb: TordKeyboard
+# user_lang_code_object: Texts
+
 
 ###
 
-players_are_added = False
-levels_are_chosen = False
-mode_is_chosen = False
+# players_are_added = False
+# levels_are_chosen = False
+# mode_is_chosen = False
 
-truth = ""
-truth_index = 0
-dare = ""
-dare_index = 0
-nie_index = 0
+# truth = ""
+# truth_index = 0
+# dare = ""
+# dare_index = 0
+# nie_index = 0
 
 
-nie = ""
-tord = ""
-tord_t = True
+# nie = ""
+# tord = ""
+# tord_t = True
 
-current_player_name = ""
-first_message_id: int
-last_message_id: int
+# current_player_name = ""
+# first_message_id: int
+# last_message_id: int
 
-# def update_keyboards_object():
-#     global keyboards, engine, player
-#     if Texts.lang_code:
-#         keyboards_en = TordKeyboard()
-#         keyboards = keyboards_en
-#         engine_updated = Engine()
-#         engine = engine_updated
-#         player_updated = Players()
-#         player = player_updated
-#         return keyboards, engine, player
-
-# texts = Texts.truth_or_dare
-###
+tord_kb: TordKeyboard
 
 @dp.message_handler(commands='truth_or_dare', state='*')
 async def players_names(message: Message, state: FSMContext):
-    global keyboards, engine, player
-    await state.finish()
-    global first_message_id
-    first_message_id = message.message_id
-    await PlayerStates.ready_to_get_players_names.set()
-    # keyboards, engine, player = update_keyboards_object()
-    keyboards, engine, player = TordKeyboard(), Engine(), Players()
-    await bot.send_message(chat_id=message.from_user.id, text=Texts.truth_or_dare["players names enter request"])
+    # global tord_game_obj, tord_kb, first_message_id, user_lang_code_object
+    await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
+    await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=PlayerStates.ready_to_get_players_names)
+
+    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
+    tord_game_obj.first_message_id = message.message_id
+
+    await bot.send_message(chat_id=message.from_user.id, text=user_lang_code_object.truth_or_dare["players names enter request"])
     logging.info("User is asked to enter names of players")
 
 
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
 async def check_players_names(message: Message, state: FSMContext):
-    await PlayerStates.check_players_names.set()
-    player.add_player(player.list_of_players_names(data=message.text))
-    names = ""
-    for name in player.players_list:
-        names += f"{name}\n"
-    answer = f"""{Texts.truth_or_dare["check names"]}\n\n{names}\n{Texts.truth_or_dare["right?"]}"""
-    if len(player.players_list) < 2:
-        await state.finish()
-        await bot.send_message(chat_id=message.from_user.id, text=f"{Texts.truth_or_dare['min2']} /truth_or_dare")
+    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
+
+    await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=PlayerStates.check_players_names)
+    tord_game_obj.add_players_names(message.text)
+
+    names = tord_game_obj.get_str_of_players_list()
+    answer = f"""{user_lang_code_object.truth_or_dare["check names"]}\n\n{names}\n{user_lang_code_object.truth_or_dare["right?"]}"""
+
+    if len(tord_game_obj.players_list) < 2:
+        await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
+        await bot.send_message(chat_id=message.from_user.id, text=f"{user_lang_code_object.truth_or_dare['min2']} /truth_or_dare")
     else:
-        await bot.send_message(chat_id=message.from_user.id, text=answer, reply_markup=keyboards.keyboard_players)
-        logging.info(f"User has entered {player.players_list}")
+        await bot.send_message(chat_id=message.from_user.id, text=answer, reply_markup=tord_kb.keyboard_players)
+        logging.info(f"User has entered {tord_game_obj.players_list}")
 
 
 
-@dp.callback_query_handler(keyboards.cb_players.filter(action='no'), state=PlayerStates.check_players_names)
+@dp.callback_query_handler(tord_kb.cb_players.filter(action='no'), state=PlayerStates.check_players_names)
 async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
-    player.players_list.clear()
-    await query.answer()
-    await PlayerStates.ready_to_get_players_names.set()
-    await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["enter usernames"])
+
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
+    tord_game_obj.players_list.clear()
+    # await query.answer()
+    await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.ready_to_get_players_names)
+    # await PlayerStates.ready_to_get_players_names.set()
+
+    await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["enter usernames"])
     logging.info("User reenters names")
 
 
-@dp.callback_query_handler(keyboards.cb_players.filter(action='yes'), state=PlayerStates.check_players_names)
+@dp.callback_query_handler(tord_kb.cb_players.filter(action='yes'), state=PlayerStates.check_players_names)
 async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]):
-    print(int(query.message.message_id))
     logging.info('Got this callback data: %r', callback_data)
-    global players_are_added
-    players_are_added = True
-    await query.answer()
-    await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["proceed to settings"])
-    await PlayerStates.settings.set()
-    await bot.send_message(text=Texts.truth_or_dare["choose levels"],
+
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
+    tord_game_obj.players_are_added = True
+    # await query.answer()
+    await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["proceed to settings"])
+    await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.settings)
+    # await PlayerStates.settings.set()
+    await bot.send_message(text=user_lang_code_object.truth_or_dare["choose levels"],
                            chat_id=query.from_user.id,
-                           reply_markup=keyboards.keyboard_level_all)
+                           reply_markup=tord_kb.keyboard_level_all)
     logging.info(f"User has is offered to choose levels")
 
 
 
-@dp.callback_query_handler(keyboards.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']),
+@dp.callback_query_handler(tord_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']),
                            state=PlayerStates.settings)
 async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
-    print(query.message.message_id)
     logging.info('Got this callback data: %r', callback_data)
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
     answer = callback_data['action']
     if answer == 'lifestyle':
-        new_keyboard = keyboards.update_keyboard(0, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(0, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'absurd':
-        new_keyboard = keyboards.update_keyboard(1, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(1, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'company':
-        new_keyboard = keyboards.update_keyboard(2, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(2, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'relations':
-        new_keyboard = keyboards.update_keyboard(3, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(3, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'awkward':
-        new_keyboard = keyboards.update_keyboard(4, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(4, query.message.reply_markup)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'ready':
-        if not True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
+        if not True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level, tord_kb.adult_level]:
             await bot.answer_callback_query(query.id, '🗿', True)
         else:
-            await PlayerStates.mode.set()
+            # await PlayerStates.mode.set()
+            await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.mode)
             await bot.send_message(chat_id=query.from_user.id,
-                                   text=Texts.truth_or_dare["mode"],
-                                   reply_markup=keyboards.keyboard_mode)
-    global levels_are_chosen
-    if True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
-        levels_are_chosen = True
+                                   text=user_lang_code_object.truth_or_dare["mode"],
+                                   reply_markup=tord_kb.keyboard_mode)
+
+    if True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level, tord_kb.adult_level]:
+        tord_game_obj.levels_are_chosen = True
     else:
-        levels_are_chosen = False
+        tord_game_obj.levels_are_chosen = False
 
 
 
-@dp.callback_query_handler(keyboards.cb_mode.filter(action=['free', 'step']), state=PlayerStates.mode)
+@dp.callback_query_handler(tord_kb.cb_mode.filter(action=['free', 'step']), state=PlayerStates.mode)
 async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+    # global truth, dare, current_player_name, first_message_id, last_message_id
+
     answer = callback_data['action']
-    global truth, dare, current_player_name, first_message_id, last_message_id
-    last_message_id = query.message.message_id
+
+    tord_game_obj.last_message_id = query.message.message_id
     if answer == 'free':
-        await PlayerStates.game_free.set()
-        engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
-        current_player_name = player.players_list[player.current_player_number]
-        await bot.send_message(chat_id=query.from_user.id, text=f'{current_player_name}, {Texts.truth_or_dare["tord?"]}',
-                               reply_markup=keyboards.keyboard_td)
+        await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.game_free)
+        # await PlayerStates.game_free.set()
+        tord_game_obj.set_levels()
+        tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+        await bot.send_message(chat_id=query.from_user.id, text=f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["tord?"]}',
+                               reply_markup=tord_kb.keyboard_td)
         try:
-            for mid in range(first_message_id, last_message_id+1):
+            for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
                 await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
         except:
             pass
 
     elif answer == 'step':
-        if levels_are_chosen == False and players_are_added == False:
+        if tord_game_obj.levels_are_chosen == False and tord_game_obj.players_are_added == False:
             await bot.send_message(chat_id=query.from_user.id,
-                                   text=Texts.truth_or_dare["players, level and mode!"])
+                                   text=user_lang_code_object.truth_or_dare["players, level and mode!"])
         else:
-            await PlayerStates.game.set()
-            engine.set_levels(keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level)
-            current_player_name = player.players_list[player.current_player_number]
-            if player.truth_circle == True:
-                truth = engine.shuffled_list(engine.t_all)[0]
+            await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.game)
+            # await PlayerStates.game.set()
+            tord_game_obj.set_levels()
+            tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+            if tord_game_obj.truth_circle == True:
+                tord_game_obj.shuffle_lists()
+                tord_game_obj.truth = tord_game_obj.truths_list[0]
                 await bot.send_message(chat_id=query.from_user.id,
-                                       text=f"{current_player_name}, {truth}",
-                                       reply_markup=keyboards.keyboard_completed)
+                                       text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
+                                       reply_markup=tord_kb.keyboard_completed)
                 try:
                     for mid in range(first_message_id, last_message_id+1):
                         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
                 except:
                     pass
                 logging.info(
-                    f"Truth circle = {player.truth_circle}; "
-                    f"Current player name: {current_player_name}; "
-                    f"Truth: {truth}")
-            elif player.truth_circle == False:
-                dare = engine.shuffled_list(engine.d_all)[0]
+                    f"Truth circle = {tord_game_obj.truth_circle}; "
+                    f"Current player name: {tord_game_obj.current_player_name}; "
+                    f"Truth: {tord_game_obj.truth}")
+            elif tord_game_obj.truth_circle == False:
+                tord_game_obj.shuffle_lists()
+                tord_game_obj.dare = tord_game_obj.dares_list[0]
                 await bot.send_message(chat_id=query.from_user.id,
-                                       text=f"{current_player_name}, {dare}",
-                                       reply_markup=keyboards.keyboard_completed)
+                                       text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
+                                       reply_markup=tord_kb.keyboard_completed)
                 try:
                     for mid in range(first_message_id, last_message_id+1):
                         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
                 except:
                     pass
                 logging.info(
-                    f"Truth circle = {player.truth_circle};"
-                    f"Current player name: {current_player_name};"
-                    f"Dare: {dare};")
+                    f"Truth circle = {tord_game_obj.truth_circle};"
+                    f"Current player name: {tord_game_obj.current_player_name};"
+                    f"Dare: {tord_game_obj.dare};")
 
 
 
-@dp.callback_query_handler(keyboards.cb_completed.filter(action=['completed', 'failed', 'over']),
+@dp.callback_query_handler(tord_kb.cb_completed.filter(action=['completed', 'failed', 'over']),
                            state=PlayerStates.game)
 async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
     answer = callback_data['action']
     message_id = query.message.message_id
-    global truth, dare, current_player_name
+    # global truth, dare, current_player_name
     if answer == 'completed':
-        player.next_player_number()
-        player.circle_changer()
+        tord_game_obj.next_player_number()
+        tord_game_obj.circle_changer()
 
-        if engine.out_of_objects(engine.t_all) == True or engine.out_of_objects(engine.d_all) == True:
-            await state.finish()
-            await query.answer()
+        if tord_game_obj.out_of_objects() == True:
+            # await state.finish()
+            await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+            # await query.answer()
             await bot.send_message(chat_id=query.from_user.id,
-                                   text=f"{Texts.truth_or_dare['game over']} /truth_or_dare")
+                                   text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
 
-        if player.truth_circle == True:
-            engine.t_all.remove(truth)
-            current_player_name = player.players_list[player.current_player_number]
-            truth = engine.shuffled_list(engine.t_all)[0]
+        if tord_game_obj.truth_circle == True:
+            tord_game_obj.truths_list.remove(tord_game_obj.truth)
+            tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.truth = tord_game_obj.truths_list[0]
             await bot.edit_message_text(chat_id=query.from_user.id,
-                                   text=f"{current_player_name}, {truth}",
-                                   reply_markup=keyboards.keyboard_completed,
+                                   text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
+                                   reply_markup=tord_kb.keyboard_completed,
                                    message_id = message_id)
             logging.info(
-                f"\nTruth circle = {player.truth_circle}; "
-                f"Current player name: {current_player_name}; "
-                f"Current player number: {player.current_player_number};\n"
-                f"Current q: {truth};\n"
-                f"Length o lust: {len(engine.t_all)}")
+                f"\nTruth circle = {tord_game_obj.truth_circle}; "
+                f"Current player name: {tord_game_obj.current_player_name}; "
+                f"Current player number: {tord_game_obj.current_player_number};\n"
+                f"Current q: {tord_game_obj.truth};\n"
+                f"Length o lust: {len(tord_game_obj.truths_list)}")
 
-        elif player.truth_circle == False:
+        elif tord_game_obj.truth_circle == False:
             try:
-                engine.d_all.remove(dare)
+                tord_game_obj.dares_list.remove(tord_game_obj.dare)
             except ValueError:
                 pass
-            current_player_name = player.players_list[player.current_player_number]
-            dare = engine.shuffled_list(engine.d_all)[0]
+            tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.dare = tord_game_obj.dares_list[0]
             await bot.edit_message_text(chat_id=query.from_user.id,
-                                   text=f"{current_player_name}, {dare}",
-                                   reply_markup=keyboards.keyboard_completed,
+                                   text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
+                                   reply_markup=tord_kb.keyboard_completed,
                                    message_id = message_id)
 
             logging.info(
-                f"\nTruth circle = {player.truth_circle}; "
-                f"Current player name: {current_player_name}; "
-                f"Current player number: {player.current_player_number};\n"
-                f"Current q: {dare};\n"
-                f"Length o lust: {len(engine.d_all)}")
+                f"\nTruth circle = {tord_game_obj.truth_circle}; "
+                f"Current player name: {tord_game_obj.current_player_name}; "
+                f"Current player number: {tord_game_obj.current_player_number};\n"
+                f"Current q: {tord_game_obj.dare};\n"
+                f"Length o lust: {len(tord_game_obj.dares_list)}")
 
     elif answer == 'failed':
-        if player.fail_check(current_player_name) == True:
+        if tord_game_obj.fail_check(tord_game_obj.current_player_name) == True:
             await bot.answer_callback_query(query.id,
-                                            f'{current_player_name}, {Texts.truth_or_dare["penalty"]}',
+                                            f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["penalty"]}',
                                             True)
-        player.score[current_player_name]['p'] += 1
-        if player.truth_circle == True:
-            truth = engine.shuffled_list(engine.t_all)[0]
+        tord_game_obj.penalties[tord_game_obj.current_player_name]['p'] += 1
+        if tord_game_obj.truth_circle == True:
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.truth = tord_game_obj.truths_list[0]
             await bot.edit_message_text(chat_id=query.from_user.id,
-                                   text=f"{current_player_name}, {truth}",
-                                   reply_markup=keyboards.keyboard_completed,
+                                   text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
+                                   reply_markup=tord_kb.keyboard_completed,
                                    message_id=query.message.message_id)
-        elif player.truth_circle == False:
-            dare = engine.shuffled_list(engine.d_all)[0]
+        elif tord_game_obj.truth_circle == False:
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.dare = tord_game_obj.dares_list[0]
             await bot.edit_message_text(chat_id=query.from_user.id,
-                                        text=f"{current_player_name}, {dare}",
-                                        reply_markup=keyboards.keyboard_completed,
+                                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
+                                        reply_markup=tord_kb.keyboard_completed,
                                         message_id=query.message.message_id)
 
     elif answer == "over":
-        await state.finish()
-        await query.answer()
-        player.players_list.clear()
+        await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+        # await query.answer()
+        tord_game_obj.reset()
         await bot.send_message(chat_id=query.from_user.id,
-                               text=f"{Texts.truth_or_dare['game over']} /truth_or_dare")
+                               text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
+        await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 
-@dp.callback_query_handler(keyboards.cb_td.filter(action=['truth', 'dare', 'end']),
+@dp.callback_query_handler(tord_kb.cb_td.filter(action=['truth', 'dare', 'end']),
                            state=PlayerStates.game_free)
 async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
+
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
     answer = callback_data['action']
-    global tord, tord_t, current_player_name
-    current_player_name = player.players_list[player.current_player_number]
+    # global tord, tord_t, current_player_name
+    tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
     if answer == 'truth':
-        tord_t = True
-        tord = engine.shuffled_list(engine.t_all)[0]
-        await bot.edit_message_text(text=f"{current_player_name}, {tord}", reply_markup=keyboards.keyboard_completed_f,
+        tord_game_obj.shuffle_lists()
+        tord_game_obj.td_obj_truth = True
+        tord_game_obj.td_obj = tord_game_obj.truths_list[0]
+        await bot.edit_message_text(text=f"{tord_game_obj.current_player_name}, {tord_game_obj.td_obj}", reply_markup=tord_kb.keyboard_completed_f,
                                     message_id=query.message.message_id, chat_id=query.from_user.id)
     elif answer == 'dare':
-        tord_t = False
-        tord = engine.shuffled_list(engine.d_all)[0]
-        await bot.edit_message_text(text=f"{current_player_name}, {tord}", reply_markup=keyboards.keyboard_completed_f,
+        tord_game_obj.shuffle_lists()
+        tord_game_obj.td_obj_truth = False
+        tord_game_obj.td_obj = tord_game_obj.dares_list[0]
+        await bot.edit_message_text(text=f"{tord_game_obj.current_player_name}, {tord_game_obj.td_obj}", reply_markup=tord_kb.keyboard_completed_f,
                                     message_id=query.message.message_id, chat_id=query.from_user.id)
     elif answer == 'end':
-        player.players_list.clear()
-        await state.finish()
-        await bot.send_message(chat_id=query.from_user.id, text=Texts.truth_or_dare["game over"])
+        tord_game_obj.reset()
+        # await state.finish()
+        await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+
+        await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["game over"])
         await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-        await bot.send_message(text=Texts.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
+        await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
 
-@dp.callback_query_handler(keyboards.cb_completed_f.filter(action=['completed_f', 'failed_f']),
+@dp.callback_query_handler(tord_kb.cb_completed_f.filter(action=['completed_f', 'failed_f']),
                            state=PlayerStates.game_free)
 async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
+
+    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
     answer = callback_data['action']
-    global tord, tord_t, current_player_name
+    # global tord, tord_t, current_player_name
     if answer == 'completed_f':
-        if tord_t == True:
-            engine.t_all.remove(tord)
-        elif tord_t == False:
-            engine.d_all.remove(tord)
-        player.next_player_number()
-        current_player_name = player.players_list[player.current_player_number]
-        await bot.edit_message_text(chat_id=query.from_user.id, text=f'{current_player_name}, {Texts.truth_or_dare["tord?"]}',
-                               reply_markup=keyboards.keyboard_td, message_id=query.message.message_id)
+        if tord_game_obj.td_obj_truth == True:
+            tord_game_obj.truths_list.remove(tord_game_obj.td_obj)
+        elif tord_game_obj.td_obj_truth == False:
+            tord_game_obj.dares_list.remove(tord_game_obj.td_obj)
+        tord_game_obj.next_player_number()
+        tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+        await bot.edit_message_text(chat_id=query.from_user.id, text=f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["tord?"]}',
+                               reply_markup=tord_kb.keyboard_td, message_id=query.message.message_id)
 
     elif answer == 'failed_f':
-        if player.fail_check(current_player_name) == True:
+        if tord_game_obj.fail_check(tord_game_obj.current_player_name) == True:
             await bot.answer_callback_query(query.id,
-                                            f'{current_player_name}, {Texts.truth_or_dare["penalty"]}',
+                                            f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["penalty"]}',
                                             True)
-        player.score[current_player_name]['p'] += 1
-        if tord_t == True:
-            tord = engine.shuffled_list(engine.t_all)[0]
-        elif tord_t == False:
-            tord = engine.shuffled_list(engine.d_all)[0]
-        await bot.edit_message_text(text=f"{current_player_name}, {tord}", reply_markup=keyboards.keyboard_completed_f,
+        tord_game_obj.penalties[tord_game_obj.current_player_name]['p'] += 1
+        if tord_game_obj.td_obj_truth == True:
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.td_obj = tord_game_obj.truths_list[0]
+        elif tord_game_obj.td_obj_truth == False:
+            tord_game_obj.shuffle_lists()
+            tord_game_obj.td_obj = tord_game_obj.dares_list[0]
+        await bot.edit_message_text(text=f"{tord_game_obj.current_player_name}, {tord_game_obj.td_obj}", reply_markup=tord_kb.keyboard_completed_f,
                                     message_id=query.message.message_id, chat_id=query.from_user.id)
