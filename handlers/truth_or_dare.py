@@ -112,6 +112,7 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
 
     tord_game_obj.players_are_added = True
     # await query.answer()
@@ -132,30 +133,31 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], s
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
 
     answer = callback_data['action']
     if answer == 'lifestyle':
-        new_keyboard = tord_kb.update_keyboard(0, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(0, query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'absurd':
-        new_keyboard = tord_kb.update_keyboard(1, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(1, query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'company':
-        new_keyboard = tord_kb.update_keyboard(2, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(2, query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'relations':
-        new_keyboard = tord_kb.update_keyboard(3, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(3, query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'awkward':
-        new_keyboard = tord_kb.update_keyboard(4, query.message.reply_markup)
+        new_keyboard = tord_kb.update_keyboard(4, query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
@@ -182,6 +184,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
     # global truth, dare, current_player_name, first_message_id, last_message_id
 
     answer = callback_data['action']
@@ -249,6 +252,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
 
     answer = callback_data['action']
     message_id = query.message.message_id
@@ -340,6 +344,7 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
 
     answer = callback_data['action']
     # global tord, tord_t, current_player_name
@@ -375,6 +380,7 @@ async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: ty
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb
 
     answer = callback_data['action']
     # global tord, tord_t, current_player_name

@@ -359,10 +359,12 @@ class Database:
         connection = sqlite3.connect("./database/users.db")
         c = connection.cursor()
 
-        c.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))
-        result = c.fetchone()[0]
+        try:
+            c.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))
+            result = c.fetchone()[0]
+        except:
 
-        if result is None:
+            # if result is None:
             query = """
                     INSERT INTO users (user_id, lang_code, tord_game, nie_game, 
                                         the_35_game, themes_game, tord_kb, nie_kb, 
@@ -387,7 +389,7 @@ class Database:
 
 
     @classmethod
-    def get_user_obj_from_db(cls, the_user_id: Users):
+    def get_user_obj_from_db(cls, the_user_id: str | int):
         connection = sqlite3.connect("./database/users.db")
         c = connection.cursor()
 
@@ -395,17 +397,17 @@ class Database:
         c.execute(query, (the_user_id,))
         data = c.fetchall()
 
-        return {
+        the_dict = {
             "user_id": data[0][0],
             "lang_code": data[0][1],
-            "tord_game": data[0][2],
-            "nie_game": data[0][3],
-            "the_35_game": data[0][4],
-            "themes_game": data[0][5],
-            "tord_kb": data[0][6],
-            "nie_kb": data[0][7],
-            "the_35_kb": data[0][8],
-            "themes_kb": data[0][9],
+            "tord_game": pickle.loads(data[0][2]),
+            "nie_game": pickle.loads(data[0][3]),
+            "the_35_game": pickle.loads(data[0][4]),
+            "themes_game": pickle.loads(data[0][5]),
+            "tord_kb": pickle.loads(data[0][6]),
+            "nie_kb": pickle.loads(data[0][7]),
+            "the_35_kb": pickle.loads(data[0][8]),
+            "themes_kb": pickle.loads(data[0][9]),
             "chat_id": data[0][10],
             "chat_type": data[0][11],
             "username": data[0][12],
@@ -413,6 +415,28 @@ class Database:
             "lName": data[0][14],
             "is_bot":data[0][15]
         }
+
+        print(the_dict['user_id'])
+        print(the_dict['lang_code'])
+
+        return_obj = Users(data[0][0],
+                            data[0][1],
+                            pickle.loads(data[0][2]),
+                            pickle.loads(data[0][3]),
+                            pickle.loads(data[0][4]),
+                            pickle.loads(data[0][5]),
+                            pickle.loads(data[0][6]),
+                            pickle.loads(data[0][7]),
+                            pickle.loads(data[0][8]),
+                            pickle.loads(data[0][9]),
+                            data[0][10],
+                            data[0][11],
+                            data[0][12],
+                            data[0][13],
+                            data[0][14],
+                            data[0][15])
+
+        return return_obj
 
     @classmethod
     def update_user_obj(cls, the_user_id, new_obj):
