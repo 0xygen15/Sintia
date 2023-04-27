@@ -56,6 +56,8 @@ class Texts:
 
         self.lang_code = lang_code
 
+        self.load_localisation()
+
 
     def load_localisation(self):
         with open(f"./local/{self.lang_code}/info.json", "r", encoding="utf8") as info_file:

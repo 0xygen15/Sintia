@@ -1,8 +1,10 @@
+from typing import Dict, Any
+
 from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
 from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThreeOfFiveKeyboard, ThemesKeyboard
-from mainUnit.database import Database
+# from mainUnit.database import Database
+from local.lang import Texts
 
-from loader import user_objects
 
 class Users:
     def __init__(self, user_id: str | int, lang_code: str,
@@ -34,12 +36,27 @@ class Users:
         self.lName = lName
         self.is_bot = is_bot
 
-    @classmethod
-    def retrieve_user_obj(cls, user_id):
-        try:
-            user_obj = user_objects[user_id]
-        except KeyError:
-            user_objects[user_id] = Database.get_user_obj_from_db(user_id)
-            user_obj = user_objects[user_id]
 
-        return user_obj
+
+
+#Localisation objects
+loc_ru, loc_uk, loc_sr, loc_en, loc_de, loc_fr, loc_es = Texts("ru"), Texts("uk"), Texts("sr"), Texts("en"), Texts("de"), Texts("fr"), Texts("es")
+
+#dict with user object where are all thew user's objects are stored
+user_objects: Dict[str, Users|Any]= {}
+
+#dict with loc objects for access from any place of project
+loc_objects: Dict[str, Texts] = {
+    "ru": loc_ru,
+    "uk": loc_uk,
+    "sr": loc_sr,
+    "en": loc_en,
+    "de": loc_de,
+    "fr": loc_fr,
+    "es": loc_es
+}
+
+def load_localisations():
+    for loc_obj_code, loc_obj in loc_objects.items():
+        loc_obj.load_localisation()
+

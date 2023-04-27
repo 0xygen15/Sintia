@@ -2,7 +2,7 @@ from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
 from loader import dp, bot
-from loader import loc_objects, user_objects
+from mainUnit.users import loc_objects
 
 from mainUnit.users import Users
 from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
@@ -11,7 +11,7 @@ from mainUnit.database import Database
 
 @dp.message_handler(commands='info')
 async def info(message: Message):
-    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    user_obj = Database.retrieve_user_obj(message.from_user.id)
     await bot.send_message(text=loc_objects[user_obj.lang_code].info["info"], chat_id=message.from_user.id, parse_mode='HTML')
 
 
@@ -19,17 +19,24 @@ async def info(message: Message):
 async def start(message: Message, state: FSMContext):
     # await state.finish()
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
+    try:
+        user_obj = Database.retrieve_user_obj(message.from_user.id)
+        lang_code = user_obj.lang_code
+    except:
+        lang_code = message.from_user.language_code
+
+    # lang_code = message.from_user.language_code
     user = Users(
         user_id=message.from_user.id,
-        lang_code=message.from_user.language_code,
-        tord_game=Tord(message.from_user.id, message.from_user.language_code),
-        nie_game=Nie(message.from_user.id, message.from_user.language_code),
-        the_35_game=ThreeOfFive(message.from_user.id, message.from_user.language_code),
-        themes_game=Themes(message.from_user.id, message.from_user.language_code),
-        tord_kb=TordKeyboard(message.from_user.language_code),
-        nie_kb=NieKeyboard(message.from_user.language_code),
-        the_35_kb=ThreeOfFiveKeyboard(message.from_user.language_code),
-        themes_kb=ThemesKeyboard(message.from_user.language_code),
+        lang_code=lang_code,
+        tord_game=Tord(message.from_user.id, lang_code),
+        nie_game=Nie(message.from_user.id, lang_code),
+        the_35_game=ThreeOfFive(message.from_user.id, lang_code),
+        themes_game=Themes(message.from_user.id, lang_code),
+        tord_kb=TordKeyboard(loc_objects[lang_code]),
+        nie_kb=NieKeyboard(loc_objects[lang_code]),
+        the_35_kb=ThreeOfFiveKeyboard(loc_objects[lang_code]),
+        themes_kb=ThemesKeyboard(loc_objects[lang_code]),
         chat_id=message.chat.id,
         chat_type=message.chat.type,
         username=message.from_user.username,
@@ -41,10 +48,10 @@ async def start(message: Message, state: FSMContext):
     Database.create_users_db() # create db if not created
     Database.add_user_to_db(user) #add user data to db if bot added yet
 
-    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    user_obj = Database.retrieve_user_obj(message.from_user.id)
 
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    user_lang_code_object.load_localisation() #load localisation files
+    # user_lang_code_object.load_localisation() #load localisation files
 
     await bot.send_message(text=user_lang_code_object.info["start"], chat_id=message.from_user.id, parse_mode='HTML')
 
@@ -52,7 +59,7 @@ async def start(message: Message, state: FSMContext):
 async def main_menu(message: Message, state: FSMContext):
     # await state.finish()
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
-    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    user_obj = Database.retrieve_user_obj(message.from_user.id)
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    user_lang_code_object.load_localisation()
+    # user_lang_code_object.load_localisation()
     await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=message.from_user.id, parse_mode='HTML')

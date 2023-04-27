@@ -4,21 +4,13 @@ import typing
 from aiogram.types import CallbackQuery, Message
 from aiogram.dispatcher import FSMContext
 
-from mainUnit.engine import Engine
-from mainUnit.keyboards import TordKeyboard
-from mainUnit.players import Players
 from mainUnit.states import PlayerStates
-
-from local.lang import Texts
-
+from mainUnit.users import loc_objects
+from mainUnit.keyboards import TordKeyboard
+from mainUnit.database import Database
 
 from loader import dp, bot
-from loader import loc_objects, user_objects
 
-from mainUnit.users import Users
-from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
-from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThemesKeyboard, ThreeOfFiveKeyboard
-from mainUnit.database import Database
 
 ####
 
@@ -30,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 # keyboards = TordKeyboard()
 
 # tord_game_obj: Tord
-tord_kb: TordKeyboard
+# tord_kb: TordKeyboard
 # user_lang_code_object: Texts
 
 
@@ -52,10 +44,10 @@ tord_kb: TordKeyboard
 # tord_t = True
 
 # current_player_name = ""
-# first_message_id: int
-# last_message_id: int
+first_message_id: int
+last_message_id: int
 
-tord_kb: TordKeyboard
+tord_kb: TordKeyboard = TordKeyboard(loc_file=loc_objects["de"])
 
 @dp.message_handler(commands='truth_or_dare', state='*')
 async def players_names(message: Message, state: FSMContext):
@@ -63,7 +55,7 @@ async def players_names(message: Message, state: FSMContext):
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
     await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=PlayerStates.ready_to_get_players_names)
 
-    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    user_obj = Database.retrieve_user_obj(message.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -76,7 +68,7 @@ async def players_names(message: Message, state: FSMContext):
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
 async def check_players_names(message: Message, state: FSMContext):
-    user_obj = Users.retrieve_user_obj(message.from_user.id)
+    user_obj = Database.retrieve_user_obj(message.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
     tord_kb = user_obj.tord_kb
@@ -100,7 +92,7 @@ async def check_players_names(message: Message, state: FSMContext):
 async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -117,7 +109,7 @@ async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str])
 async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -137,7 +129,7 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
                            state=PlayerStates.settings)
 async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
     logging.info('Got this callback data: %r', callback_data)
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -187,7 +179,7 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], s
 @dp.callback_query_handler(tord_kb.cb_mode.filter(action=['free', 'step']), state=PlayerStates.mode)
 async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
     # global truth, dare, current_player_name, first_message_id, last_message_id
@@ -254,7 +246,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
                            state=PlayerStates.game)
 async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -345,7 +337,7 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
 async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
@@ -380,7 +372,7 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
 async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
-    user_obj = Users.retrieve_user_obj(query.from_user.id)
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
 

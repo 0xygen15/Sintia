@@ -99,7 +99,7 @@ class Engine:
         return theme_questions_list
 
 class Tord:
-    def __init__(self, user_id, lang_code):
+    def __init__(self, user_id: str | int, lang_code: str):
         self.user_id = user_id
         self.lang_code = lang_code
 

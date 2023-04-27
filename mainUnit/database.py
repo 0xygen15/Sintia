@@ -1,7 +1,7 @@
 import sqlite3
 import pickle
 
-from mainUnit.users import Users
+from mainUnit.users import Users, user_objects
 
 import loader
 
@@ -56,8 +56,6 @@ class Database:
     #         connection.close()
     #     else:
     #         pass
-
-
     @classmethod
     def chat_ids(cls):
         connection = sqlite3.connect("./database/users.db")
@@ -378,18 +376,18 @@ class Database:
                     username, fName, lName, is_bot)
             c.execute(query, data)
 
-            loader.user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
+            user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
 
             connection.commit()
             connection.close()
         else:
-            loader.user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
+            user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
             connection.close()
 
 
 
     @classmethod
-    def get_user_obj_from_db(cls, the_user_id):
+    def get_user_obj_from_db(cls, the_user_id: Users):
         connection = sqlite3.connect("./database/users.db")
         c = connection.cursor()
 
@@ -417,7 +415,7 @@ class Database:
         }
 
     @classmethod
-    def update_user_obj(cls, the_user_id, new_obj: Users):
+    def update_user_obj(cls, the_user_id, new_obj):
         user_id = new_obj.user_id
         lang_code = new_obj.lang_code
 
@@ -453,7 +451,17 @@ class Database:
                           username, fName, lName, is_bot,
                           the_user_id,))
 
-        loader.user_objects[user_id] = new_obj # UPDATE OBJECT IN OBJECT DICT
+        user_objects[user_id] = new_obj # UPDATE OBJECT IN OBJECT DICT
 
         connection.commit()
         connection.close()
+
+    @classmethod
+    def retrieve_user_obj(cls, user_id):
+        try:
+            user_obj = user_objects[user_id]
+        except KeyError:
+            user_objects[user_id] = cls.get_user_obj_from_db(user_id)
+            user_obj = user_objects[user_id]
+
+        return user_obj
