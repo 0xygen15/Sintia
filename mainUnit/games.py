@@ -279,6 +279,10 @@ class Nie:
         self.truth_circle = True
         self.penalties = {}
 
+        self.tord_truth = True
+        self.tord = ""
+        self.nie = ""
+
     def __str__(self):
         return f"Nie object with id: {self.user_id}"
 

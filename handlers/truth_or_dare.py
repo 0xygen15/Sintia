@@ -2,7 +2,6 @@ import logging
 import typing
 
 from aiogram.types import CallbackQuery, Message
-from aiogram.dispatcher import FSMContext
 
 from mainUnit.states import PlayerStates
 from mainUnit.users import loc_objects
@@ -44,13 +43,13 @@ logging.basicConfig(level=logging.INFO)
 # tord_t = True
 
 # current_player_name = ""
-first_message_id: int
-last_message_id: int
+# first_message_id: int
+# last_message_id: int
 
-tord_kb: TordKeyboard = TordKeyboard(loc_file=loc_objects["de"])
+tord_kb: TordKeyboard = TordKeyboard(loc_file=loc_objects["en"]) #defaul kb, so it would be possible to use decorators
 
 @dp.message_handler(commands='truth_or_dare', state='*')
-async def players_names(message: Message, state: FSMContext):
+async def players_names(message: Message):
     # global tord_game_obj, tord_kb, first_message_id, user_lang_code_object
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
     await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=PlayerStates.ready_to_get_players_names)
@@ -67,11 +66,11 @@ async def players_names(message: Message, state: FSMContext):
 
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
-async def check_players_names(message: Message, state: FSMContext):
+async def check_players_names(message: Message):
     user_obj = Database.retrieve_user_obj(message.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=PlayerStates.check_players_names)
     tord_game_obj.add_players_names(message.text)
@@ -112,7 +111,7 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     tord_game_obj.players_are_added = True
     # await query.answer()
@@ -128,12 +127,12 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
 
 @dp.callback_query_handler(tord_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']),
                            state=PlayerStates.settings)
-async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
+async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     answer = callback_data['action']
     if answer == 'lifestyle':
@@ -179,13 +178,12 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str], s
 
 
 @dp.callback_query_handler(tord_kb.cb_mode.filter(action=['free', 'step']), state=PlayerStates.mode)
-async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
+async def mode(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
-    # global truth, dare, current_player_name, first_message_id, last_message_id
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     answer = callback_data['action']
 
@@ -219,7 +217,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
                                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
                                        reply_markup=tord_kb.keyboard_completed)
                 try:
-                    for mid in range(first_message_id, last_message_id+1):
+                    for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
                         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
                 except:
                     pass
@@ -234,7 +232,7 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
                                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
                                        reply_markup=tord_kb.keyboard_completed)
                 try:
-                    for mid in range(first_message_id, last_message_id+1):
+                    for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
                         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
                 except:
                     pass
@@ -247,12 +245,12 @@ async def mode(query: CallbackQuery, state: FSMContext, callback_data: typing.Di
 
 @dp.callback_query_handler(tord_kb.cb_completed.filter(action=['completed', 'failed', 'over']),
                            state=PlayerStates.game)
-async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
+async def game_step(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     answer = callback_data['action']
     message_id = query.message.message_id
@@ -338,13 +336,13 @@ async def game_step(query: CallbackQuery, state: FSMContext, callback_data: typi
 
 @dp.callback_query_handler(tord_kb.cb_td.filter(action=['truth', 'dare', 'end']),
                            state=PlayerStates.game_free)
-async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
+async def game_free(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     answer = callback_data['action']
     # global tord, tord_t, current_player_name
@@ -374,13 +372,13 @@ async def game_free(query: CallbackQuery, state: FSMContext, callback_data: typi
 
 @dp.callback_query_handler(tord_kb.cb_completed_f.filter(action=['completed_f', 'failed_f']),
                            state=PlayerStates.game_free)
-async def game_free_c(query: CallbackQuery, state: FSMContext, callback_data: typing.Dict[str, str]):
+async def game_free_c(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
 
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     tord_game_obj = user_obj.tord_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    tord_kb = user_obj.tord_kb
+    tord_kb = user_obj.tord_kb # it is ok to shadow from outer scope
 
     answer = callback_data['action']
     # global tord, tord_t, current_player_name

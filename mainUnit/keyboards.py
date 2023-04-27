@@ -250,39 +250,39 @@ class TordKeyboard:
                                                 )
         return updated_keyboard
 
-    def update_keyboard_mode(self, index: int, old_keyboard: InlineKeyboardMarkup):
-        object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
-        if "+" in str(object_text):
-            if index == 0:
-                self.mode_mark1 = ''
-                self.free_mode = False
-            elif index == 1:
-                self.mode_mark2 = ''
-                self.step_mode = False
-        elif "+" not in str(object_text):
-            if index == 0:
-                self.mode_mark1 = ' +'
-                self.free_mode = True
-            elif index == 1:
-                self.mode_mark2 = ' +'
-                self.step_mode = True
-        updated_keyboard_mode = InlineKeyboardMarkup(row_width=2,
-                                                     inline_keyboard=[
-                                                         [
-                                                             InlineKeyboardButton(f'{self.loc_file.keyboards["free mode"]} {self.mode_mark1}',
-                                                                                  callback_data=self.cb_mode.new(
-                                                                                      action='free'
-                                                                                  )),
-
-                                                         ],
-                                                         [
-                                                             InlineKeyboardButton(f'{self.loc_file.keyboards["alternate mode"]} {self.mode_mark2}',
-                                                                                  callback_data=self.cb_mode.new(
-                                                                                      action='step'
-                                                                                  ))
-                                                         ]
-                                                     ])
-        return updated_keyboard_mode
+    # def update_keyboard_mode(self, index: int, old_keyboard: InlineKeyboardMarkup):
+    #     object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
+    #     if "+" in str(object_text):
+    #         if index == 0:
+    #             self.mode_mark1 = ''
+    #             self.free_mode = False
+    #         elif index == 1:
+    #             self.mode_mark2 = ''
+    #             self.step_mode = False
+    #     elif "+" not in str(object_text):
+    #         if index == 0:
+    #             self.mode_mark1 = ' +'
+    #             self.free_mode = True
+    #         elif index == 1:
+    #             self.mode_mark2 = ' +'
+    #             self.step_mode = True
+    #     updated_keyboard_mode = InlineKeyboardMarkup(row_width=2,
+    #                                                  inline_keyboard=[
+    #                                                      [
+    #                                                          InlineKeyboardButton(f'{self.loc_file.keyboards["free mode"]} {self.mode_mark1}',
+    #                                                                               callback_data=self.cb_mode.new(
+    #                                                                                   action='free'
+    #                                                                               )),
+    #
+    #                                                      ],
+    #                                                      [
+    #                                                          InlineKeyboardButton(f'{self.loc_file.keyboards["alternate mode"]} {self.mode_mark2}',
+    #                                                                               callback_data=self.cb_mode.new(
+    #                                                                                   action='step'
+    #                                                                               ))
+    #                                                      ]
+    #                                                  ])
+    #     return updated_keyboard_mode
 class NieKeyboard:
     def __init__(self, loc_file: Texts):
         self.loc_file = loc_file
@@ -407,42 +407,52 @@ class NieKeyboard:
         return f"""Nie Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
 
 
-    def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup):
+    def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
         object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
 
         if "+" in str(object_text):
             if index == 0:
                 self.mark1 = ""
                 self.lifestyle_level = False
+                game_obj.lifestyle_level = False
             elif index == 1:
                 self.mark2 = ""
                 self.absurd_level = False
+                game_obj.absurd_level = False
             elif index == 2:
                 self.mark3 = ""
                 self.relations_level = False
+                game_obj.relations_level = False
             elif index == 3:
                 self.mark4 = ""
                 self.personal_level = False
+                game_obj.personal_level = False
             elif index == 4:
                 self.mark5 = ""
                 self.adult_level = False
+                game_obj.adult_level = False
 
         elif "+" not in str(object_text):
             if index == 0:
                 self.mark1 = " +"
                 self.lifestyle_level = True
+                game_obj.lifestyle_level = True
             elif index == 1:
                 self.mark2 = " +"
                 self.absurd_level = True
+                game_obj.absurd_level = True
             elif index == 2:
                 self.mark3 = " +"
                 self.relations_level = True
+                game_obj.relations_level = True
             elif index == 3:
                 self.mark4 = " +"
                 self.personal_level = True
+                game_obj.personal_level = True
             elif index == 4:
                 self.mark5 = " +"
                 self.adult_level = True
+                game_obj.adult_level = True
 
         updated_keyboard = InlineKeyboardMarkup(row_width=1,
                                                 inline_keyboard=[
