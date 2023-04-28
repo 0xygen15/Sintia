@@ -376,6 +376,11 @@ class ThreeOfFive:
             self.nevers_str += f"<b>{level[1]}:</b>\n"
             self.nevers_str += f"{list_to_string(the_list=one_level(files[2], level[0]))}\n"
 
+    def reset(self):
+        self.truths_str = ""
+        self.dares_str = ""
+        self.nevers_str = ""
+
 class Themes:
     def __init__(self, user_id, lang_code):
         self.user_id = user_id
@@ -383,11 +388,14 @@ class Themes:
 
         self.theme_questions_list = []
 
+        self.theme_chosen = ""
+        self.index: int
+
     def __str__(self):
         return f"Themes object with id: {self.user_id}"
 
-    def theme(self, theme_name: str):
+    def theme(self):
         with open(f"database/{self.lang_code}/themes_truth.json", mode="r", encoding="utf8") as f:
             file = json.load(f)
-            theme_questions_dict = file[theme_name]
+            theme_questions_dict = file[self.theme_chosen]
         self.theme_questions_list = [v for k, v in theme_questions_dict.items()]
