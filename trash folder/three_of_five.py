@@ -6,7 +6,7 @@ from aiogram.types import CallbackQuery, Message
 
 from mainUnit.engine import Engine
 from mainUnit.keyboards import ThreeOfFiveKeyboard
-from mainUnit.players import Players
+from mainUnit import Players
 
 from local.lang import Texts
 

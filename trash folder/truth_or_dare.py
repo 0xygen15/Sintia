@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 
 from mainUnit.engine import Engine
 from mainUnit.keyboards import TordKeyboard
-from mainUnit.players import Players
+from mainUnit import Players
 from mainUnit.states import PlayerStates
 
 from local.lang import Texts

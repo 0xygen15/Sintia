@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 
 from mainUnit.engine import Engine, Users
 from mainUnit.keyboards import NieKeyboard
-from mainUnit.players import Players
+from mainUnit import Players
 from mainUnit.states import NieStates
 
 from local.lang import Texts

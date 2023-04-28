@@ -1,5 +1,3 @@
-import typing
-
 from aiogram.types import Message, ContentTypes
 from aiogram.dispatcher import FSMContext
 
@@ -10,8 +8,6 @@ from mainUnit.config import feedback_channel_id
 
 from mainUnit.users import loc_objects
 from mainUnit.database import Database
-
-from local.lang import Texts
 
 
 @dp.message_handler(commands='advertise', state='*')

@@ -3,7 +3,6 @@ import pickle
 
 from mainUnit.users import Users, user_objects
 
-import loader
 
 class Database:
     # connection = sqlite3.connect("./database/users.db")

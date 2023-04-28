@@ -72,8 +72,8 @@ def create_and_fill_truth(file):
 
     connection.commit()
 
-create_and_fill_never("../database/never.json")
-create_and_fill_truth("../database/truth.json")
-create_and_fill_dare("../database/dare.json")
+create_and_fill_never("never.json")
+create_and_fill_truth("truth.json")
+create_and_fill_dare("dare.json")
 
 connection.close()

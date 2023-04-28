@@ -1,13 +1,8 @@
-from aiogram.types import Message
-from aiogram.dispatcher import FSMContext
-
-from loader import dp, bot
 from loader import loc_objects, user_objects
 
 from mainUnit.users import Users
 from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
 from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThemesKeyboard, ThreeOfFiveKeyboard
-from mainUnit.database import Database
 
 test_user = Users(
     user_id="107985053",

@@ -9,7 +9,6 @@ from mainUnit.config import feedback_channel_id
 from mainUnit.users import loc_objects
 from mainUnit.database import Database
 
-from local.lang import Texts
 
 @dp.message_handler(commands='feedback', state='*')
 async def feedback_pending(message: Message, state: FSMContext):

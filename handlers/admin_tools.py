@@ -1,10 +1,9 @@
 import logging
 
 from aiogram import types
-from aiogram.dispatcher import FSMContext, filters
+from aiogram.dispatcher import filters
 from aiogram.types import Message
 
-from mainUnit.states import AdsStates
 from mainUnit.engine import Users
 from mainUnit.config import admin_id, backup_channel_id, post_channel_id
 

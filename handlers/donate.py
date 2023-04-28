@@ -1,19 +1,13 @@
-import typing
-
-from aiogram.types import Message, CallbackQuery, ContentTypes
+from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
 from loader import dp, bot
 
-from mainUnit.engine import Users
-from mainUnit.keyboards import ConfigKeyboard
-from mainUnit.states import LangStates, Feedback, Advertise
-from mainUnit.config import admin_id, feedback_channel_id, post_channel_id, donation_links
+from mainUnit.config import donation_links
 
 from mainUnit.users import loc_objects
 from mainUnit.database import Database
 
-from local.lang import Texts
 
 @dp.message_handler(commands='donate', state='*')
 async def donate(message: Message, state: FSMContext):

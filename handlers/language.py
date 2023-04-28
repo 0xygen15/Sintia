@@ -13,7 +13,6 @@ from mainUnit.database import Database
 from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
 from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThemesKeyboard, ThreeOfFiveKeyboard
 from mainUnit.users import Users
-from local.lang import Texts
 
 
 @dp.message_handler(commands="language")

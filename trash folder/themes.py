@@ -1,11 +1,10 @@
 import logging
 import typing
 
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery
 
 from mainUnit.engine import Engine
-from mainUnit.keyboards import ThemesKeyboard
-from mainUnit.players import Players
+from mainUnit import Players
 from mainUnit.states import ThemesStates
 from handlers.info import *
 
