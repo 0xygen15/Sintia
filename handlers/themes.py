@@ -174,9 +174,9 @@ async def themes_game(query: CallbackQuery, callback_data: typing.Dict[str, str]
         # await state.finish()
         await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
         themes_game_obj.theme_chosen = ""
-        await bot.edit_message_text(text=user_lang_code_object.themes["game over"],
+        await bot.edit_message_text(text=user_lang_code_object.themes["game over"]+" /themes",
                                     chat_id=query.from_user.id,
                                     message_id=message_id,
-                                    reply_markup=themes_kb.kb_themes,
+                                    reply_markup=None,
                                     parse_mode='HTML')
         await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')

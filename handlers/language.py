@@ -6,7 +6,6 @@ from aiogram.dispatcher import FSMContext
 from loader import dp, bot
 from mainUnit.users import loc_objects
 
-from mainUnit.engine import Users
 from mainUnit.keyboards import ConfigKeyboard
 from mainUnit.states import LangStates
 from mainUnit.database import Database

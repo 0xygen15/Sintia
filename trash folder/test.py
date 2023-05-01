@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect("trash folder/users.db")
+connection = sqlite3.connect("users.db")
 c = connection.cursor()
 
 query = "SELECT * FROM users"

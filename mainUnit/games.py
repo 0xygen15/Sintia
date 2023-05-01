@@ -224,7 +224,7 @@ class Tord:
                 self.truth_circle = True
 
     def fail_check(self, name):
-        fail_number = self.penalties[name]['p']
+        fail_number = self.penalties[name]
         if 0 <= fail_number < 5:
             pass
         elif fail_number % 5 == 0:
@@ -233,8 +233,8 @@ class Tord:
             return False
 
     def reset(self):
-        self.truths_list.clear()
-        self.dares_list.clear()
+        self.truths_list = []
+        self.dares_list = []
 
         self.lifestyle_level = False
         self.absurd_level = False
@@ -242,11 +242,11 @@ class Tord:
         self.personal_level = False
         self.awkward_level = False
 
-        self.players_list.clear()
+        self.players_list = []
         self.current_player_number = 0
         self.players_number = 0
         self.truth_circle = True
-        self.penalties.clear()
+        self.penalties = {}
 
         self.players_are_added = False
         self.levels_are_chosen = False
@@ -256,6 +256,9 @@ class Tord:
         self.current_player_name = ""
         self.first_message_id = ""
         self.last_message_id = ""
+
+        self.td_obj = ""
+        self.td_obj_truth = True
 
 
 class Nie:
@@ -331,6 +334,27 @@ class Nie:
             random.shuffle(the_list)
             random.shuffle(the_list)
             random.shuffle(the_list)
+
+    def reset(self):
+        self.truths_list = []
+        self.dares_list = []
+        self.nevers_list = []
+
+        self.lifestyle_level = False
+        self.absurd_level = False
+        self.relations_level = False
+        self.personal_level = False
+        self.awkward_level = False
+
+        self.players_list = []
+        self.current_player_number = 0
+        self.players_number = 0
+        self.truth_circle = True
+        self.penalties = {}
+
+        self.tord_truth = True
+        self.tord = ""
+        self.nie = ""
 
 class ThreeOfFive:
     def __init__(self, user_id, lang_code):

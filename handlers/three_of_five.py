@@ -48,11 +48,12 @@ async def three_of_five_start(message: Message):
     user_obj = Database.retrieve_user_obj(message.from_user.id)
     the35_game_obj = user_obj.the_35_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    the35_kb = user_obj.the_35_game
+    the35_kb = user_obj.the_35_kb
 
     # data = engine.three_of_five()
     # keyboards, engine, player = update_keyboards_object()
     # keyboards, engine, player = ThreeOfFiveKeyboard(), Engine(), Players()
+    the35_game_obj.three_of_five()
     await bot.send_message(chat_id=message.from_user.id,
                            text=user_lang_code_object.three_of_five["description"],
                            reply_markup=the35_kb.kb35)
@@ -67,7 +68,7 @@ async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[st
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     the35_game_obj = user_obj.the_35_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
-    the35_kb = user_obj.the_35_game
+    the35_kb = user_obj.the_35_kb
 
     message_id = query.message.message_id
     if answer == "Truth":
@@ -86,7 +87,7 @@ async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[st
         the35_game_obj.reset()
         text = f"{user_lang_code_object.three_of_five['new game']} /three_of_five"
         await bot.edit_message_text(text=text, chat_id=query.from_user.id, message_id=message_id,
-                                    parse_mode='HTML')
+                                    parse_mode='HTML', reply_markup=None)
         await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
 
 
