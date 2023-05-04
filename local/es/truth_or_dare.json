@@ -7,7 +7,7 @@
     "enter usernames": "Ingrese los nombres de los jugadores:",
     "proceed to settings": "Genial, puedes ir a la configuración.",
     "choose levels": "En este menú, debe elegir categorías de preguntas y acciones para el juego.",
-    "mode": "Seleccione el modo de juego. Hay dos de ellos. \n\n 'Free': todos eligen cuándo es la verdad, y cuándo la acción. \n\n Alternativamente, el bot alternará la verdad y la acción una vez.",
+    "mode": "Seleccione el modo de juego. Hay dos de ellos. \n\nLibre: todos eligen cuándo es la verdad, y cuándo la acción. \n\n Alternativamente, el bot alternará la verdad y la acción una vez.",
     "tord?": "¿Verdadero o acción?",
     "players, level and mode!": "¡Primero debes agregar jugadores, elegir el nivel y el modo del juego!.",
     "game over": "El juego ha terminado, las preguntas/acciones han terminado. Haga clic en un nuevo juego",

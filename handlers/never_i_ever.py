@@ -21,12 +21,9 @@ nie_kb: NieKeyboard = NieKeyboard(loc_file=loc_objects["en"])
 
 @dp.message_handler(commands="never_i_ever", state='*')
 async def never_i_ever(message: Message):
-    # global keyboards, engine, player
-    # await state.finish()
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
-    # await NieStates.levels.set()
     await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id, state=NieStates.levels)
-    # keyboards, engine, player = update_keyboards_object()
+
     user_obj = Database.retrieve_user_obj(message.from_user.id)
     nie_game_obj = user_obj.nie_game
     user_lang_code_object = loc_objects[user_obj.lang_code]
@@ -35,7 +32,6 @@ async def never_i_ever(message: Message):
     nie_game_obj.reset()
     nie_kb.reset()
 
-    # keyboards, engine, player = NieKeyboard(), Engine(), Players()
     await bot.send_message(chat_id=message.from_user.id, text=user_lang_code_object.never_i_ever["choose levels"], reply_markup=nie_kb.keyboard_level_all)
 
 
@@ -78,18 +74,11 @@ async def nie_levels(query: CallbackQuery, callback_data: typing.Dict[str, str])
         if not True in [nie_game_obj.lifestyle_level, nie_game_obj.absurd_level, nie_game_obj.relations_level, nie_game_obj.personal_level, nie_game_obj.awkward_level]:
             await bot.answer_callback_query(query.id, user_lang_code_object.never_i_ever["no choice made"], True)
         else:
-            # await NieStates.game.set()
             await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=NieStates.game)
             nie_game_obj.set_levels()
             await bot.send_message(chat_id=query.from_user.id,
                                    text=user_lang_code_object.never_i_ever["begin it"],
                                    reply_markup=nie_kb.keyboard_nie)
-    # global levels_are_chosen
-    # if True in [keyboards.lifestyle_level, keyboards.absurd_level, keyboards.relations_level, keyboards.personal_level, keyboards.adult_level]:
-    #     levels_are_chosen = True
-    # else:
-    #     levels_are_chosen = False
-
 
 @dp.callback_query_handler(nie_kb.cb_nie.filter(action=['truth_nie', 'dare_nie', 'next_nie', 'end_nie']),
                            state=NieStates.game)
@@ -102,7 +91,7 @@ async def nie_game(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     nie_kb = user_obj.nie_kb
 
     answer = callback_data['action']
-    # global tord, tord_t, nie
+
     if answer == 'truth_nie':
         nie_game_obj.tord_truth = True
         nie_game_obj.shuffle_lists()
@@ -121,7 +110,6 @@ async def nie_game(query: CallbackQuery, callback_data: typing.Dict[str, str]):
                                     message_id=query.message.message_id, chat_id=query.from_user.id)
         nie_game_obj.nevers_list.remove(nie_game_obj.nie)
     elif answer == 'end_nie':
-        # await state.finish()
         nie_game_obj.reset()
         nie_kb.reset()
         await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
@@ -141,7 +129,7 @@ async def nie_comp(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     nie_kb = user_obj.nie_kb
 
     answer = callback_data['action']
-    # global tord, tord_t, nie
+
     if answer == 'completed_f':
         if nie_game_obj.tord_truth == True:
             nie_game_obj.truths_list.remove(nie_game_obj.tord)

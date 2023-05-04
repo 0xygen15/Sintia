@@ -415,9 +415,6 @@ class Database:
             "is_bot":data[0][15]
         }
 
-        print(the_dict['user_id'])
-        print(the_dict['lang_code'])
-
         return_obj = Users(data[0][0],
                             data[0][1],
                             pickle.loads(data[0][2]),

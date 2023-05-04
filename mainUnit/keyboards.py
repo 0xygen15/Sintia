@@ -3,8 +3,6 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from local.lang import Texts
 
-# texts = self.loc_file.keyboards
-# texts_themes = self.loc_file.themes
 class TordKeyboard:
     def __init__(self, loc_file: Texts):
         self.loc_file = loc_file
@@ -559,29 +557,7 @@ class ThreeOfFiveKeyboard:
 class ThemesKeyboard:
     def __init__(self, loc_file: Texts):
         self.loc_file = loc_file
-        # self.cb_completed = CallbackData('name', 'action')
-        # self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
-        #                                                inline_keyboard=[
-        #                                                    [
-        #                                                        InlineKeyboardButton('Выполнено',
-        #                                                                             callback_data=self.cb_completed.new(
-        #                                                                                 action='completed'
-        #                                                                             )),
-        #
-        #                                                    ],
-        #                                                    [
-        #                                                        InlineKeyboardButton('Не выполнено',
-        #                                                                             callback_data=self.cb_completed.new(
-        #                                                                                 action='failed'
-        #                                                                             ))
-        #                                                    ],
-        #                                                    [
-        #                                                        InlineKeyboardButton(' О к о н ч и т ь  и г р у',
-        #                                                                             callback_data=self.cb_completed.new(
-        #                                                                                 action='over'
-        #                                                                             ))
-        #                                                    ]
-        #                                                ])
+
         self.cb_themes = CallbackData('name', 'action')
         self.kb_themes = InlineKeyboardMarkup(row_width=3,
                                               inline_keyboard=[

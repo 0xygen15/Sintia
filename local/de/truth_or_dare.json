@@ -6,7 +6,7 @@
     "enter usernames": "Geben Sie die Namen der Spieler ein:",
     "proceed to settings": "Großartig, Sie können zu den Einstellungen gehen.",
     "choose levels": "In diesem Menü müssen Sie Kategorien von Fragen und Aktionen für das Spiel auswählen.",
-    "mode": "Wählen Sie den Spielmodus. Es gibt zwei von ihnen. \n\n 'Free' - Jeder wählt, wann die Wahrheit ist und wann die Aktion. \n\n Alternativ - der Bot wird einmal die Wahrheit und Aktion abwechseln.",
+    "mode": "Wählen Sie den Spielmodus. Es gibt zwei von ihnen. \n\nFrei - Jeder wählt, wann die Wahrheit ist und wann die Aktion. \n\n Alternativ - der Bot wird einmal die Wahrheit und Aktion abwechseln.",
     "tord?": "Wahrheit oder Pflicht?",
     "players, level and mode!": "Zuerst müssen Sie Spieler hinzufügen, die Spielebene und den Modus des Spiels auswählen!.",
     "game over": "Das Spiel ist vorbei, Fragen/Aktionen sind vorbei. Klicken Sie auf ein neues Spiel",
