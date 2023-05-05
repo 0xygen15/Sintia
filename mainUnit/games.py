@@ -422,3 +422,55 @@ class Themes:
             file = json.load(f)
             theme_questions_dict = file[self.theme_chosen]
         self.theme_questions_list = [v for k, v in theme_questions_dict.items()]
+
+
+class Spy:
+    def __init__(self, user_id: str | int, lang_code: str):
+        self.user_id = user_id
+        self.lang_code = lang_code
+
+        self.players_raw_list: list[str] = []
+        self.spies_number: int = 0
+        self.players_number: int = len(self.players_raw_list)
+
+        self.spies_list_names: list[str] = []
+
+        self.players_game_dict: dict[str: str] = {}
+
+        self.current_displayed_player: str = ""
+
+        self.guess: str = ""
+
+    def suggest_spies_number(self) -> list:
+        if self.players_number == 3:
+            return [1]
+        elif self.players_number == 4:
+            return [1,2]
+        elif 5 <= self.players_number <= 6:
+            return [2, 3]
+        elif 7 <= self.players_number <= 9:
+            return [2, 3, 4]
+        elif 10 <= self.players_number <= 12:
+            return [3, 4]
+        elif 12 <= self.players_number <= 16:
+            return [4,5]
+
+    def set_spies(self):
+
+        while len(self.spies_list_names) != self.spies_number:
+            index = random.randint(0, len(self.players_raw_list) - 1)
+            if index in self.spies_list_names:
+                continue
+            else:
+                self.spies_list_names.append(self.players_raw_list[index])
+
+        for player in self.players_raw_list:
+            if player in self.spies_list_names:
+                self.players_game_dict[player] = "spy"
+            else:
+                self.players_game_dict[player] = "not spy"
+
+
+
+
+
