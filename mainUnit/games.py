@@ -1,5 +1,6 @@
 import random
 import json
+import time
 
 # class Engine:
 #     def __init__(self):
@@ -425,12 +426,26 @@ class Themes:
 
 
 class Spy:
+
+    """
+    1. User sets number of players (reply kb)
+    2. User sets number of spies (reply kb)
+    3. User chooses the set of locations (reply kb)
+    4. User sets the timer.
+
+    The game begins.
+
+    1. Users one by one get a role via inline button.
+    2. Time to time bot informs about time remaining.
+    3. User finishes the game and can begin a new one.
+    """
     def __init__(self, user_id: str | int, lang_code: str):
         self.user_id = user_id
         self.lang_code = lang_code
 
         self.players_raw_list: list[str] = []
         self.spies_number: int = 0
+        self.suggested_spies_number: list = []
         self.players_number: int = len(self.players_raw_list)
 
         self.spies_list_names: list[str] = []
@@ -439,21 +454,67 @@ class Spy:
 
         self.current_displayed_player: str = ""
 
+        self.gamesets: list = []
+        self.chosen_gameset: str = ""
         self.guess: str = ""
 
-    def suggest_spies_number(self) -> list:
+    def add_players_names(self, data: str):
+        """
+        The function returns a list of names from a raw string where names are separated with commas.
+        """
+        raw_names_list = data.split(sep=",")
+        names_list = []
+        for raw_name in raw_names_list:
+            name = (raw_name.replace(" ", ""))
+            if name.islower():
+                name.capitalize()
+            else:
+                pass
+            names_list.append(name)
+        self.players_raw_list = names_list
+        self.players_number = len(self.players_raw_list)
+
+
+    def suggest_spies_number(self):
         if self.players_number == 3:
-            return [1]
+            self.suggested_spies_number = [1]
         elif self.players_number == 4:
-            return [1,2]
+            self.suggested_spies_number = [1]
         elif 5 <= self.players_number <= 6:
-            return [2, 3]
+            self.suggested_spies_number = [2]
         elif 7 <= self.players_number <= 9:
-            return [2, 3, 4]
+            self.suggested_spies_number = [2, 3]
         elif 10 <= self.players_number <= 12:
-            return [3, 4]
+            self.suggested_spies_number = [3, 4]
         elif 12 <= self.players_number <= 16:
-            return [4,5]
+            self.suggested_spies_number = [4, 5]
+
+    def choose_spies_number(self, choice: int | str):
+        if int(choice) in self.suggested_spies_number:
+            self.spies_number = choice
+
+
+    def read_gamesets(self) -> list:
+        with open(f"./database/{self.lang_code}/spy.json") as json_file:
+            file_dict = json.load(json_file)
+
+            for k, v in file_dict:
+                self.gamesets.append(k)
+
+        return self.gamesets
+
+    def set_gameset_and_guess(self, gameset: str):
+        if gameset in self.gamesets:
+            self.chosen_gameset = gameset
+
+        with open(f"./database/{self.lang_code}/spy.json") as json_file:
+            file_dict = json.load(json_file)
+
+            guesses = [key for key, value in file_dict.items()]
+
+            choice_index = random.randint(0, len(guesses) - 1)
+
+            self.guess = guesses[choice_index]
 
     def set_spies(self):
 
@@ -469,6 +530,10 @@ class Spy:
                 self.players_game_dict[player] = "spy"
             else:
                 self.players_game_dict[player] = "not spy"
+
+
+
+
 
 
 
