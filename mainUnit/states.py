@@ -38,3 +38,4 @@ class Feedback(StatesGroup):
 
 class Advertise(StatesGroup):
     pending = State()
+
