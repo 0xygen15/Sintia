@@ -547,10 +547,30 @@ class ThreeOfFiveKeyboard:
         self.kb35b = InlineKeyboardMarkup(row_width=2,
                                           inline_keyboard=[
                                               [
+                                                  InlineKeyboardButton("⬅️",
+                                                                       callback_data=self.cb35.new(action="main menu")),
+
                                                   InlineKeyboardButton(self.loc_file.keyboards["begin"],
-                                                                       callback_data=self.cb35.new(action="Begin"))
+                                                                       callback_data=self.cb35.new(action="begin"))
                                               ]
                                           ])
+
+        self.cb35n = CallbackData('name', 'action')
+        self.kb35n = InlineKeyboardMarkup(row_width=2,
+                                         inline_keyboard=[
+                                             [
+                                                 InlineKeyboardButton("⬅️",
+                                                                      callback_data=self.cb35.new(action="previous")),
+                                                 InlineKeyboardButton("➡️",
+                                                                          callback_data=self.cb35.new(action="next"))
+                                             ],
+                                             [
+                                                 InlineKeyboardButton(self.loc_file.keyboards["end the game"],
+                                                                      callback_data=self.cb35.new(action="end"))
+                                             ]
+                                         ]
+
+        )
 
     def __str__(self):
         return f"""35 Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
@@ -559,7 +579,7 @@ class ThemesKeyboard:
         self.loc_file = loc_file
 
         self.cb_themes = CallbackData('name', 'action')
-        self.kb_themes = InlineKeyboardMarkup(row_width=3,
+        self.kb_themes = InlineKeyboardMarkup(row_width=2,
                                               inline_keyboard=[
                                                   [
                                                       InlineKeyboardButton(self.loc_file.themes["school name"],
@@ -568,14 +588,20 @@ class ThemesKeyboard:
                                                       InlineKeyboardButton(self.loc_file.themes["work name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="work")),
-                                                      InlineKeyboardButton(self.loc_file.themes["travel name"],
-                                                                           callback_data=self.cb_themes.new(
-                                                                               action="travel"))
+
                                                   ],
                                                   [
+                                                      InlineKeyboardButton(self.loc_file.themes["travel name"],
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="travel")),
+
                                                       InlineKeyboardButton(self.loc_file.themes["worldview name"],
                                                                            callback_data=self.cb_themes.new(
-                                                                               action="worldview")),
+                                                                                action="worldview"))
+                                                  ],
+
+                                                  [
+
                                                       InlineKeyboardButton(self.loc_file.themes["social media name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="social media")),
@@ -589,16 +615,17 @@ class ThemesKeyboard:
                                                                                action="relations")),
                                                       InlineKeyboardButton(self.loc_file.themes["memes name"],
                                                                            callback_data=self.cb_themes.new(
-                                                                               action="memes")),
-                                                      InlineKeyboardButton(self.loc_file.themes["religion name"],
-                                                                           callback_data=self.cb_themes.new(
-                                                                               action="religion"))
-
+                                                                               action="memes"))
                                                   ],
                                                   [
+                                                      InlineKeyboardButton(self.loc_file.themes["religion name"],
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="religion")),
                                                       InlineKeyboardButton(self.loc_file.themes["memories name"],
                                                                            callback_data=self.cb_themes.new(
-                                                                               action="memories")),
+                                                                               action="memories"))
+                                                  ],
+                                                  [
                                                       InlineKeyboardButton(self.loc_file.themes["if name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="if")),
@@ -613,9 +640,16 @@ class ThemesKeyboard:
                                                       InlineKeyboardButton(self.loc_file.themes["fashion name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="fashion")),
+                                                  ],
+                                                  [
                                                       InlineKeyboardButton(self.loc_file.themes["hard choice name"],
                                                                            callback_data=self.cb_themes.new(
                                                                                action="hard choice"))
+                                                  ],
+                                                  [
+                                                      InlineKeyboardButton(self.loc_file.keyboards["menu"],
+                                                                           callback_data=self.cb_themes.new(
+                                                                               action="main menu"))
                                                   ]
                                               ])
 
@@ -645,7 +679,7 @@ class ThemesKeyboard:
         self.kb_themes_confirm = InlineKeyboardMarkup(row_width=2,
                                                       inline_keyboard=[
                                                           [
-                                                              InlineKeyboardButton(self.loc_file.keyboards["menu"],
+                                                              InlineKeyboardButton("⬅️",
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='menu'
                                                                                    )),
@@ -660,6 +694,16 @@ class ThemesKeyboard:
 
     def __str__(self):
         return f"""Themes Kb object. Sample: {self.loc_file.keyboards["dare"]}"""
+
+# class OtherKBs:
+#     def __init__(self, loc_file: Texts):
+#         self.loc_file = loc_file
+#
+#         self.main_menu_kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+#
+#     def set_up_main_menu_kb(self):
+#
+
 
 class ConfigKeyboard:
     cb_lang = CallbackData('name', 'action')

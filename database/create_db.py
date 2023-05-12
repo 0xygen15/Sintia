@@ -1,10 +1,17 @@
 import sqlite3
+import os
 
-# filename to form database
-file = "users.db"
+def init_db():
 
-try:
-    conn = sqlite3.connect(file)
-    print("Database Sqlite3.db formed.")
-except:
-    print("Database Sqlite3.db not formed.")
+    if os.path.isfile("users.db"):
+        print("The db already exist")
+    else:
+        file = "users.db"
+
+        try:
+            conn = sqlite3.connect(file)
+            print("Database Sqlite3.db formed.")
+        except:
+            print("Database Sqlite3.db not formed.")
+
+init_db()

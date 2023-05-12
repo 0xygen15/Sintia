@@ -24,7 +24,6 @@ async def language(message: Message):
 async def choose_language(query: CallbackQuery, callback_data: typing.Dict[str, str], state: FSMContext):
 
     lang_code_choice = callback_data['action']
-    print(lang_code_choice)
 
     responses = {'en': "English language chosen as a default. Have a nice game!",
                 'de': "Standardmäßig ist die deutsche Sprache gewählt. Haben Sie ein schönes Spiel!",
@@ -36,7 +35,6 @@ async def choose_language(query: CallbackQuery, callback_data: typing.Dict[str, 
     }
 
     loc_obj = loc_objects[lang_code_choice]
-    print(loc_obj.keyboards)
 
 
     updated_user_obj = Users(

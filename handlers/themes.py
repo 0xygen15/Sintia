@@ -46,7 +46,8 @@ async def themes_start(message: Message):
                                                               "videogames",
                                                               "education",
                                                               "fashion",
-                                                              "hard choice"]),
+                                                              "hard choice",
+                                                              "main menu"]),
                            state=ThemesStates.theme_choice)
 async def themes_choice(query: CallbackQuery, callback_data: typing.Dict[str, str]):
 
@@ -60,11 +61,18 @@ async def themes_choice(query: CallbackQuery, callback_data: typing.Dict[str, st
     themes_kb = user_obj.themes_kb
 
     message_id = query.message.message_id
-    themes_game_obj.theme_chosen = answer
-    key = answer + " desc"
 
-    await bot.edit_message_text(text=f"{user_lang_code_object.themes[key]}", chat_id=query.from_user.id, message_id=message_id,
-                                        reply_markup=themes_kb.kb_themes_confirm, parse_mode='HTML')
+    if answer == "main menu":
+        await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+        await bot.edit_message_text(chat_id=query.from_user.id,
+                               text=user_lang_code_object.info["main_menu"],
+                               message_id=message_id, reply_markup=None, parse_mode='HTML')
+    else:
+        themes_game_obj.theme_chosen = answer
+        key = answer + " desc"
+
+        await bot.edit_message_text(text=f"{user_lang_code_object.themes[key]}", chat_id=query.from_user.id, message_id=message_id,
+                                            reply_markup=themes_kb.kb_themes_confirm, parse_mode='HTML')
 
 
 @dp.callback_query_handler(themes_kb.cb_themes_confirm.filter(action=["menu", "begin"]), state=ThemesStates.confirmation)

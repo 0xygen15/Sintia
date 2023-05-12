@@ -268,8 +268,38 @@ class ThreeOfFive:
         self.dares_str = ""
         self.nevers_str = ""
 
+        # self.game_dict = {}
+        self.game_list: list[str] = []
+        self.index: int = 0
+
     def __str__(self):
         return f"ThreeOfFive object with id: {self.user_id}"
+
+    def main_func(self):
+        def list_to_string(the_list):
+            the_string = ""
+            for item in the_list:
+                the_string += item
+                the_string += "\n"
+            return the_string
+        def one_level(filename, levelname):
+
+            with open(f"database/{self.lang_code}/{filename}", mode="r", encoding="utf8") as f:
+                file = json.load(f)
+                levelfile_dict = file[levelname]
+                levelfile_list = [value for value in levelfile_dict.values()]
+                random.shuffle(levelfile_list)
+                return levelfile_list[0:5]
+
+        levels = [["lifestyle", "1"], ["absurd", "2"], ["relations", "3"], ["personal", "4"], ["adult", "5"]]
+        files = ["truth.json", "dare.json", "never.json"]
+
+        for file in files:
+            for level in levels:
+                file_name = file.split(sep=".")[0]
+                text = list_to_string(one_level(file, level[0]))
+                # self.game_dict[f"{file_name}{level[1]}"] = text
+                self.game_list.append(text)
 
     def three_of_five(self):
         def one_level(filename, levelname):
@@ -307,6 +337,7 @@ class ThreeOfFive:
         self.truths_str = ""
         self.dares_str = ""
         self.nevers_str = ""
+        self.game_list = []
 
 class Themes:
     def __init__(self, user_id, lang_code):
