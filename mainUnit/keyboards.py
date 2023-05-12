@@ -6,19 +6,31 @@ from local.lang import Texts
 class TordKeyboard:
     def __init__(self, loc_file: Texts):
         self.loc_file = loc_file
+
+        self.to_menu_cb = CallbackData('name', 'action')
+        self.to_menu_kb = InlineKeyboardMarkup(row_width=1,
+                                               inline_keyboard=[
+                                                   [
+                                                       InlineKeyboardButton(
+                                                           text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                           callback_data=self.to_menu_cb.new(action='main menu')
+                                                       )
+                                                   ]
+                                               ])
+
         self.cb_td = CallbackData('name', 'action')
         self.keyboard_td = InlineKeyboardMarkup(row_width=2,
                                                 inline_keyboard=[
                                                     [
-                                                        InlineKeyboardButton(self.loc_file.keyboards["truth"],
+                                                        InlineKeyboardButton(text=f"""❔ {self.loc_file.keyboards["truth"]}""",
                                                                              callback_data=self.cb_td.new(
                                                                                  action='truth')),
-                                                        InlineKeyboardButton(self.loc_file.keyboards["dare"],
+                                                        InlineKeyboardButton(text=f"""🤸 {self.loc_file.keyboards["dare"]}""",
                                                                              callback_data=self.cb_td.new(
                                                                                  action='dare'))
                                                     ],
                                                     [
-                                                        InlineKeyboardButton(self.loc_file.keyboards["end"],
+                                                        InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end"]}""",
                                                                              callback_data=self.cb_td.new(
                                                                                  action='end'))
                                                     ]
@@ -26,18 +38,19 @@ class TordKeyboard:
 
         self.cb_all_level = CallbackData('name', 'action')
 
-        self.mark1 = ""
-        self.mark2 = ""
-        self.mark3 = ""
-        self.mark4 = ""
-        self.mark5 = ""
-        self.lifestyle_level = False
-        self.absurd_level = False
-        self.relations_level = False
-        self.personal_level = False
-        self.adult_level = False
+        # self.mark1 = ""
+        # self.mark2 = ""
+        # self.mark3 = ""
+        # self.mark4 = ""
+        # self.mark5 = ""
+        self.mark1, self.mark2, self.mark3, self.mark4, self.mark5 = "", "", "", "", ""
+        # self.lifestyle_level = False
+        # self.absurd_level = False
+        # self.relations_level = False
+        # self.personal_level = False
+        # self.adult_level = False
 
-        self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
+        self.keyboard_level_all = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
                                                                InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
@@ -48,9 +61,7 @@ class TordKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='absurd'))
-                                                           ],
-                                                           [
+                                                                       action='absurd')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
@@ -60,9 +71,7 @@ class TordKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='relations'))
-                                                           ],
-                                                           [
+                                                                       action='relations')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
@@ -70,9 +79,14 @@ class TordKeyboard:
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   self.loc_file.keyboards["choice is made"],
-                                                                   callback_data=self.cb_all_level.new(action=
-                                                                                                       'ready')
+                                                                   text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
+                                                                   callback_data=self.cb_all_level.new(action='ready')
+                                                               )
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                                   callback_data=self.cb_all_level.new(action='main menu')
                                                                )
                                                            ]
                                                        ]
@@ -83,12 +97,18 @@ class TordKeyboard:
         self.keyboard_players = InlineKeyboardMarkup(row_width=2,
                                                      inline_keyboard=[
                                                          [
-                                                             InlineKeyboardButton(self.loc_file.keyboards["right"],
+                                                             InlineKeyboardButton(text=f"""👍 {self.loc_file.keyboards["right"]}""",
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='yes')),
-                                                             InlineKeyboardButton(self.loc_file.keyboards["need edit"],
+                                                             InlineKeyboardButton(text=f"""✏️ {self.loc_file.keyboards["need edit"]}""",
                                                                                   callback_data=self.cb_players.new(
                                                                                       action='no')),
+                                                         ],
+                                                         [
+                                                             InlineKeyboardButton(
+                                                                 text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                                 callback_data=self.cb_all_level.new(action='main menu')
+                                                             )
                                                          ]
                                                      ]
                                                      )
@@ -118,20 +138,20 @@ class TordKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["done"],
+                                                               InlineKeyboardButton(text=f"""✔️ {self.loc_file.keyboards["done"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["not done"],
+                                                               InlineKeyboardButton(text=f"""❌ {self.loc_file.keyboards["not done"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["end the game"],
+                                                               InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -142,14 +162,14 @@ class TordKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton(self.loc_file.keyboards["done"],
+                                                                 InlineKeyboardButton(text=f"""✔️ {self.loc_file.keyboards["done"]}""",
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton(self.loc_file.keyboards["not done"],
+                                                                 InlineKeyboardButton(text=f"""❌ {self.loc_file.keyboards["not done"]}""",
                                                                                       callback_data=self.cb_completed.new(
                                                                                           action='failed_f'
                                                                                       ))
@@ -164,11 +184,11 @@ class TordKeyboard:
         self.mark3 = ""
         self.mark4 = ""
         self.mark5 = ""
-        self.lifestyle_level = False
-        self.absurd_level = False
-        self.relations_level = False
-        self.personal_level = False
-        self.adult_level = False
+        # self.lifestyle_level = False
+        # self.absurd_level = False
+        # self.relations_level = False
+        # self.personal_level = False
+        # self.adult_level = False
 
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
         object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
@@ -217,47 +237,47 @@ class TordKeyboard:
                 game_obj.adult_level = True
                 # self.adult_level = True
 
-        updated_keyboard = InlineKeyboardMarkup(row_width=1,
-                                                inline_keyboard=[
-                                                    [
-                                                        InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
-                                                                             callback_data=self.cb_all_level.new(
-                                                                                 action='lifestyle'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='absurd'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'{self.loc_file.keyboards["company"]} {self.mark3}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='company'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'{self.loc_file.keyboards["relations"]} {self.mark4}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='relations'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
-                                                            callback_data=self.cb_all_level.new(
-                                                                action='awkward'))
-                                                    ],
-                                                    [
-                                                        InlineKeyboardButton(
-                                                            self.loc_file.keyboards["choice is made"],
-                                                            callback_data=self.cb_all_level.new(action=
-                                                                                                'ready')
-                                                        )
-                                                    ]
-
-                                                ]
-                                                )
+        updated_keyboard = InlineKeyboardMarkup(row_width=2,
+                                                       inline_keyboard=[
+                                                           [
+                                                               InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
+                                                                                    callback_data=self.cb_all_level.new(
+                                                                                        action='lifestyle'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='absurd')),
+                                                               InlineKeyboardButton(
+                                                                   f'{self.loc_file.keyboards["company"]} {self.mark3}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='company'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   f'{self.loc_file.keyboards["relations"]} {self.mark4}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='relations')),
+                                                               InlineKeyboardButton(
+                                                                   f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
+                                                                   callback_data=self.cb_all_level.new(
+                                                                       action='awkward'))
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
+                                                                   callback_data=self.cb_all_level.new(action='ready')
+                                                               )
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                                   callback_data=self.cb_all_level.new(action='main menu')
+                                                               )
+                                                           ]
+                                                       ]
+                                                       )
         return updated_keyboard
 
     # def update_keyboard_mode(self, index: int, old_keyboard: InlineKeyboardMarkup):
@@ -300,38 +320,39 @@ class NieKeyboard:
         self.keyboard_nie = InlineKeyboardMarkup(row_width=2,
                                                  inline_keyboard=[
                                                      [
-                                                         InlineKeyboardButton(self.loc_file.keyboards["truth"],
+                                                         InlineKeyboardButton(text=f"""❔ {self.loc_file.keyboards["truth"]}""",
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='truth_nie')),
-                                                         InlineKeyboardButton(self.loc_file.keyboards["dare"],
+                                                         InlineKeyboardButton(text=f"""🤸 {self.loc_file.keyboards["dare"]}""",
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='dare_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton(self.loc_file.keyboards["never i ever"],
+                                                         InlineKeyboardButton(text=f"""💡 {self.loc_file.keyboards["never i ever"]}""",
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='next_nie'))
                                                      ],
                                                      [
-                                                         InlineKeyboardButton(self.loc_file.keyboards["end the game"],
+                                                         InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
                                                                               callback_data=self.cb_nie.new(
                                                                                   action='end_nie'))
                                                      ]
                                                  ])
         self.cb_all_level = CallbackData('name', 'action')
 
-        self.mark1 = ""
-        self.mark2 = ""
-        self.mark3 = ""
-        self.mark4 = ""
-        self.mark5 = ""
-        self.lifestyle_level = False
-        self.absurd_level = False
-        self.relations_level = False
-        self.personal_level = False
-        self.adult_level = False
+        # self.mark1 = ""
+        # self.mark2 = ""
+        # self.mark3 = ""
+        # self.mark4 = ""
+        # self.mark5 = ""
+        self.mark1, self.mark2, self.mark3, self.mark4, self.mark5 = "", "", "", "", ""
+        # self.lifestyle_level = False
+        # self.absurd_level = False
+        # self.relations_level = False
+        # self.personal_level = False
+        # self.adult_level = False
 
-        self.keyboard_level_all = InlineKeyboardMarkup(row_width=1,
+        self.keyboard_level_all = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
                                                                InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
@@ -342,9 +363,7 @@ class NieKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='absurd'))
-                                                           ],
-                                                           [
+                                                                       action='absurd')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
@@ -354,9 +373,7 @@ class NieKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='relations'))
-                                                           ],
-                                                           [
+                                                                       action='relations')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
@@ -364,9 +381,14 @@ class NieKeyboard:
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   self.loc_file.keyboards["choice is made"],
-                                                                   callback_data=self.cb_all_level.new(action=
-                                                                                                       'ready')
+                                                                   text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
+                                                                   callback_data=self.cb_all_level.new(action='ready')
+                                                               )
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                                   callback_data=self.cb_all_level.new(action='main menu')
                                                                )
                                                            ]
                                                        ]
@@ -375,20 +397,20 @@ class NieKeyboard:
         self.keyboard_completed = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["done"],
+                                                               InlineKeyboardButton(text=f"""✔️ {self.loc_file.keyboards["done"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='completed'
                                                                                     )),
 
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["not done"],
+                                                               InlineKeyboardButton(text=f"""❌ {self.loc_file.keyboards["not done"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='failed'
                                                                                     ))
                                                            ],
                                                            [
-                                                               InlineKeyboardButton(self.loc_file.keyboards["end the game"],
+                                                               InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
                                                                                     callback_data=self.cb_completed.new(
                                                                                         action='over'
                                                                                     ))
@@ -399,14 +421,14 @@ class NieKeyboard:
         self.keyboard_completed_f = InlineKeyboardMarkup(row_width=2,
                                                          inline_keyboard=[
                                                              [
-                                                                 InlineKeyboardButton(self.loc_file.keyboards["done"],
+                                                                 InlineKeyboardButton(text=f"""✔️ {self.loc_file.keyboards["done"]}""",
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='completed_f'
                                                                                       )),
 
                                                              ],
                                                              [
-                                                                 InlineKeyboardButton(self.loc_file.keyboards["not done"],
+                                                                 InlineKeyboardButton(text=f"""❌ {self.loc_file.keyboards["not done"]}""",
                                                                                       callback_data=self.cb_completed_f.new(
                                                                                           action='failed_f'
                                                                                       ))
@@ -423,11 +445,11 @@ class NieKeyboard:
         self.mark3 = ""
         self.mark4 = ""
         self.mark5 = ""
-        self.lifestyle_level = False
-        self.absurd_level = False
-        self.relations_level = False
-        self.personal_level = False
-        self.adult_level = False
+        # self.lifestyle_level = False
+        # self.absurd_level = False
+        # self.relations_level = False
+        # self.personal_level = False
+        # self.adult_level = False
 
 
     def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
@@ -477,8 +499,8 @@ class NieKeyboard:
 #                 # self.adult_level = True
                 game_obj.awkward_level = True
 
-        updated_keyboard = InlineKeyboardMarkup(row_width=1,
-                                                inline_keyboard=[
+        updated_keyboard = InlineKeyboardMarkup(row_width=2,
+                                                       inline_keyboard=[
                                                            [
                                                                InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
                                                                                     callback_data=self.cb_all_level.new(
@@ -488,9 +510,7 @@ class NieKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='absurd'))
-                                                           ],
-                                                           [
+                                                                       action='absurd')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["company"]} {self.mark3}',
                                                                    callback_data=self.cb_all_level.new(
@@ -500,9 +520,7 @@ class NieKeyboard:
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["relations"]} {self.mark4}',
                                                                    callback_data=self.cb_all_level.new(
-                                                                       action='relations'))
-                                                           ],
-                                                           [
+                                                                       action='relations')),
                                                                InlineKeyboardButton(
                                                                    f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
                                                                    callback_data=self.cb_all_level.new(
@@ -510,48 +528,53 @@ class NieKeyboard:
                                                            ],
                                                            [
                                                                InlineKeyboardButton(
-                                                                   self.loc_file.keyboards["choice is made"],
-                                                                   callback_data=self.cb_all_level.new(action=
-                                                                                                       'ready')
+                                                                   text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
+                                                                   callback_data=self.cb_all_level.new(action='ready')
+                                                               )
+                                                           ],
+                                                           [
+                                                               InlineKeyboardButton(
+                                                                   text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                                   callback_data=self.cb_all_level.new(action='main menu')
                                                                )
                                                            ]
                                                        ]
-                                                )
+                                                       )
         return updated_keyboard
 
 class ThreeOfFiveKeyboard:
     def __init__(self, loc_file: Texts):
         self.loc_file = loc_file
-        self.cb35 = CallbackData('name', 'action')
-        self.kb35 = InlineKeyboardMarkup(row_width=2,
-                                         inline_keyboard=[
-                                             [
-                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter truth"],
-                                                                      callback_data=self.cb35.new(action="Truth"))
-                                             ],
-                                             [
-                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter dare"],
-                                                                      callback_data=self.cb35.new(action="Dare"))
-                                             ],
-                                             [
-                                                 InlineKeyboardButton(self.loc_file.keyboards["chapter nie"],
-                                                                      callback_data=self.cb35.new(action="Never"))
-                                             ],
-                                             [
-                                                 InlineKeyboardButton(self.loc_file.keyboards["endgame new game"],
-                                                                      callback_data=self.cb35.new(action="End"))
-                                             ]
-                                         ])
+        # self.cb35 = CallbackData('name', 'action')
+        # self.kb35 = InlineKeyboardMarkup(row_width=2,
+        #                                  inline_keyboard=[
+        #                                      [
+        #                                          InlineKeyboardButton(self.loc_file.keyboards["chapter truth"],
+        #                                                               callback_data=self.cb35.new(action="Truth"))
+        #                                      ],
+        #                                      [
+        #                                          InlineKeyboardButton(self.loc_file.keyboards["chapter dare"],
+        #                                                               callback_data=self.cb35.new(action="Dare"))
+        #                                      ],
+        #                                      [
+        #                                          InlineKeyboardButton(self.loc_file.keyboards["chapter nie"],
+        #                                                               callback_data=self.cb35.new(action="Never"))
+        #                                      ],
+        #                                      [
+        #                                          InlineKeyboardButton(self.loc_file.keyboards["endgame new game"],
+        #                                                               callback_data=self.cb35.new(action="End"))
+        #                                      ]
+        #                                  ])
 
         self.cb35b = CallbackData('name', 'action')
         self.kb35b = InlineKeyboardMarkup(row_width=2,
                                           inline_keyboard=[
                                               [
                                                   InlineKeyboardButton("⬅️",
-                                                                       callback_data=self.cb35.new(action="main menu")),
+                                                                       callback_data=self.cb35b.new(action="main menu")),
 
-                                                  InlineKeyboardButton(self.loc_file.keyboards["begin"],
-                                                                       callback_data=self.cb35.new(action="begin"))
+                                                  InlineKeyboardButton(text=f"""🤸 {self.loc_file.keyboards["begin"]}""",
+                                                                       callback_data=self.cb35b.new(action="begin"))
                                               ]
                                           ])
 
@@ -560,13 +583,13 @@ class ThreeOfFiveKeyboard:
                                          inline_keyboard=[
                                              [
                                                  InlineKeyboardButton("⬅️",
-                                                                      callback_data=self.cb35.new(action="previous")),
+                                                                      callback_data=self.cb35n.new(action="previous")),
                                                  InlineKeyboardButton("➡️",
-                                                                          callback_data=self.cb35.new(action="next"))
+                                                                          callback_data=self.cb35n.new(action="next"))
                                              ],
                                              [
-                                                 InlineKeyboardButton(self.loc_file.keyboards["end the game"],
-                                                                      callback_data=self.cb35.new(action="end"))
+                                                 InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
+                                                                      callback_data=self.cb35n.new(action="end"))
                                              ]
                                          ]
 
@@ -647,7 +670,7 @@ class ThemesKeyboard:
                                                                                action="hard choice"))
                                                   ],
                                                   [
-                                                      InlineKeyboardButton(self.loc_file.keyboards["menu"],
+                                                      InlineKeyboardButton(text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
                                                                            callback_data=self.cb_themes.new(
                                                                                action="main menu"))
                                                   ]
@@ -668,7 +691,7 @@ class ThemesKeyboard:
 
                                                        ],
                                                        [
-                                                           InlineKeyboardButton(self.loc_file.keyboards["end the game"],
+                                                           InlineKeyboardButton(text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
                                                                                 callback_data=self.cb_themes_game.new(
                                                                                     action='end'
                                                                                 ))
@@ -683,7 +706,7 @@ class ThemesKeyboard:
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='menu'
                                                                                    )),
-                                                              InlineKeyboardButton(self.loc_file.keyboards["begin"],
+                                                              InlineKeyboardButton(text=f"""🤸 {self.loc_file.keyboards["begin"]}""",
                                                                                    callback_data=self.cb_themes_confirm.new(
                                                                                        action='begin'
                                                                                    ))

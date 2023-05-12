@@ -85,7 +85,7 @@ async def three_of_five_setup(query: CallbackQuery, callback_data: typing.Dict[s
                                     message_id=message_id, reply_markup=the35_kb.kb35n, parse_mode='HTML')
 
 
-@dp.callback_query_handler(the35_kb.cb35.filter(action=['previous', 'next', 'end']))
+@dp.callback_query_handler(the35_kb.cb35n.filter(action=['previous', 'next', 'end']))
 async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     answer = callback_data['action']
 
@@ -114,9 +114,10 @@ async def three_of_five_game(query: CallbackQuery, callback_data: typing.Dict[st
                                         message_id=message_id, reply_markup=the35_kb.kb35n, parse_mode='HTML')
     elif answer == "end":
         the35_game_obj.reset()
-        text = f"{user_lang_code_object.three_of_five['new game']} /three_of_five"
-        await bot.edit_message_text(text=text, chat_id=query.from_user.id, message_id=message_id,
-                                    parse_mode='HTML', reply_markup=None)
+        # text = f"{user_lang_code_object.three_of_five['new game']} /three_of_five"
+        # await bot.edit_message_text(text=text, chat_id=query.from_user.id, message_id=message_id,
+        #                             parse_mode='HTML', reply_markup=None)
+        await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
         await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id,
                                parse_mode='HTML')
 

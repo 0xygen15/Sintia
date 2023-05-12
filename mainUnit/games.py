@@ -90,10 +90,11 @@ class Tord:
         for raw_name in raw_names_list:
             name = (raw_name.replace(" ", ""))
             if name.islower():
-                name.capitalize()
+                name_capitalised = name.capitalize()
+                names_list.append(name_capitalised)
             else:
                 pass
-            names_list.append(name)
+
         self.players_list = names_list
         self.players_number = len(self.players_list)
 
@@ -134,6 +135,12 @@ class Tord:
             return True
         else:
             return False
+
+    def load_again(self):
+        self.truths_list = []
+        self.dares_list = []
+
+        self.set_levels()
 
     def reset(self):
         self.truths_list = []

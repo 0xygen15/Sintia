@@ -1,6 +1,6 @@
 {
-    "choose levels": "Choose levels:",
+    "choose levels": "Choose from one to five game levels to continue. To select a level, click on the corresponding button. + means the level is selected. After selecting the levels, click the \"Selection Made\" button.",
     "no choice made": "But you didn't choose anything!",
-    "begin it": "Let's start! Click 'Never I ever ...'",
+    "begin it": "To start the game, click on the \"I've never...\" button and the bot will generate the first sentence. Truth or Dare can be obtained by clicking on the corresponding buttons.\n\nHave fun playing!'",
     "game over": "Game over"
 }

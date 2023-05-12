@@ -1,6 +1,5 @@
+import aiogram.types
 from aiogram.types import Message
-from aiogram.dispatcher import FSMContext
-
 from loader import dp, bot
 from mainUnit.users import loc_objects
 
@@ -9,10 +8,24 @@ from mainUnit.games import Tord, Nie, ThreeOfFive, Themes
 from mainUnit.keyboards import TordKeyboard, NieKeyboard, ThemesKeyboard, ThreeOfFiveKeyboard
 from mainUnit.database import Database
 
+
+tord_kb: TordKeyboard = TordKeyboard(loc_file=loc_objects["en"])
 @dp.message_handler(commands='info')
 async def info(message: Message):
     user_obj = Database.retrieve_user_obj(message.from_user.id)
-    await bot.send_message(text=loc_objects[user_obj.lang_code].info["info"], chat_id=message.from_user.id, parse_mode='HTML')
+    tord_kb = user_obj.tord_kb
+    await bot.send_message(text=loc_objects[user_obj.lang_code].info["info"], chat_id=message.from_user.id, parse_mode='HTML',
+                           reply_markup=tord_kb.to_menu_kb)
+
+
+@dp.callback_query_handler(tord_kb.to_menu_cb.filter(antion=["main menu"]))
+async def to_main_menu(query: aiogram.types.CallbackQuery):
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+
+    await bot.edit_message_text(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id,
+                                parse_mode='HTML',
+                                message_id=query.message.message_id, reply_markup=None)
 
 
 @dp.message_handler(commands=['start', 'main_menu'])
@@ -51,6 +64,8 @@ async def start(message: Message):
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
     await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=message.from_user.id, parse_mode='HTML')
+
+
 
 # @dp.message_handler(commands='main_menu', state='*')
 # async def main_menu(message: Message):

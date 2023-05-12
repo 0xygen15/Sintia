@@ -37,6 +37,22 @@ async def players_names(message: Message):
     logging.info("User is asked to enter names of players")
 
 
+@dp.callback_query_handler(tord_kb.to_menu_cb.filter(action=["main menu"]), state=PlayerStates.ready_to_get_players_names)
+async def to_main_menu(query: CallbackQuery):
+    await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb  # it is ok to shadow from outer scope
+
+    tord_game_obj.reset()
+    tord_kb.reset()
+
+    message_id_to_edit = query.message.message_id
+
+    await bot.edit_message_text(text=user_lang_code_object.info["main_menu"], chat=query.message.chat.id,
+                                message_id=message_id_to_edit, reply_markup=None, parse_mode="HTML")
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
 async def check_players_names(message: Message):
@@ -52,11 +68,38 @@ async def check_players_names(message: Message):
     answer = f"""{user_lang_code_object.truth_or_dare["check names"]}\n\n{names}\n{user_lang_code_object.truth_or_dare["right?"]}"""
 
     if len(tord_game_obj.players_list) < 2:
-        await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
+        tord_game_obj.reset()
+        tord_kb.reset()
         await bot.send_message(chat_id=message.from_user.id, text=f"{user_lang_code_object.truth_or_dare['min2']} /truth_or_dare")
+        await dp.storage.set_state(chat=message.chat.id, user=message.from_user.id,
+                                   state=PlayerStates.ready_to_get_players_names)
+        await bot.send_message(chat_id=message.from_user.id,
+                               text=user_lang_code_object.truth_or_dare["players names enter request"])
     else:
         await bot.send_message(chat_id=message.from_user.id, text=answer, reply_markup=tord_kb.keyboard_players)
         logging.info(f"User has entered {tord_game_obj.players_list}")
+
+
+@dp.callback_query_handler(tord_kb.cb_players.filter(action=["main menu"]), state=PlayerStates.check_players_names)
+async def to_main_menu(query: CallbackQuery):
+    await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+
+    user_obj = Database.retrieve_user_obj(query.from_user.id)
+    tord_game_obj = user_obj.tord_game
+    user_lang_code_object = loc_objects[user_obj.lang_code]
+    tord_kb = user_obj.tord_kb  # it is ok to shadow from outer scope
+
+    tord_game_obj.reset()
+    tord_kb.reset()
+
+    last_message = query.message.message_id
+    for m in range(tord_game_obj.first_message_id, last_message):
+        try:
+            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+        except:
+            pass
+
+    await bot.send_message(text=user_lang_code_object.info["main_menu"], chat=query.message.chat.id, parse_mode="HTML")
 
 
 
@@ -69,6 +112,14 @@ async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str])
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
     tord_game_obj.players_list.clear()
+
+    last_message = query.message.message_id
+    for m in range(tord_game_obj.first_message_id, last_message):
+        try:
+            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+        except:
+            pass
+
     await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.ready_to_get_players_names)
 
     await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["enter usernames"])
@@ -86,12 +137,24 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
 
     tord_game_obj.players_are_added = True
 
-    await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["proceed to settings"])
-    await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.settings)
+    last_message = query.message.message_id
+    for m in range(tord_game_obj.first_message_id, last_message - 1):
+        try:
+            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+        except:
+            pass
 
-    await bot.send_message(text=user_lang_code_object.truth_or_dare["choose levels"],
+    # await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["proceed to settings"])
+    await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.settings)
+    text = f"""{user_lang_code_object.truth_or_dare["proceed to settings"]}\n\n{user_lang_code_object.truth_or_dare["choose levels"]}"""
+    # await bot.send_message(text=user_lang_code_object.truth_or_dare["choose levels"],
+    #                        chat_id=query.from_user.id,
+    #                        reply_markup=tord_kb.keyboard_level_all)
+    await bot.edit_message_text(text=text,
                            chat_id=query.from_user.id,
-                           reply_markup=tord_kb.keyboard_level_all)
+                           reply_markup=tord_kb.keyboard_level_all,
+                           message_id=last_message,
+                           parse_mode="HTML")
     logging.info(f"User has is offered to choose levels")
 
 
@@ -137,9 +200,16 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
         else:
             # await PlayerStates.mode.set()
             await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.mode)
-            await bot.send_message(chat_id=query.from_user.id,
+            message_id_to_edit = query.message.message_id
+            # await bot.send_message(chat_id=query.from_user.id,
+            #                        text=user_lang_code_object.truth_or_dare["mode"],
+            #                        reply_markup=tord_kb.keyboard_mode)
+            await bot.edit_message_text(chat_id=query.from_user.id,
                                    text=user_lang_code_object.truth_or_dare["mode"],
-                                   reply_markup=tord_kb.keyboard_mode)
+                                   reply_markup=tord_kb.keyboard_mode,
+                                   message_id=message_id_to_edit,
+                                   parse_mode="HTML")
+
 
     if True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level, tord_kb.adult_level]:
         tord_game_obj.levels_are_chosen = True
@@ -164,8 +234,14 @@ async def mode(query: CallbackQuery, callback_data: typing.Dict[str, str]):
         # await PlayerStates.game_free.set()
         tord_game_obj.set_levels()
         tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
-        await bot.send_message(chat_id=query.from_user.id, text=f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["tord?"]}',
-                               reply_markup=tord_kb.keyboard_td)
+        message_id_to_edit = query.message.message_id
+        # await bot.send_message(chat_id=query.from_user.id, text=f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["tord?"]}',
+        #                        reply_markup=tord_kb.keyboard_td)
+        await bot.edit_message_text(chat_id=query.from_user.id,
+                               text=f'{tord_game_obj.current_player_name}, {user_lang_code_object.truth_or_dare["tord?"]}',
+                               reply_markup=tord_kb.keyboard_td,
+                               message_id=message_id_to_edit,
+                               parse_mode="HTML")
         # try:
         #     for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
         #         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
@@ -183,9 +259,15 @@ async def mode(query: CallbackQuery, callback_data: typing.Dict[str, str]):
             if tord_game_obj.truth_circle == True:
                 tord_game_obj.shuffle_lists()
                 tord_game_obj.truth = tord_game_obj.truths_list[0]
-                await bot.send_message(chat_id=query.from_user.id,
+                message_id_to_edit = query.message.message_id
+                # await bot.send_message(chat_id=query.from_user.id,
+                #                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
+                #                        reply_markup=tord_kb.keyboard_completed)
+                await bot.edit_message_text(chat_id=query.from_user.id,
                                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
-                                       reply_markup=tord_kb.keyboard_completed)
+                                       reply_markup=tord_kb.keyboard_completed,
+                                       message_id=message_id_to_edit,
+                                       parse_mode="HTML")
                 # try:
                 #     for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
                 #         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
@@ -198,14 +280,20 @@ async def mode(query: CallbackQuery, callback_data: typing.Dict[str, str]):
             elif tord_game_obj.truth_circle == False:
                 tord_game_obj.shuffle_lists()
                 tord_game_obj.dare = tord_game_obj.dares_list[0]
-                await bot.send_message(chat_id=query.from_user.id,
+                message_id_to_edit = query.message.message_id
+                # await bot.send_message(chat_id=query.from_user.id,
+                #                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
+                #                        reply_markup=tord_kb.keyboard_completed)
+                await bot.edit_message_text(chat_id=query.from_user.id,
                                        text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
-                                       reply_markup=tord_kb.keyboard_completed)
-                try:
-                    for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
-                        await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
-                except:
-                    pass
+                                       reply_markup=tord_kb.keyboard_completed,
+                                       message_id=message_id_to_edit,
+                                       parse_mode="HTML")
+                # try:
+                #     for mid in range(tord_game_obj.first_message_id, tord_game_obj.last_message_id+1):
+                #         await bot.delete_message(chat_id=query.from_user.id, message_id=mid)
+                # except:
+                #     pass
                 logging.info(
                     f"Truth circle = {tord_game_obj.truth_circle};"
                     f"Current player name: {tord_game_obj.current_player_name};"
@@ -229,11 +317,35 @@ async def game_step(query: CallbackQuery, callback_data: typing.Dict[str, str]):
         tord_game_obj.next_player_number()
         tord_game_obj.circle_changer()
 
-        if tord_game_obj.out_of_objects() == True:
-            await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+        if tord_game_obj.out_of_objects() == True: #GAME WILL GO ON UNTIL USER STOPS THE GAME
+            # await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
 
-            await bot.send_message(chat_id=query.from_user.id,
-                                   text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
+            # message_id_to_edit = query.message.message_id
+
+            tord_game_obj.load_again()
+            tord_game_obj.current_player_name = tord_game_obj.players_list[tord_game_obj.current_player_number]
+            tord_game_obj.shuffle_lists()
+
+            if tord_game_obj.truth_circle == True:
+                tord_game_obj.truth = tord_game_obj.truths_list[0]
+                await bot.edit_message_text(chat_id=query.from_user.id,
+                                            text=f"{tord_game_obj.current_player_name}, {tord_game_obj.truth}",
+                                            reply_markup=tord_kb.keyboard_completed,
+                                            message_id=message_id)
+            else:
+                tord_game_obj.shuffle_lists()
+                tord_game_obj.dare = tord_game_obj.dares_list[0]
+                await bot.edit_message_text(chat_id=query.from_user.id,
+                                            text=f"{tord_game_obj.current_player_name}, {tord_game_obj.dare}",
+                                            reply_markup=tord_kb.keyboard_completed,
+                                            message_id=message_id)
+            # await bot.send_message(chat_id=query.from_user.id,
+            #                        text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
+            await bot.edit_message_text(chat_id=query.from_user.id,
+                                   text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare",
+                                        message_id=message_id,
+                                        reply_markup=None,
+                                        parse_mode="HTML")
 
         if tord_game_obj.truth_circle == True:
             tord_game_obj.truths_list.remove(tord_game_obj.truth)
@@ -297,10 +409,19 @@ async def game_step(query: CallbackQuery, callback_data: typing.Dict[str, str]):
 
         tord_game_obj.reset()
         tord_kb.reset()
-        await bot.send_message(chat_id=query.from_user.id,
-                               text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
-        # await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+
+        # message_id_to_edit = query.message.message_id
+
+        # await bot.send_message(chat_id=query.from_user.id,
+        #                        text=f"{user_lang_code_object.truth_or_dare['game over']} /truth_or_dare")
+        # await bot.edit_message_text(chat_id=query.from_user.id,
+        #                        text=f"{user_lang_code_object.truth_or_dare['game over']}",
+        #                             message_id=message_id_to_edit,
+        #                             reply_markup=None,
+        #                             parse_mode="HTML")
+
         await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
+        await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
 
 
 
@@ -335,9 +456,16 @@ async def game_free(query: CallbackQuery, callback_data: typing.Dict[str, str]):
 
         await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
 
-        await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["game over"])
-        # await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+        # message_id_to_edit = query.message.message_id
+        #
+        # await bot.edit_message_text(chat_id=query.from_user.id,
+        #                             text=f"{user_lang_code_object.truth_or_dare['game over']}",
+        #                             message_id=message_id_to_edit,
+        #                             reply_markup=None,
+        #                             parse_mode="HTML")
+
         await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.from_user.id, parse_mode='HTML')
+        await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
 
 
 

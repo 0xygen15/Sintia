@@ -1,6 +1,6 @@
 {
-    "choose levels": "Wählen Sie Spielebene:",
+    "choose levels": "Wählen Sie zwischen einem und fünf Spielstufen, um fortzufahren. Um eine Stufe auszuwählen, klicken Sie auf die entsprechende Schaltfläche. + bedeutet, dass die Stufe ausgewählt ist. Nach der Auswahl der Stufen klicken Sie auf die Schaltfläche \"Auswahl getroffen\".",
     "no choice made": "Aber du hast nichts ausgewählt!",
-    "begin it": "Lasst uns beginnen! Klicken Sie auf \"Ich habe nie ...\"",
+    "begin it": "Um das Spiel zu starten, klicken Sie auf die Schaltfläche \"Ich habe noch nie ...\" und der Bot wird den ersten Satz generieren. Wahrheit oder Pflicht kann durch Klicken auf die entsprechenden Schaltflächen erhalten werden.\n\nViel Spaß beim Spielen!",
     "game over": "Das Spiel ist beendet"
 }

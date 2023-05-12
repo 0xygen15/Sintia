@@ -1,6 +1,6 @@
 {
-    "choose levels": "Elija niveles:",
+    "choose levels": "Elija de uno a cinco niveles de juego para continuar. Para seleccionar un nivel, haga clic en el botón correspondiente. + significa que el nivel está seleccionado. Después de seleccionar los niveles, haga clic en el botón \"Selección realizada\".",
     "no choice made": "¡Pero no elegiste nada!",
-    "begin it": "¡Empecemos! Haga clic en 'Yo nunca ...'",
+    "begin it": "Para comenzar el juego, haga clic en el botón \"Nunca he...\" y el bot generará la primera frase. La verdad o el reto se puede obtener haciendo clic en los botones correspondientes.\n\n¡Diviértete jugando!",
     "game over": "Juego terminado"
 }
