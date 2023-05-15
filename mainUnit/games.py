@@ -11,8 +11,8 @@ class Tord:
 
         self.lifestyle_level = False
         self.absurd_level = False
+        self.company_level = False
         self.relations_level = False
-        self.personal_level = False
         self.awkward_level = False
 
         self.players_list = []
@@ -27,8 +27,8 @@ class Tord:
         self.truth = ""
         self.dare = ""
         self.current_player_name = ""
-        self.first_message_id = ""
-        self.last_message_id = ""
+        self.first_message_id: int = 0
+        self.last_message_id: int = 0
 
         self.td_obj = ""
         self.td_obj_truth = True
@@ -63,8 +63,8 @@ class Tord:
 
         levels = [[self.lifestyle_level, "lifestyle"],
                   [self.absurd_level, "absurd"],
-                  [self.relations_level, "relations"],
-                  [self.personal_level, "personal"],
+                  [self.company_level, "relations"],
+                  [self.relations_level, "personal"],
                   [self.awkward_level, "adult"]]
 
 
@@ -148,8 +148,8 @@ class Tord:
 
         self.lifestyle_level = False
         self.absurd_level = False
+        self.company_level = False
         self.relations_level = False
-        self.personal_level = False
         self.awkward_level = False
 
         self.players_list = []
@@ -182,8 +182,8 @@ class Nie:
 
         self.lifestyle_level = False
         self.absurd_level = False
+        self.company_level = False
         self.relations_level = False
-        self.personal_level = False
         self.awkward_level = False
 
         self.players_list = []
@@ -227,8 +227,8 @@ class Nie:
 
         levels = [[self.lifestyle_level, "lifestyle"],
                   [self.absurd_level, "absurd"],
-                  [self.relations_level, "relations"],
-                  [self.personal_level, "personal"],
+                  [self.company_level, "relations"],
+                  [self.relations_level, "personal"],
                   [self.awkward_level, "adult"]]
 
 
@@ -252,8 +252,8 @@ class Nie:
 
         self.lifestyle_level = False
         self.absurd_level = False
+        self.company_level = False
         self.relations_level = False
-        self.personal_level = False
         self.awkward_level = False
 
         self.players_list = []

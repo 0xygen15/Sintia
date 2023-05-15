@@ -35,7 +35,7 @@ async def never_i_ever(message: Message):
     await bot.send_message(chat_id=message.from_user.id, text=user_lang_code_object.never_i_ever["choose levels"], reply_markup=nie_kb.keyboard_level_all)
 
 
-@dp.callback_query_handler(nie_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']), state=NieStates.levels)
+@dp.callback_query_handler(nie_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready', 'main menu']), state=NieStates.levels)
 async def nie_levels(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
     answer = callback_data['action']
@@ -46,32 +46,44 @@ async def nie_levels(query: CallbackQuery, callback_data: typing.Dict[str, str])
     nie_kb = user_obj.nie_kb
 
     if answer == 'lifestyle':
-        new_keyboard = nie_kb.update_keyboard(0, query.message.reply_markup, nie_game_obj)
+        new_keyboard = nie_kb.update_keyboard(0, 0, query.message.reply_markup, nie_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'absurd':
-        new_keyboard = nie_kb.update_keyboard(1, query.message.reply_markup, nie_game_obj)
+        new_keyboard = nie_kb.update_keyboard(1, 0, query.message.reply_markup, nie_game_obj)
+        nie_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'company':
-        new_keyboard = nie_kb.update_keyboard(2, query.message.reply_markup, nie_game_obj)
+        new_keyboard = nie_kb.update_keyboard(1, 1, query.message.reply_markup, nie_game_obj)
+        nie_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'relations':
-        new_keyboard = nie_kb.update_keyboard(3, query.message.reply_markup, nie_game_obj)
+        new_keyboard = nie_kb.update_keyboard(2, 0, query.message.reply_markup, nie_game_obj)
+        nie_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'awkward':
-        new_keyboard = nie_kb.update_keyboard(4, query.message.reply_markup, nie_game_obj)
+        new_keyboard = nie_kb.update_keyboard(2, 1, query.message.reply_markup, nie_game_obj)
+        nie_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
+    elif answer == "main menu":
+        await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+        nie_game_obj.reset()
+        await bot.edit_message_text(chat_id=query.from_user.id,
+                                    text=user_lang_code_object.info["main_menu"],
+                                    reply_markup=None,
+                                    message_id=query.message.message_id,
+                                    parse_mode="HTML")
     elif answer == 'ready':
-        if not True in [nie_game_obj.lifestyle_level, nie_game_obj.absurd_level, nie_game_obj.relations_level, nie_game_obj.personal_level, nie_game_obj.awkward_level]:
+        if not True in [nie_game_obj.lifestyle_level, nie_game_obj.absurd_level, nie_game_obj.company_level, nie_game_obj.company_level, nie_game_obj.awkward_level]:
             await bot.answer_callback_query(query.id, user_lang_code_object.never_i_ever["no choice made"], True)
         else:
             await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=NieStates.game)

@@ -190,52 +190,67 @@ class TordKeyboard:
         # self.personal_level = False
         # self.adult_level = False
 
-    def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
-        object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
-
+    def update_keyboard(self, row: int, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
+        object_text = old_keyboard.values.get("inline_keyboard")[row][index]['text']
+        print(old_keyboard.values.get("inline_keyboard"))
         if "+" in str(object_text):
-            if index == 0:
+            if row == 0:
                 self.mark1 = ""
                 game_obj.lifestyle_level = False
+                print(f"index: {row}; mark: {self.mark1}; {game_obj.lifestyle_level}")
                 # self.lifestyle_level = False
-            elif index == 1:
-                self.mark2 = ""
-                game_obj.absurd_level = False
-                # self.absurd_level = False
-            elif index == 2:
-                self.mark3 = ""
-                game_obj.relations_level = False
-                # self.relations_level = False
-            elif index == 3:
-                self.mark4 = ""
-                game_obj.personal_level = False
-                # self.personal_level = False
-            elif index == 4:
-                self.mark5 = ""
-                game_obj.adult_level = False
-                # self.adult_level = False
+            elif row == 1:
+                if index == 0:
+                    self.mark2 = ""
+                    game_obj.absurd_level = False
+                    # self.absurd_level = False
+                    print(f"index: {row}; mark: {self.mark2}; {game_obj.absurd_level}")
+                elif index == 1:
+                    self.mark3 = ""
+                    game_obj.company_level = False
+                    # self.relations_level = False
+                    print(f"index: {row}; mark: {self.mark3}; {game_obj.company_level}")
+            elif row == 2:
+                if index == 0:
+                    self.mark4 = ""
+                    game_obj.company_level = False
+                    # self.personal_level = False
+                    print(f"index: {row}; mark: {self.mark4}; {game_obj.company_level}")
+                elif index == 1:
+                    self.mark5 = ""
+                    game_obj.awkward_level = False
+                    # self.adult_level = False
+                    print(f"index: {row}; mark: {self.mark5}; {game_obj.awkward_level}")
+
 
         elif "+" not in str(object_text):
-            if index == 0:
+            if row == 0:
                 self.mark1 = " +"
                 game_obj.lifestyle_level = True
-                # self.lifestyle_level = True
-            elif index == 1:
-                self.mark2 = " +"
-                game_obj.absurd_level = True
-                # self.absurd_level = True
-            elif index == 2:
-                self.mark3 = " +"
-                game_obj.relations_level = True
-                # self.relations_level = True
-            elif index == 3:
-                self.mark4 = " +"
-                game_obj.personal_level = True
-                # self.personal_level = True
-            elif index == 4:
-                self.mark5 = " +"
-                game_obj.adult_level = True
-                # self.adult_level = True
+                print(f"index: {row}; mark: {self.mark1}; {game_obj.lifestyle_level}")
+                # self.lifestyle_level = False
+            elif row == 1:
+                if index == 0:
+                    self.mark2 = " +"
+                    game_obj.absurd_level = True
+                    # self.absurd_level = False
+                    print(f"index: {row}; mark: {self.mark2}; {game_obj.absurd_level}")
+                elif index == 1:
+                    self.mark3 = " +"
+                    game_obj.company_level = True
+                    # self.relations_level = False
+                    print(f"index: {row}; mark: {self.mark3}; {game_obj.company_level}")
+            elif row == 2:
+                if index == 0:
+                    self.mark4 = " +"
+                    game_obj.company_level = True
+                    # self.personal_level = False
+                    print(f"index: {row}; mark: {self.mark4}; {game_obj.company_level}")
+                elif index == 1:
+                    self.mark5 = " +"
+                    game_obj.awkward_level = True
+                    # self.adult_level = False
+                    print(f"index: {row}; mark: {self.mark5}; {game_obj.awkward_level}")
 
         updated_keyboard = InlineKeyboardMarkup(row_width=2,
                                                        inline_keyboard=[
@@ -451,95 +466,110 @@ class NieKeyboard:
         # self.personal_level = False
         # self.adult_level = False
 
-
-    def update_keyboard(self, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
-        object_text = old_keyboard.values.get("inline_keyboard")[index][0]['text']
-
+    def update_keyboard(self, row: int, index: int, old_keyboard: InlineKeyboardMarkup, game_obj):
+        object_text = old_keyboard.values.get("inline_keyboard")[row][index]['text']
+        print(old_keyboard.values.get("inline_keyboard"))
         if "+" in str(object_text):
-            if index == 0:
+            if row == 0:
                 self.mark1 = ""
-                # self.lifestyle_level = False
                 game_obj.lifestyle_level = False
-            elif index == 1:
-                self.mark2 = ""
-                # self.absurd_level = False
-                game_obj.absurd_level = False
-            elif index == 2:
-                self.mark3 = ""
-                # self.relations_level = False
-                game_obj.relations_level = False
-            elif index == 3:
-                self.mark4 = ""
-                # self.personal_level = False
-                game_obj.personal_level = False
-            elif index == 4:
-                self.mark5 = ""
-                # self.adult_level = False
-                game_obj.awkward_level = False
+                print(f"index: {row}; mark: {self.mark1}; {game_obj.lifestyle_level}")
+                # self.lifestyle_level = False
+            elif row == 1:
+                if index == 0:
+                    self.mark2 = ""
+                    game_obj.absurd_level = False
+                    # self.absurd_level = False
+                    print(f"index: {row}; mark: {self.mark2}; {game_obj.absurd_level}")
+                elif index == 1:
+                    self.mark3 = ""
+                    game_obj.company_level = False
+                    # self.relations_level = False
+                    print(f"index: {row}; mark: {self.mark3}; {game_obj.company_level}")
+            elif row == 2:
+                if index == 0:
+                    self.mark4 = ""
+                    game_obj.company_level = False
+                    # self.personal_level = False
+                    print(f"index: {row}; mark: {self.mark4}; {game_obj.company_level}")
+                elif index == 1:
+                    self.mark5 = ""
+                    game_obj.awkward_level = False
+                    # self.adult_level = False
+                    print(f"index: {row}; mark: {self.mark5}; {game_obj.awkward_level}")
+
 
         elif "+" not in str(object_text):
-            if index == 0:
+            if row == 0:
                 self.mark1 = " +"
-#                 # self.lifestyle_level = True
                 game_obj.lifestyle_level = True
-            elif index == 1:
-                self.mark2 = " +"
-#                 # self.absurd_level = True
-                game_obj.absurd_level = True
-            elif index == 2:
-                self.mark3 = " +"
-#                 # self.relations_level = True
-                game_obj.relations_level = True
-            elif index == 3:
-                self.mark4 = " +"
-#                 # self.personal_level = True
-                game_obj.personal_level = True
-            elif index == 4:
-                self.mark5 = " +"
-#                 # self.adult_level = True
-                game_obj.awkward_level = True
+                print(f"index: {row}; mark: {self.mark1}; {game_obj.lifestyle_level}")
+                # self.lifestyle_level = False
+            elif row == 1:
+                if index == 0:
+                    self.mark2 = " +"
+                    game_obj.absurd_level = True
+                    # self.absurd_level = False
+                    print(f"index: {row}; mark: {self.mark2}; {game_obj.absurd_level}")
+                elif index == 1:
+                    self.mark3 = " +"
+                    game_obj.company_level = True
+                    # self.relations_level = False
+                    print(f"index: {row}; mark: {self.mark3}; {game_obj.company_level}")
+            elif row == 2:
+                if index == 0:
+                    self.mark4 = " +"
+                    game_obj.company_level = True
+                    # self.personal_level = False
+                    print(f"index: {row}; mark: {self.mark4}; {game_obj.company_level}")
+                elif index == 1:
+                    self.mark5 = " +"
+                    game_obj.awkward_level = True
+                    # self.adult_level = False
+                    print(f"index: {row}; mark: {self.mark5}; {game_obj.awkward_level}")
 
         updated_keyboard = InlineKeyboardMarkup(row_width=2,
-                                                       inline_keyboard=[
-                                                           [
-                                                               InlineKeyboardButton(f'{self.loc_file.keyboards["about life"]} {self.mark1}',
-                                                                                    callback_data=self.cb_all_level.new(
-                                                                                        action='lifestyle'))
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='absurd')),
-                                                               InlineKeyboardButton(
-                                                                   f'{self.loc_file.keyboards["company"]} {self.mark3}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='company'))
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   f'{self.loc_file.keyboards["relations"]} {self.mark4}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='relations')),
-                                                               InlineKeyboardButton(
-                                                                   f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
-                                                                   callback_data=self.cb_all_level.new(
-                                                                       action='awkward'))
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
-                                                                   callback_data=self.cb_all_level.new(action='ready')
-                                                               )
-                                                           ],
-                                                           [
-                                                               InlineKeyboardButton(
-                                                                   text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
-                                                                   callback_data=self.cb_all_level.new(action='main menu')
-                                                               )
-                                                           ]
-                                                       ]
-                                                       )
+                                                inline_keyboard=[
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            f'{self.loc_file.keyboards["about life"]} {self.mark1}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='lifestyle'))
+                                                    ],
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            f'{self.loc_file.keyboards["absurd"]} {self.mark2}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='absurd')),
+                                                        InlineKeyboardButton(
+                                                            f'{self.loc_file.keyboards["company"]} {self.mark3}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='company'))
+                                                    ],
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            f'{self.loc_file.keyboards["relations"]} {self.mark4}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='relations')),
+                                                        InlineKeyboardButton(
+                                                            f'{self.loc_file.keyboards["awkward"]} {self.mark5}',
+                                                            callback_data=self.cb_all_level.new(
+                                                                action='awkward'))
+                                                    ],
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            text=f""">>> {self.loc_file.keyboards["choice is made"]} <<<""",
+                                                            callback_data=self.cb_all_level.new(action='ready')
+                                                        )
+                                                    ],
+                                                    [
+                                                        InlineKeyboardButton(
+                                                            text=f"""🔙 {self.loc_file.keyboards["menu"]} 🔙""",
+                                                            callback_data=self.cb_all_level.new(action='main menu')
+                                                        )
+                                                    ]
+                                                ]
+                                                )
         return updated_keyboard
 
 class ThreeOfFiveKeyboard:

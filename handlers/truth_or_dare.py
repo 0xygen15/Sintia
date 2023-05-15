@@ -33,7 +33,8 @@ async def players_names(message: Message):
 
     tord_game_obj.first_message_id = message.message_id
 
-    await bot.send_message(chat_id=message.from_user.id, text=user_lang_code_object.truth_or_dare["players names enter request"])
+    await bot.send_message(chat_id=message.from_user.id, text=user_lang_code_object.truth_or_dare["players names enter request"],
+                           reply_markup=tord_kb.to_menu_kb)
     logging.info("User is asked to enter names of players")
 
 
@@ -51,7 +52,7 @@ async def to_main_menu(query: CallbackQuery):
 
     message_id_to_edit = query.message.message_id
 
-    await bot.edit_message_text(text=user_lang_code_object.info["main_menu"], chat=query.message.chat.id,
+    await bot.edit_message_text(text=user_lang_code_object.info["main_menu"], chat_id=query.message.chat.id,
                                 message_id=message_id_to_edit, reply_markup=None, parse_mode="HTML")
 
 @dp.message_handler(state=PlayerStates.ready_to_get_players_names)
@@ -92,14 +93,14 @@ async def to_main_menu(query: CallbackQuery):
     tord_game_obj.reset()
     tord_kb.reset()
 
-    last_message = query.message.message_id
-    for m in range(tord_game_obj.first_message_id, last_message):
-        try:
-            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
-        except:
-            pass
+    # last_message = query.message.message_id
+    # for m in range(tord_game_obj.first_message_id, last_message - 1):
+    #     try:
+    #         await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+    #     except:
+    #         pass
 
-    await bot.send_message(text=user_lang_code_object.info["main_menu"], chat=query.message.chat.id, parse_mode="HTML")
+    await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=query.message.chat.id, parse_mode="HTML")
 
 
 
@@ -113,12 +114,12 @@ async def players_no(query: CallbackQuery, callback_data: typing.Dict[str, str])
 
     tord_game_obj.players_list.clear()
 
-    last_message = query.message.message_id
-    for m in range(tord_game_obj.first_message_id, last_message):
-        try:
-            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
-        except:
-            pass
+    # last_message = query.message.message_id
+    # for m in range(tord_game_obj.first_message_id, last_message - 1):
+    #     try:
+    #         await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+    #     except:
+    #         pass
 
     await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.ready_to_get_players_names)
 
@@ -137,12 +138,12 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
 
     tord_game_obj.players_are_added = True
 
-    last_message = query.message.message_id
-    for m in range(tord_game_obj.first_message_id, last_message - 1):
-        try:
-            await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
-        except:
-            pass
+    # last_message = query.message.message_id
+    # for m in range(tord_game_obj.first_message_id, last_message - 1):
+    #     try:
+    #         await bot.delete_message(chat_id=query.message.chat.id, message_id=m)
+    #     except:
+    #         pass
 
     # await bot.send_message(chat_id=query.from_user.id, text=user_lang_code_object.truth_or_dare["proceed to settings"])
     await dp.storage.set_state(chat=query.message.chat.id, user=query.from_user.id, state=PlayerStates.settings)
@@ -153,13 +154,13 @@ async def players_yes(query: CallbackQuery, callback_data: typing.Dict[str, str]
     await bot.edit_message_text(text=text,
                            chat_id=query.from_user.id,
                            reply_markup=tord_kb.keyboard_level_all,
-                           message_id=last_message,
+                           message_id=query.message.message_id,
                            parse_mode="HTML")
     logging.info(f"User has is offered to choose levels")
 
 
 
-@dp.callback_query_handler(tord_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready']),
+@dp.callback_query_handler(tord_kb.cb_all_level.filter(action=['lifestyle', 'absurd', 'company', 'relations', 'awkward', 'ready', 'main menu']),
                            state=PlayerStates.settings)
 async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
     logging.info('Got this callback data: %r', callback_data)
@@ -170,32 +171,44 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
 
     answer = callback_data['action']
     if answer == 'lifestyle':
-        new_keyboard = tord_kb.update_keyboard(0, query.message.reply_markup, tord_game_obj)
+        new_keyboard = tord_kb.update_keyboard(0, 0,  query.message.reply_markup, tord_game_obj)
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'absurd':
-        new_keyboard = tord_kb.update_keyboard(1, query.message.reply_markup, tord_game_obj)
+        new_keyboard = tord_kb.update_keyboard(1, 0, query.message.reply_markup, tord_game_obj)
+        # tord_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'company':
-        new_keyboard = tord_kb.update_keyboard(2, query.message.reply_markup, tord_game_obj)
+        new_keyboard = tord_kb.update_keyboard(1, 1, query.message.reply_markup, tord_game_obj)
+        # tord_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'relations':
-        new_keyboard = tord_kb.update_keyboard(3, query.message.reply_markup, tord_game_obj)
+        new_keyboard = tord_kb.update_keyboard(2, 0, query.message.reply_markup, tord_game_obj)
+        # tord_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'awkward':
-        new_keyboard = tord_kb.update_keyboard(4, query.message.reply_markup, tord_game_obj)
+        new_keyboard = tord_kb.update_keyboard(2, 1, query.message.reply_markup, tord_game_obj)
+        # tord_kb.keyboard_level_all = new_keyboard
         await bot.edit_message_reply_markup(chat_id=query.from_user.id,
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
+    elif answer == "main menu":
+        await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
+        tord_game_obj.reset()
+        await bot.edit_message_text(chat_id=query.from_user.id,
+                                    text=user_lang_code_object.info["main_menu"],
+                                    reply_markup=None,
+                                    message_id=query.message.message_id,
+                                    parse_mode="HTML")
     elif answer == 'ready':
-        if not True in [tord_game_obj.lifestyle_level, tord_game_obj.absurd_level, tord_game_obj.relations_level, tord_game_obj.personal_level, tord_game_obj.adult_level]:
+        if not True in [tord_game_obj.lifestyle_level, tord_game_obj.absurd_level, tord_game_obj.company_level, tord_game_obj.company_level, tord_game_obj.awkward_level]:
             await bot.answer_callback_query(query.id, user_lang_code_object.never_i_ever["no choice made"], True)
         else:
             # await PlayerStates.mode.set()
@@ -211,10 +224,10 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
                                    parse_mode="HTML")
 
 
-    if True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level, tord_kb.adult_level]:
-        tord_game_obj.levels_are_chosen = True
-    else:
-        tord_game_obj.levels_are_chosen = False
+    # if True in [tord_game_obj.lifestyle_level, tord_game_obj.absurd_level, tord_game_obj.company_level, tord_game_obj.relations_level, tord_game_obj.awkward_level]:
+    #     tord_game_obj.levels_are_chosen = True
+    # else:
+    #     tord_game_obj.levels_are_chosen = False
 
 
 

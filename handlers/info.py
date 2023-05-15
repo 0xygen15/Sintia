@@ -18,7 +18,7 @@ async def info(message: Message):
                            reply_markup=tord_kb.to_menu_kb)
 
 
-@dp.callback_query_handler(tord_kb.to_menu_cb.filter(antion=["main menu"]))
+@dp.callback_query_handler(tord_kb.to_menu_cb.filter(action=["main menu"]))
 async def to_main_menu(query: aiogram.types.CallbackQuery):
     user_obj = Database.retrieve_user_obj(query.from_user.id)
     user_lang_code_object = loc_objects[user_obj.lang_code]
