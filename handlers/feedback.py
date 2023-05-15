@@ -29,7 +29,7 @@ async def feedback_pending(message: Message, state: FSMContext):
     await bot.send_message(text=user_lang_code_object.info["feedback"], chat_id=message.from_user.id, parse_mode='HTML',
                            reply_markup=tord_kb.to_menu_kb)
 
-@dp.callback_query_handler(tord_kb.to_menu_cb.filter(action=["main menu"]))
+@dp.callback_query_handler(tord_kb.to_menu_cb.filter(action=["main menu"]), state=Feedback.pending)
 async def to_main_menu(query: CallbackQuery):
     await dp.storage.finish(chat=query.message.chat.id, user=query.from_user.id)
 
