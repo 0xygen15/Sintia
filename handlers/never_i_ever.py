@@ -90,7 +90,7 @@ async def nie_levels(query: CallbackQuery, callback_data: typing.Dict[str, str])
             nie_game_obj.set_levels()
             await bot.send_message(chat_id=query.from_user.id,
                                    text=user_lang_code_object.never_i_ever["begin it"],
-                                   reply_markup=nie_kb.keyboard_nie)
+                                   reply_markup=nie_kb.kb_start)
 
 @dp.callback_query_handler(nie_kb.cb_nie.filter(action=['truth_nie', 'dare_nie', 'next_nie', 'end_nie']),
                            state=NieStates.game)

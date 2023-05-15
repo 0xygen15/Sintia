@@ -93,7 +93,7 @@ class Tord:
                 name_capitalised = name.capitalize()
                 names_list.append(name_capitalised)
             else:
-                pass
+                names_list.append(name)
 
         self.players_list = names_list
         self.players_number = len(self.players_list)

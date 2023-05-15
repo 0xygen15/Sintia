@@ -355,6 +355,23 @@ class NieKeyboard:
                                                  ])
         self.cb_all_level = CallbackData('name', 'action')
 
+        self.kb_start = InlineKeyboardMarkup(row_width=2,
+                                             inline_keyboard=[
+                                                 [
+                                                     InlineKeyboardButton(
+                                                         text=f"""💡 {self.loc_file.keyboards["never i ever"]}""",
+                                                         callback_data=self.cb_nie.new(
+                                                             action='next_nie'))
+                                                 ],
+                                                 [
+                                                     InlineKeyboardButton(
+                                                         text=f"""🔚 {self.loc_file.keyboards["end the game"]}""",
+                                                         callback_data=self.cb_nie.new(
+                                                             action='end_nie'))
+                                                 ]
+                                             ]
+                                             )
+
         # self.mark1 = ""
         # self.mark2 = ""
         # self.mark3 = ""

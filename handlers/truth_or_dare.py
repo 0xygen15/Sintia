@@ -68,6 +68,8 @@ async def check_players_names(message: Message):
     names = tord_game_obj.get_str_of_players_list()
     answer = f"""{user_lang_code_object.truth_or_dare["check names"]}\n\n{names}\n{user_lang_code_object.truth_or_dare["right?"]}"""
 
+    print(tord_game_obj.players_list)
+
     if len(tord_game_obj.players_list) < 2:
         tord_game_obj.reset()
         tord_kb.reset()
