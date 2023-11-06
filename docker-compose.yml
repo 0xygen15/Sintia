@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  sintia:
+    image: sintia
+    ports:
+      - 8081:8081
+    volumes:
+      - main_volume:/home/data
+volumes:
+  main_volume:
