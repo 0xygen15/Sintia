@@ -6,6 +6,6 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - main_volume:/home/data
+      - main_volume:/home/app/database
 volumes:
   main_volume:
