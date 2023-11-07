@@ -7,3 +7,5 @@ RUN chown -R root:root /app
 RUN chmod 777 /app
 RUN pip install -r requirements.txt
 CMD python app.py
+
+#docker run -d -p 8081:8081 -v main_volume:/home/app/database --name sintia_app sintia
