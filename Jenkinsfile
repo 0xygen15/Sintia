@@ -1,29 +1,34 @@
 #!/usr/bin/env groovy
 
-def gv
-
 pipeline {
     agent any
     stages {
-        stage("init") {
-            steps {
-                gv = load "script.groovy"
-            }
-        }
         stage("test") {
             steps {
                 script {
-                    gv.testApp()
+                    echo "testing application..."
+                    sh "pytest tests/"
                 }
             }
         }
         stage("build") {
             steps {
                 script {
-                    gv.testApp()
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'USERNAME', usernameVariable: 'PWD')]) {
+                    echo "building application..."
+                    sh "echo ${PWD} | docker login -u ${USERNAME} --password-stdin"
+                    sh "docker build -t sintia:1.0.${BUILD_NUMBER} ."
+                        }
+                    }
+                }
+            }
+        }
+        stage("deploy") {
+            steps {
+                script {
+                    echo "deploying app ..."
                 }
             }
         }
     }
-
 }
