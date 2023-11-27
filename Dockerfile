@@ -5,6 +5,8 @@ WORKDIR /app
 COPY . /app
 RUN chown -R root:root /app
 RUN chmod 777 /app
+RUN python3 -m venv .venv
+RUN source .venv/bin/activate
 RUN pip install -r requirements.txt
 CMD python app.py
 
