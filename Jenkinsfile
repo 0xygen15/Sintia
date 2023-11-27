@@ -6,6 +6,7 @@ pipeline {
         stage("test") {
             steps {
                 script {
+                    sh 'pip install pytest'
                     sh 'pytest tests/'
                 }
             }
