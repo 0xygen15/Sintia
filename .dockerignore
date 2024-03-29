@@ -1,5 +1,4 @@
 trash folder/
-.venv/
 .gitignore
 compose.yaml
 Dockerfile

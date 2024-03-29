@@ -1,6 +1,9 @@
 from aiogram import executor
 import asyncio
 
+import subprocess
+subprocess.run(['sh', 'venv/bin/activate'])
+
 from loader import dp
 
 import handlers
