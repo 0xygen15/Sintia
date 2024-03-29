@@ -13,21 +13,31 @@ import psycopg2
 
 try:
     # connect to exist database
+    print('entered')
     connection = psycopg2.connect(
-        host="172.19.0.2",
+        host="127.0.0.2",
         user="sintia",
         password="example",
         database="users",
         port="5432"
     )
-    connection.autocommit = True
+    # connection.autocommit = True
+    print('connected')
+    # Create a cursor object using the connection
+    cursor = connection.cursor()
+    print('cursor created')
+    # Execute a test query to check the connection
+    cursor.execute("SELECT version();")
+    print('select executed')
+    # Fetch the result
+    db_version = cursor.fetchone()
+    print('fetched')
+    print("Successfully connected to PostgreSQL")
+    print("PostgreSQL version:", db_version)
 
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT version();"
-        )
-
-        print(f"Server version: {cursor.fetchone()}")
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
 
 
 except Exception as _ex:
