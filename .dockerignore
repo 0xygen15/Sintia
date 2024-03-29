@@ -1,0 +1,9 @@
+trash folder/
+.venv/
+.gitignore
+compose.yaml
+Dockerfile
+Jenkinsfile
+script.groovy
+spy.txt
+current_tasks.txt
