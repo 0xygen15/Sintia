@@ -43,7 +43,7 @@ async def start(message: Message):
             is_bot=message.from_user.is_bot
         )
 
-        Database.create_users_db() # create db if not created
+        Database.create_users_table() # create db if not created
         Database.add_user_to_db(user) #add user data to db if bot added yet
 
         user_obj = Database.retrieve_user_obj(message.from_user.id)

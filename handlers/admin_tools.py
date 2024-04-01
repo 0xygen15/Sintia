@@ -4,7 +4,7 @@ from aiogram import types
 from aiogram.dispatcher import filters
 from aiogram.types import Message
 
-from mainUnit.config import admin_id, backup_channel_id, post_channel_id
+from mainUnit.config import ADMIN_ID, backup_channel_id, post_channel_id
 
 from loader import dp, bot
 
@@ -55,7 +55,7 @@ async def forward_from_channel(message: Message):
         await bot.forward_message(chat_id=chat_id[0], from_chat_id=post_channel_id, message_id=message.message_id,
                                   disable_notification=False)
 
-@dp.message_handler(filters.IDFilter(chat_id=admin_id), commands="backup_the_db")
+@dp.message_handler(filters.IDFilter(chat_id=ADMIN_ID), commands="backup_the_db")
 async def backup_the_dp(message: Message):
     time = datetime.now()
     database_file = types.InputFile("../trash folder/users.db", f"users_{time}")
@@ -63,9 +63,9 @@ async def backup_the_dp(message: Message):
     await bot.send_document(chat_id=backup_channel_id, document=database_file, caption=file_caption)
 
 
-@dp.message_handler(filters.IDFilter(chat_id=admin_id), commands="statistics")
+@dp.message_handler(filters.IDFilter(chat_id=ADMIN_ID), commands="statistics")
 async def statistics(message: Message):
     data = Users.get_statistics()
-    await bot.send_message(chat_id=admin_id, text=data)
+    await bot.send_message(chat_id=ADMIN_ID, text=data)
 
 

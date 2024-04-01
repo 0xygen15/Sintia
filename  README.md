@@ -1,0 +1,1 @@
+Environmental variables should be put into .env file in the workdir folder. 
