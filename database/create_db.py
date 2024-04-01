@@ -320,4 +320,17 @@ def create_database_if_not_exists():
     except psycopg2.errors.DuplicateDatabase:
         print("[WARNING] Database 'sitnia' already exists!")
 
-create_database_if_not_exists()
+def test_db():
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USERNAME, password=DB_PWD, host=DB_HOST, port=DB_PORT)
+    connection.autocommit = True
+    cursor = connection.cursor()
+
+    cursor.execute(""" SELECT * FROM users """)
+    data = cursor.fetchall()
+
+    print(data)
+
+    connection.commit()
+    connection.close()
+
+test_db()

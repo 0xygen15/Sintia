@@ -310,8 +310,8 @@ class Database:
 
         query = """
             CREATE TABLE IF NOT EXISTS users (
-            user_id CHAR UNIQUE,
-            lang_code CHAR,
+            user_id CHAR(32) UNIQUE,
+            lang_code CHAR(3),
             tord_game BYTEA,
             nie_game BYTEA,
             the_35_game BYTEA,
@@ -320,12 +320,12 @@ class Database:
             nie_kb BYTEA,
             the_35_kb BYTEA,
             themes_kb BYTEA,
-            chat_id CHAR,
-            chat_type CHAR,
-            username CHAR,
-            fName CHAR,
-            lName CHAR,
-            is_bot INTEGER
+            chat_id CHAR(32),
+            chat_type CHAR(32),
+            username CHAR(255),
+            fName CHAR(96),
+            lName CHAR(96),
+            is_bot SMALLINT
             ) 
             """
 
@@ -358,13 +358,15 @@ class Database:
         is_bot = int(users_obj.is_bot)
 
         connection = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PWD, database=DB_NAME, port=DB_PORT)
+        print(f"[INFO] Method {cls.add_user_to_db.__name__} connected to database {DB_NAME}.")
         cursor = connection.cursor()
 
         try:
-            cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
+            cursor.execute("SELECT * FROM users WHERE user_id = '%s'", (user_id,))
+            print(f"[INFO] Method {cls.add_user_to_db.__name__} has executed SELECT query.")
             result = cursor.fetchone()[0]
-        except:
-
+            print(f"[INFO] Method {cls.add_user_to_db.__name__}: result fetched")
+        except Exception as _ex:
             # if result is None:
             query = """
                         INSERT INTO users (user_id, lang_code, tord_game, nie_game, 
@@ -378,6 +380,7 @@ class Database:
                     the_35_kb, themes_kb, chat_id, chat_type,
                     username, fName, lName, is_bot)
             cursor.execute(query, data)
+            print(f"[INFO] Method {cls.add_user_to_db.__name__} has executed INSERT query.")
 
             user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
 
@@ -385,6 +388,7 @@ class Database:
             connection.close()
         else:
             user_objects[user_id] = users_obj  # ADD OBJECT TO OBJECT DICT
+            print(f"[INFO] Method {cls.add_user_to_db.__name__} has added object to object dict.")
             connection.close()
 
     @classmethod
@@ -392,7 +396,7 @@ class Database:
         connection = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PWD, database=DB_NAME, port=DB_PORT)
         cursor = connection.cursor()
 
-        query = "SELECT * FROM users WHERE user_id = %s"
+        query = "SELECT * FROM users WHERE user_id = '%s'"
         cursor.execute(query, (the_user_id,))
         data = cursor.fetchall()
 
@@ -507,7 +511,7 @@ class Database:
         connection = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PWD, database=DB_NAME,port=DB_PORT)
         cursor = connection.cursor()
 
-        query = """SELECT lang_code FROM USERS WHERE user_id = %s"""
+        query = """SELECT lang_code FROM USERS WHERE user_id = '%s'"""
         cursor.execute(query, (user_id,))
         lang_code = cursor.fetchone()[0]
 
@@ -521,7 +525,7 @@ class Database:
         connection = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PWD, database=DB_NAME, port=DB_PORT)
         cursor = connection.cursor()
 
-        query = "UPDATE users SET lang_code = %s WHERE user_id = %s"
+        query = "UPDATE users SET lang_code = %s WHERE user_id = '%s'"
         data = (lang_code, user_id)
         cursor.execute(query, data)
 
@@ -536,25 +540,25 @@ class Database:
         cursor.execute("SELECT user_id FROM users")
         all_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = ru")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'ru'")
         ru_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = uk")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'uk'")
         uk_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = en")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'en'")
         en_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = de")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'de'")
         de_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = es")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'es'")
         es_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = fr")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'fr'")
         fr_users_number = len(cursor.fetchall())
 
-        cursor.execute("SELECT * FROM users WHERE lang_code = sr")
+        cursor.execute("SELECT * FROM users WHERE lang_code = 'sr'")
         sr_users_number = len(cursor.fetchall())
 
         data = {
