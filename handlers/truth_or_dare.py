@@ -132,7 +132,8 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
                                             reply_markup=new_keyboard,
                                             message_id=query.message.message_id)
     elif answer == 'ready':
-        if not True in [tord_game_obj.lifestyle_level, tord_game_obj.absurd_level, tord_game_obj.relations_level, tord_game_obj.personal_level, tord_game_obj.adult_level]:
+        if not True in [tord_game_obj.lifestyle_level, tord_game_obj.absurd_level, tord_game_obj.relations_level,
+                        tord_game_obj.personal_level, tord_game_obj.adult_level]:
             await bot.answer_callback_query(query.id, user_lang_code_object.never_i_ever["no choice made"], True)
         else:
             # await PlayerStates.mode.set()
@@ -141,7 +142,8 @@ async def settings(query: CallbackQuery, callback_data: typing.Dict[str, str]):
                                    text=user_lang_code_object.truth_or_dare["mode"],
                                    reply_markup=tord_kb.keyboard_mode)
 
-    if True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level, tord_kb.adult_level]:
+    if True in [tord_kb.lifestyle_level, tord_kb.absurd_level, tord_kb.relations_level, tord_kb.personal_level,
+                tord_kb.awkward_level]:
         tord_game_obj.levels_are_chosen = True
     else:
         tord_game_obj.levels_are_chosen = False

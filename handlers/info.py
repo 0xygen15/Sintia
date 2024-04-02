@@ -20,7 +20,6 @@ async def start(message: Message):
     await dp.storage.finish(chat=message.chat.id, user=message.from_user.id)
     try:
         user_obj = Database.retrieve_user_obj(message.from_user.id)
-        # lang_code = user_obj.lang_code
     except:
         lang_code = message.from_user.language_code
 
@@ -48,6 +47,7 @@ async def start(message: Message):
 
         user_obj = Database.retrieve_user_obj(message.from_user.id)
 
+    # print(vars(user_obj))
     user_lang_code_object = loc_objects[user_obj.lang_code]
 
     await bot.send_message(text=user_lang_code_object.info["main_menu"], chat_id=message.from_user.id, parse_mode='HTML')

@@ -143,6 +143,7 @@ async def nie_comp(query: CallbackQuery, callback_data: typing.Dict[str, str]):
             nie_game_obj.shuffle_lists()
             nie_game_obj.tord = nie_game_obj.truths_list[0]
         elif nie_game_obj.tord_truth == False:
+            nie_game_obj.shuffle_lists()
             nie_game_obj.tord = nie_game_obj.dares_list[0]
         await bot.edit_message_text(text=nie_game_obj.tord, reply_markup=nie_kb.keyboard_completed_f,
                                     message_id=query.message.message_id, chat_id=query.from_user.id)
