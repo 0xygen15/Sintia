@@ -6,3 +6,4 @@ Jenkinsfile
 script.groovy
 spy.txt
 current_tasks.txt
+README.md

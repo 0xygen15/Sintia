@@ -1,8 +1,8 @@
-1. Connect to Postgre SQL.
-2. Prepare Dockerfiles for App and Db containers.
+1. Connect to Postgre SQL. +++
+2. Prepare Dockerfiles for App and Db containers. +++
 3. Configure pytest.
 4. Set Jenkins pipeline.
-5. Configure Kubernetes.
+5. Configure Kubernetes. +++
 6. Set monitoring tools.
 
 In version 2:

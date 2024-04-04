@@ -13,7 +13,8 @@ post_channel_id = ev.get('POST_CHANNEL_ID')
 backup_channel_id = ev.get('BACKUP_CHANNEL_ID')
 donation_links = ""
 
-DB_HOST = "127.0.0.3"
+# DB_HOST = "127.0.0.3"
+DB_HOST = "postgres"
 DB_PORT = "5432"
 
 DB_USERNAME = ev.get("DB_USERNAME")
