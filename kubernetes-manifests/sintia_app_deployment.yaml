@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sintia-app-deployment
+  labels:
+    app: sintia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sintia
+  template:
+    metadata:
+      labels:
+        app: sintia
+    spec:
+      containers:
+      - name: sintia-app-container
+        image: 0xygen15/sintia:1.0.0
+        ports:
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sintia-app-service
+spec:
+  selector:
+    app: sintia
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
