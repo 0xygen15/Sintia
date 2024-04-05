@@ -1,34 +1,70 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: postgres-deployment
+#  labels:
+#    app: postgres
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: postgres
+#  template:
+#    metadata:
+#      labels:
+#        app: postgres
+#    spec:
+#      containers:
+#      - name: postgres
+#        image: postgres
+#        ports:
+#        - containerPort: 5432
+#        envFrom:
+#          - configMapRef:
+#              name: postgres-secret
+#        volumeMounts:
+#          - mountPath: /var/lib/postgresql/data
+#            name: postgresdata
+#      volumes:
+#        - name: postgresdata
+#          persistentVolumeClaim:
+#            claimName: postgres-volume-claim
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: postgres-deployment
-  labels:
-    app: postgres
+  name: postgres
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgres # has to match .spec.template.metadata.labels
+  serviceName: 'postgresql-svc'
+  replicas: 1 # by default is 1
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres # has to match .spec.selector.matchLabels
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
-      - name: postgres
-        image: postgres
-        ports:
-        - containerPort: 5432
-        envFrom:
+        - name: postgres-container
+          image: postgres
+          envFrom:
           - configMapRef:
               name: postgres-secret
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: postgresdata
-      volumes:
-        - name: postgresdata
-          persistentVolumeClaim:
-            claimName: postgres-volume-claim
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ['ReadWriteOnce']
+#        storageClassName: "csi-disk"
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

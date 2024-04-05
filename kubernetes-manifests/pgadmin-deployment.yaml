@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin-deployment
+  labels:
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - name: pgadmin-container
+        image: dpage/pgadmin4
+        ports:
+        - containerPort: 5050
+        envFrom:
+          - configMapRef:
+              name: pgadmin-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin
+  labels:
+    app: pgadmin
+spec:
+  ports:
+    - port: 5050
+  selector:
+    app: pgadmin
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin-secret
+  labels:
+    app: pgadmin
+data:
+  PGADMIN_DEFAULT_EMAIL: "user@ex.com"
+  PGADMIN_DEFAULT_PASSWORD: "example"
