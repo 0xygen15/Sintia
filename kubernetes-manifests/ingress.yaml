@@ -23,6 +23,21 @@ spec:
                 name: postgres
                 port:
                   number: 5432
+          - path: /pgadmin
+            pathType: Prefix
+            backend:
+              service:
+                name: pgadmin
+                port:
+                  number: 5050
+          - path: /ps
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-service
+                port:
+                  number: 9090
+
 #    - host: postgres
 #      http:
 #        paths:

@@ -12,3 +12,4 @@ kubectl apply -f ingress.yaml
 kubectl apply -f postgres-deployment.yaml
 kubectl apply -f pgadmin-deployment.yaml
 kubectl apply -f sintia-app-deployment.yaml
+kubectl apply -f prometheus-deployment.yaml
